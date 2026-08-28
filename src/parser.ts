@@ -1,5 +1,5 @@
-import * as XLSX from 'xlsx';
 import { classify, normalizeText } from './classifier';
+import { readTabularWorkbook } from './spreadsheet';
 import type { AppSettings, BomRow, ClassificationDictionary, ColumnMapping, Material, StyleData } from './types';
 
 export const HEADER_ALIASES: Record<string,string[]> = {
@@ -48,13 +48,13 @@ export function aggregate(rows: BomRow[], loss: number, dict: ClassificationDict
   });
 }
 export async function parseBomFile(file: File, settings: AppSettings, dict: ClassificationDictionary): Promise<{styles:StyleData[]; unmapped?:{sheet:string; rows:unknown[][]}}> {
-  const wb=XLSX.read(await file.arrayBuffer(),{type:'array',cellDates:false}); const styles:StyleData[]=[];
-  for(const sheetName of wb.SheetNames){
-    const rows=XLSX.utils.sheet_to_json<unknown[]>(wb.Sheets[sheetName],{header:1,raw:true,defval:''}); const found=detectHeader(rows);
+  const sheets=await readTabularWorkbook(file); const styles:StyleData[]=[];
+  for(const sheet of sheets){
+    const sheetName=sheet.name, rows=sheet.rows; const found=detectHeader(rows);
     if(!found) return {styles,unmapped:{sheet:sheetName,rows}};
     const bomRows=rowsFromSheet(rows,found.mapping,found.row,{file:file.name,sheet:sheetName},settings);
     if(!bomRows.length) continue;
-    const base=slugStyle(file.name)||sheetName; const name=wb.SheetNames.length>1 ? `${base} - ${sheetName}` : base;
+    const base=slugStyle(file.name)||sheetName; const name=sheets.length>1 ? `${base} - ${sheetName}` : base;
     styles.push({id:`${file.name}:${sheetName}:${Date.now()}`,name,sourceFile:file.name,sourceSheet:sheetName,materials:aggregate(bomRows,settings.defaultLoss,dict),laborRemark:'It also includes the listed special process and packing costs in the factory.'});
   }
   return {styles};

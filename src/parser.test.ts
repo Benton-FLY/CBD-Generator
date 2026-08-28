@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import ExcelJS from 'exceljs';
-import { aggregate, detectHeader, rowsFromSheet } from './parser';
+import { aggregate, detectHeader, parseBomFile, rowsFromSheet } from './parser';
+import { parseFobFile } from './fob';
 import { createBuyerWorkbook } from './exporter';
 import type { BomRow, StyleData } from './types';
 
@@ -8,6 +9,8 @@ const settings={exchangeRate:900,defaultLoss:.05};
 const row=(id:string,item:string,usage:number,cost:number,structure='BODY',extra:Partial<BomRow>={}):BomRow=>({id,sourceFile:'27 LITE PANT BOM.xls',sourceSheet:'BOM',sourceRow:+id,structure,materialType:'원부자재',sequence:'',itemNo:'',item,width:'',color:'BLACK',unit:'YD',usage,currency:'USD',convertedPrice:cost,materialCostAdjustment:0,rawPrice:cost,specialFlag:'',remark:'',...extra});
 
 describe('BOM parsing and aggregation',()=>{
+  it('imports xlsx worksheet values through the OOXML-safe reader',async()=>{const wb=new ExcelJS.Workbook();const ws=wb.addWorksheet('PRICE');ws.addRow(['STYLE','FOB']);ws.addRow(['26 KINETIC',12.5]);const data=await wb.xlsx.writeBuffer();const file=new File([data as BlobPart],'FLY RACING CFMD FOB LIST (26 ~) - Copy(2).xlsx');expect(await parseFobFile(file)).toEqual([{style:'26 KINETIC',fob:12.5}]);});
+  it('imports BOM xlsx files and evaluates cached formula results',async()=>{const wb=new ExcelJS.Workbook();const ws=wb.addWorksheet('BOM');ws.addRow(['Structure','Item','Unit','소요량','환산단가']);ws.addRow(['BODY','FABRIC','YD',.5,{formula:'1+2',result:3}]);const data=await wb.xlsx.writeBuffer();const file=new File([data as BlobPart],'FORMULA BOM.xlsx');const parsed=await parseBomFile(file,settings,{});expect(parsed.styles[0].materials[0].baseCost).toBe(3);});
   it('detects a header within 30 rows regardless of column positions',()=>{const rows=[['title'],[],['Item','Structure','소요량','환산단가','Unit','Width']];const found=detectHeader(rows);expect(found?.row).toBe(2);expect(found?.mapping.item).toBe(0);expect(found?.mapping.usage).toBe(2)});
   it('uses Q usage and U converted price without reapplying BOM loss or KRW conversion',()=>{const rows=[['Structure','자재구분','Item','Unit','정소요량','로스율','소요량','Currency','단가','환산단가'],['A','원부자재','NYLON WEBBING (25M/M)','M',1,20,.5,'KRW',214,.2378],['B','원부자재','CARE LABEL','EA',1,10,1,'KRW',65,.0722]];const found=detectHeader(rows)!;const parsed=rowsFromSheet(rows,found.mapping,found.row,{file:'x.xls',sheet:'BOM'},settings);expect(parsed[0].usage).toBe(.5);expect(parsed[0].convertedPrice).toBe(.2378);expect(parsed[1].convertedPrice).toBe(.0722)});
   it('falls back only when Q/U are absent',()=>{const rows=[['Structure','Item','Unit','정소요량','로스율','Currency','단가'],['A','KRW ITEM','EA',2,10,'KRW',900]];const f=detectHeader(rows)!;const r=rowsFromSheet(rows,f.mapping,f.row,{file:'x',sheet:'s'},settings)[0];expect(r.usage).toBeCloseTo(2.2);expect(r.convertedPrice).toBe(1)});
