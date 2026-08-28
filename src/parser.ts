@@ -48,16 +48,17 @@ export function aggregate(rows: BomRow[], loss: number, dict: ClassificationDict
   });
 }
 export async function parseBomFile(file: File, settings: AppSettings, dict: ClassificationDictionary): Promise<{styles:StyleData[]; unmapped?:{sheet:string; rows:unknown[][]}}> {
-  const sheets=await readTabularWorkbook(file); const styles:StyleData[]=[];
+  const sheets=await readTabularWorkbook(file); const allRows:BomRow[]=[]; const sourceSheets:string[]=[];
   for(const sheet of sheets){
     const sheetName=sheet.name, rows=sheet.rows; const found=detectHeader(rows);
-    if(!found) return {styles,unmapped:{sheet:sheetName,rows}};
+    if(!found) return {styles:[],unmapped:{sheet:sheetName,rows}};
     const bomRows=rowsFromSheet(rows,found.mapping,found.row,{file:file.name,sheet:sheetName},settings);
     if(!bomRows.length) continue;
-    const base=slugStyle(file.name)||sheetName; const name=/사전원가/.test(base)?base:`${base} 사전원가`;
-    styles.push({id:`${file.name}:${sheetName}:${Date.now()}`,name,sourceFile:file.name,sourceSheet:sheetName,materials:aggregate(bomRows,settings.defaultLoss,dict),laborRemark:'It also includes the listed special process and packing costs in the factory.'});
+    allRows.push(...bomRows); sourceSheets.push(sheetName);
   }
-  return {styles};
+  if(!allRows.length)return {styles:[]};
+  const base=slugStyle(file.name)||sourceSheets[0]; const name=/사전원가/.test(base)?base:`${base} 사전원가`;
+  return {styles:[{id:`${file.name}:${Date.now()}`,name,sourceFile:file.name,sourceSheet:sourceSheets.join(', '),materials:aggregate(allRows,settings.defaultLoss,dict),laborRemark:'It also includes the listed special process and packing costs in the factory.'}]};
 }
 
 export const splitMaterial = (m: Material): Material[] => m.sources.map((r,i)=>({ ...m,id:`${m.id}:split:${i}`,sources:[r],baseUsage:r.usage,adjustedUsage:r.usage,baseCost:r.convertedPrice,adjustedCost:r.convertedPrice,split:true }));

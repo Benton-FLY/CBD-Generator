@@ -5,7 +5,7 @@ import { extendedCost } from './types';
 
 const ORDER: CbdGroup[]=['OUTSHELL','TRIMS','SEWING THREAD','LABEL & PACKAGING','SPECIAL PROCESS (LIST ONLY)'];
 const BLUE='4472C4', YELLOW='FFF2CC', AQUA='DDEBF7', BORDER='FF000000', WHITE='FFFFFFFF';
-const MONEY='$#,##0.0000', DECIMAL='0.0000';
+const MONEY='$0.0000', DECIMAL='0.0000';
 export const excelStyleName=(name:string)=>name.replace(/\bMODEL\s+NAME\s*:\s*/ig,'').replace(/사전원가/g,'').replace(/\s+/g,' ').trim()||'CBD';
 const safeSheet=(name:string,used:Set<string>)=>{let base=excelStyleName(name).replace(/[\\/*?:[\]]/g,' ').trim().slice(0,31)||'CBD';let out=base,n=2;while(used.has(out)){const s=` (${n++})`;out=base.slice(0,31-s.length)+s;}used.add(out);return out;};
 const borders={top:{style:'thin' as const,color:{argb:BORDER}},left:{style:'thin' as const,color:{argb:BORDER}},bottom:{style:'thin' as const,color:{argb:BORDER}},right:{style:'thin' as const,color:{argb:BORDER}}};
@@ -37,7 +37,7 @@ export async function createBuyerWorkbook(styles:StyleData[],date=new Date()):Pr
     }
     const materialTotal=rounded(subtotalCells.reduce((sum,address)=>sum+(Number((ws.getCell(address).value as ExcelJS.CellFormulaValue).result)||0),0));
     const totals:[string,number|null,string,boolean][]=[['Total material cost',materialTotal,'',true],['Labor cost',null,style.laborRemark,false],['Overhead',null,'',false],['Profit',null,'',false],['FOB PRICE',style.finalFob??null,'',false]];
-    totals.forEach(([label,value,remark,isFormula])=>{const row=ws.addRow(['',label,'','','','','',value,remark]);if(isFormula)row.getCell(8).value={formula:`SUM(${subtotalCells.join(',')})`,result:materialTotal};row.getCell(8).numFmt=MONEY;row.eachCell({includeEmpty:true},c=>{c.fill={type:'pattern',pattern:'solid',fgColor:{argb:AQUA}};c.font={name:'Arial',bold:true};c.border=borders;c.alignment={vertical:'middle',wrapText:true};});});
+    totals.forEach(([label,value,remark,isFormula])=>{const row=ws.addRow(['',label,'','','','','',value,remark]);if(isFormula)row.getCell(8).value={formula:`SUM(${subtotalCells.join(',')})`,result:materialTotal};else if(label==='FOB PRICE'&&value!==null)row.getCell(8).value={formula:String(value),result:value};row.getCell(8).numFmt=MONEY;row.eachCell({includeEmpty:true},c=>{c.fill={type:'pattern',pattern:'solid',fgColor:{argb:AQUA}};c.font={name:'Arial',bold:true};c.border=borders;c.alignment={vertical:'middle',wrapText:true};});});
     ws.autoFilter={from:{row:4,column:1},to:{row:ws.rowCount,column:9}};ws.views=[{state:'frozen',ySplit:4}];ws.pageSetup.printArea=`A1:I${ws.rowCount}`;
   }
   return wb;
