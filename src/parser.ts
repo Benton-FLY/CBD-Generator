@@ -3,7 +3,7 @@ import { classify, normalizeText } from './classifier';
 import type { AppSettings, BomRow, ClassificationDictionary, ColumnMapping, Material, StyleData } from './types';
 
 export const HEADER_ALIASES: Record<string,string[]> = {
-  structure:['STRUCTURE'], materialType:['자재구분','MATERIAL TYPE'], sequence:['원순번','순번','SEQ','SEQUENCE'], itemNo:['ITEM#','ITEM NO','ITEM NO.'], item:['ITEM','자재명'], width:['WIDTH','SIZE'], color:['COLOR'], unit:['UNIT'], netUsage:['정소요량','NET USAGE'], bomLoss:['로스율','LOSS'], usage:['소요량','USAGE'], currency:['CURRENCY','통화'], rawPrice:['단가','PRICE'], convertedPrice:['환산단가','CONVERTED PRICE','USD PRICE'], amount:['금액','AMOUNT'], specialFlag:['특수공정'], remark:['비고','REMARK']
+  structure:['STRUCTURE'], materialType:['자재구분','MATERIAL TYPE'], sequence:['원순번','순번','SEQ','SEQUENCE'], itemNo:['ITEM#','ITEM NO','ITEM NO.'], item:['ITEM','자재명'], width:['WIDTH','SIZE'], color:['COLOR'], unit:['UNIT'], netUsage:['정소요량','NET USAGE'], bomLoss:['로스율','LOSS'], usage:['소요량','USAGE'], currency:['CURRENCY','통화'], rawPrice:['단가','PRICE'], convertedPrice:['환산단가','CONVERTED PRICE','USD PRICE'], materialCostAdjustment:['자재비용차액대체'], amount:['금액','AMOUNT'], specialFlag:['특수공정'], remark:['비고','REMARK']
 };
 const cleanHeader = (v: unknown) => normalizeText(v).replace(/[\s_.-]/g,'');
 export function detectHeader(rows: unknown[][]): { row: number; mapping: ColumnMapping } | null {
@@ -26,8 +26,9 @@ export function rowsFromSheet(data: unknown[][], mapping: ColumnMapping, headerR
     const usageCol=num(get(row,'usage')), net=num(get(row,'netUsage')), loss=num(get(row,'bomLoss')) ?? 0;
     const usage=usageCol ?? (net === undefined ? 0 : net*(1+loss/100));
     const converted=num(get(row,'convertedPrice')), raw=num(get(row,'rawPrice')) ?? 0, currency=normalizeText(get(row,'currency'));
-    const convertedPrice=converted ?? (currency==='KRW' ? raw/settings.exchangeRate : raw);
-    return {id:`${meta.file}:${meta.sheet}:${headerRow+i+2}`,sourceFile:meta.file,sourceSheet:meta.sheet,sourceRow:headerRow+i+2,structure:text(get(row,'structure')),materialType:text(get(row,'materialType')),sequence:text(get(row,'sequence')),itemNo:text(get(row,'itemNo')),item:text(get(row,'item')),width:text(get(row,'width')),color:text(get(row,'color')),unit:text(get(row,'unit')),netUsage:net,bomLoss:loss,usage,currency,rawPrice:raw,convertedPrice,amount:num(get(row,'amount')),specialFlag:text(get(row,'specialFlag')),remark:text(get(row,'remark'))};
+    const materialCostAdjustment=num(get(row,'materialCostAdjustment')) ?? 0;
+    const convertedPrice=(converted ?? (currency==='KRW' ? raw/settings.exchangeRate : raw))+materialCostAdjustment;
+    return {id:`${meta.file}:${meta.sheet}:${headerRow+i+2}`,sourceFile:meta.file,sourceSheet:meta.sheet,sourceRow:headerRow+i+2,structure:text(get(row,'structure')),materialType:text(get(row,'materialType')),sequence:text(get(row,'sequence')),itemNo:text(get(row,'itemNo')),item:text(get(row,'item')),width:text(get(row,'width')),color:text(get(row,'color')),unit:text(get(row,'unit')),netUsage:net,bomLoss:loss,usage,currency,rawPrice:raw,convertedPrice,materialCostAdjustment,amount:num(get(row,'amount')),specialFlag:text(get(row,'specialFlag')),remark:text(get(row,'remark'))};
   }).filter(r => r.item && (r.usage !== 0 || r.convertedPrice !== 0 || r.materialType));
 }
 const slugStyle = (filename:string) => filename.replace(/\.(xlsx?|xls)$/i,'').replace(/\bBOM\b/ig,'').replace(/\b(?:V(?:ER)?\.?\s*)?\d+(?:\.\d+)*\b/ig,'').replace(/\b20\d{2}[._-]\d{1,2}[._-]\d{1,2}\b/g,'').replace(/[_-]+/g,' ').replace(/\s+/g,' ').trim();

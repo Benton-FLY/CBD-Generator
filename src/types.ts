@@ -5,7 +5,7 @@ export interface BomRow {
   id: string; sourceFile: string; sourceSheet: string; sourceRow: number;
   structure: string; materialType: string; sequence: string; itemNo: string; item: string;
   width: string; color: string; unit: string; netUsage?: number; bomLoss?: number; usage: number;
-  currency: string; rawPrice?: number; convertedPrice: number; amount?: number; specialFlag: string; remark: string;
+  currency: string; rawPrice?: number; convertedPrice: number; materialCostAdjustment: number; amount?: number; specialFlag: string; remark: string;
 }
 export interface Material {
   id: string; item: string; width: string; unit: string; group: CbdGroup; included: boolean;
