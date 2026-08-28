@@ -54,7 +54,7 @@ export async function parseBomFile(file: File, settings: AppSettings, dict: Clas
     if(!found) return {styles,unmapped:{sheet:sheetName,rows}};
     const bomRows=rowsFromSheet(rows,found.mapping,found.row,{file:file.name,sheet:sheetName},settings);
     if(!bomRows.length) continue;
-    const base=slugStyle(file.name)||sheetName; const name=sheets.length>1 ? `${base} - ${sheetName}` : base;
+    const base=slugStyle(file.name)||sheetName; const name=/사전원가/.test(base)?base:`${base} 사전원가`;
     styles.push({id:`${file.name}:${sheetName}:${Date.now()}`,name,sourceFile:file.name,sourceSheet:sheetName,materials:aggregate(bomRows,settings.defaultLoss,dict),laborRemark:'It also includes the listed special process and packing costs in the factory.'});
   }
   return {styles};
