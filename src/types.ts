@@ -14,7 +14,7 @@ export interface Material {
 }
 export interface StyleData {
   id: string; name: string; sourceFile: string; sourceSheet: string; materials: Material[];
-  finalFob?: number; fobMatch?: string; threadSubtotal?: number;
+  finalFob?: number; fobMatch?: string; materialTarget?: number; threadSubtotal?: number;
   laborRemark: string;
 }
 export interface AppSettings { exchangeRate: number; defaultLoss: number; }

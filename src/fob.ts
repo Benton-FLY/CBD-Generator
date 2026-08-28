@@ -3,7 +3,7 @@ import { readTabularWorkbook } from './spreadsheet';
 
 const STYLE_HEADERS=['STYLE','STYLE NAME','MODEL','MODEL NAME','스타일','품명'];
 const FOB_HEADERS=['FOB','FOB PRICE','FINAL FOB','최종 FOB','PRICE'];
-const norm=(s:unknown)=>normalizeText(s).replace(/\bBOM\b/g,'').replace(/사전원가/g,'').replace(/[-_]+/g,' ').replace(/\s+/g,' ').trim();
+const norm=(s:unknown)=>normalizeText(s).replace(/\bBOM\b/g,'').replace(/[-_]+/g,' ').replace(/\s+/g,' ').trim();
 export interface FobRecord { style:string; fob:number }
 export async function parseFobFile(file:File):Promise<FobRecord[]> { const sheets=await readTabularWorkbook(file); const out:FobRecord[]=[];
   for(const {rows} of sheets){let hi=-1,si=-1,fi=-1;
