@@ -2,11 +2,12 @@ import ExcelJS from 'exceljs';
 import { saveAs } from 'file-saver';
 import type { CbdGroup, StyleData } from './types';
 import { extendedCost } from './types';
+import { displayStyleName } from './parser';
 
 const ORDER: CbdGroup[]=['OUTSHELL','TRIMS','SEWING THREAD','LABEL & PACKAGING','SPECIAL PROCESS (LIST ONLY)'];
 const BLUE='4472C4', YELLOW='FFF2CC', AQUA='DDEBF7', BORDER='FF000000', WHITE='FFFFFFFF';
 const MONEY='$0.0000', DECIMAL='0.0000';
-export const excelStyleName=(name:string)=>name.replace(/\bMODEL\s+NAME\s*:\s*/ig,'').replace(/사전원가/g,'').replace(/\s+/g,' ').trim()||'CBD';
+export const excelStyleName=(name:string)=>displayStyleName(name.replace(/\bMODEL\s+NAME\s*:\s*/ig,''))||'CBD';
 const safeSheet=(name:string,used:Set<string>)=>{let base=excelStyleName(name).replace(/[\\/*?:[\]]/g,' ').trim().slice(0,31)||'CBD';let out=base,n=2;while(used.has(out)){const s=` (${n++})`;out=base.slice(0,31-s.length)+s;}used.add(out);return out;};
 const borders={top:{style:'thin' as const,color:{argb:BORDER}},left:{style:'thin' as const,color:{argb:BORDER}},bottom:{style:'thin' as const,color:{argb:BORDER}},right:{style:'thin' as const,color:{argb:BORDER}}};
 const rounded=(n:number)=>Math.round((n+Number.EPSILON)*10000)/10000;
@@ -28,7 +29,7 @@ export async function createBuyerWorkbook(styles:StyleData[],date=new Date()):Pr
       const start=ws.rowCount+1,detailCosts:number[]=[];
       for(const m of items){
         const listOnly=group==='SPECIAL PROCESS (LIST ONLY)';
-        const row=ws.addRow(['',m.item,listOnly?'':m.width,listOnly?'':m.unit,listOnly?null:m.adjustedCost,listOnly?null:m.adjustedUsage,listOnly?null:m.additionalLoss,null,m.remark]);row.height=24;
+        const row=ws.addRow(['',m.item,listOnly?'':m.width,listOnly?'':m.unit,listOnly?null:m.adjustedCost,listOnly?null:m.adjustedUsage,listOnly?null:m.additionalLoss,null,m.remark]);row.height=Math.max(24,18*(String(m.remark||'').split(/\r?\n| \/ /).length));
         row.eachCell({includeEmpty:true},c=>{c.font={name:'Arial',size:10};c.border=borders;c.alignment={vertical:'middle',wrapText:true};});
         if(!listOnly){const result=rounded(extendedCost(m));row.getCell(8).value={formula:`ROUND(E${row.number}*F${row.number}*(1+G${row.number}),4)`,result};row.getCell(5).numFmt=MONEY;row.getCell(6).numFmt=DECIMAL;row.getCell(7).numFmt='0%';row.getCell(8).numFmt=MONEY;detailCosts.push(result);}
       }

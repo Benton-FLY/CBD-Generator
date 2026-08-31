@@ -7,14 +7,21 @@ export interface BomRow {
   width: string; color: string; unit: string; netUsage?: number; bomLoss?: number; usage: number;
   currency: string; rawPrice?: number; convertedPrice: number; materialCostAdjustment: number; amount?: number; specialFlag: string; remark: string;
 }
+export type RowDisposition = 'review'|'separate'|'excluded';
+export interface RowStatusDetail {
+  id:string; disposition:RowDisposition; sourceRow:number; itemNo:string; item:string; structure:string;
+  materialType:string; unit:string; convertedPrice:number; materialCostAdjustment:number; remark:string;
+  result:string; reason:string;
+}
 export interface Material {
   id: string; item: string; width: string; unit: string; group: CbdGroup; included: boolean;
   baseCost: number; adjustedCost: number; baseUsage: number; adjustedUsage: number; additionalLoss: number;
-  remark: string; sources: BomRow[]; split: boolean;
+  remark: string; originalRemark?:string; remarkEdited?:boolean; sources: BomRow[]; split: boolean;
 }
 export interface StyleData {
   id: string; name: string; sourceFile: string; sourceSheet: string; materials: Material[];
-  finalFob?: number; fobMatch?: string; threadSubtotal?: number;
+  finalFob?: number; fobMatch?: string; fobMatchMethod?:'Exact'|'Normalized'|'Alias'|'Manual'; fobUnmatchedReason?:string; threadSubtotal?: number;
+  statusDetails?:RowStatusDetail[];
   laborRemark: string;
 }
 export interface AppSettings { exchangeRate: number; defaultLoss: number; }

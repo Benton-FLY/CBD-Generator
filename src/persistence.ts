@@ -15,6 +15,8 @@ export interface SavedWork {
   selections:Record<string,string[]>;
   groupFilters:Record<string,string>;
   fobs:FobRecord[];
+  fobFile?:{name:string;size:number;lastModified:number;parsedCount:number};
+  sidebarScrollTop?:number;
   scope:string;
   target:string;
   operation:string;
