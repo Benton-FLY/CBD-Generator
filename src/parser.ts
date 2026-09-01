@@ -1,6 +1,6 @@
 import { classify, normalizeText } from './classifier';
 import { readTabularWorkbook } from './spreadsheet';
-import type { AppSettings, BomRow, ClassificationDictionary, ColumnMapping, ErpMaterialAuditRow, Material, RowStatusDetail, StyleData } from './types';
+import { roundTo4, type AppSettings, type BomRow, type ClassificationDictionary, type ColumnMapping, type ErpMaterialAuditRow, type Material, type RowStatusDetail, type StyleData } from './types';
 
 export const HEADER_ALIASES: Record<string,string[]> = {
   structure:['STRUCTURE'], materialType:['자재구분','MATERIAL TYPE'], sequence:['원순번','순번','SEQ','SEQUENCE'], serialNo:['일련번호','SERIAL NO','SERIAL NUMBER'], parentSerialNo:['부모일련번호','PARENT SERIAL NO','PARENT SERIAL NUMBER'], level:['레벨','LEVEL'], hasChildren:['하위YN','하위 YN','HAS CHILDREN'], itemNo:['ITEM#','ITEM NO','ITEM NO.'], item:['ITEM','자재명'], width:['WIDTH','SIZE'], color:['COLOR'], unit:['UNIT'], netUsage:['정소요량','NET USAGE'], bomLoss:['로스율','LOSS'], usage:['소요량','USAGE'], currency:['CURRENCY','통화'], rawPrice:['단가','PRICE'], convertedPrice:['환산단가','CONVERTED PRICE','USD PRICE'], ancillaryCost:['부대비용','ADDITIONAL COST','ANCILLARY COST'], materialCostAdjustment:['자재비용차액대체'], amount:['금액','AMOUNT'], specialFlag:['특수공정'], remark:['비고','REMARK']
@@ -31,10 +31,9 @@ export function rowsFromSheet(data: unknown[][], mapping: ColumnMapping, headerR
     return {id:`${meta.file}:${meta.sheet}:${headerRow+i+2}`,sourceFile:meta.file,sourceSheet:meta.sheet,sourceRow:headerRow+i+2,structure:text(get(row,'structure')),materialType:text(get(row,'materialType')),sequence:text(get(row,'sequence')),serialNo:text(get(row,'serialNo')),parentSerialNo:text(get(row,'parentSerialNo')),level:text(get(row,'level')),hasChildren:text(get(row,'hasChildren')),itemNo:text(get(row,'itemNo')),item:text(get(row,'item')),width:text(get(row,'width')),color:text(get(row,'color')),unit:text(get(row,'unit')),netUsage:net,bomLoss:loss,usage,currency,rawPrice:raw,convertedPrice,ancillaryCost,materialCostAdjustment,amount:num(get(row,'amount')),specialFlag:text(get(row,'specialFlag')),remark:text(get(row,'remark'))};
   }).filter(r => r.item && (r.usage !== 0 || r.convertedPrice !== 0 || r.materialType));
 }
-const rounded4=(value:number)=>Math.round((value+Number.EPSILON)*10000)/10000;
 export function buildErpMaterialAudit(rows:BomRow[]):ErpMaterialAuditRow[]{
   const parentIds=new Set(rows.map(r=>normalizeText(r.parentSerialNo)).filter(Boolean));
-  return rows.map(source=>{const isParent=normalizeText(source.hasChildren)==='Y'||Boolean(source.serialNo&&parentIds.has(normalizeText(source.serialNo)));const material=normalizeText(source.materialType)==='자재';const usedFallback=material&&!isParent&&source.amount===undefined;const included=material&&!isParent;const includedAmount=included?(source.amount??rounded4(source.usage*(source.convertedPrice+(source.ancillaryCost??0)))):0;const reason=!material?`제외: 자재구분=${source.materialType||'공란'}`:isParent?'제외: 상위 복합자재':usedFallback?'검토: 금액 공란으로 fallback 계산':'포함: 말단 자재';return{source,isParent,included,includedAmount,usedFallback,reason};});
+  return rows.map(source=>{const isParent=normalizeText(source.hasChildren)==='Y'||Boolean(source.serialNo&&parentIds.has(normalizeText(source.serialNo)));const material=normalizeText(source.materialType)==='자재';const usedFallback=material&&!isParent&&source.amount===undefined;const included=material&&!isParent;const includedAmount=included?(source.amount??roundTo4(source.usage*(source.convertedPrice+(source.ancillaryCost??0)))):0;const reason=!material?`제외: 자재구분=${source.materialType||'공란'}`:isParent?'제외: 상위 복합자재':usedFallback?'검토: 금액 공란으로 fallback 계산':'포함: 말단 자재';return{source,isParent,included,includedAmount,usedFallback,reason};});
 }
 export function buyerRowsWithoutHierarchyDuplicates(rows:BomRow[],dict:ClassificationDictionary):BomRow[]{
   const childrenByParent=new Map<string,BomRow[]>();rows.forEach(r=>{const key=normalizeText(r.parentSerialNo);if(key)childrenByParent.set(key,[...(childrenByParent.get(key)||[]),r])});
@@ -83,7 +82,7 @@ export async function parseBomFile(file: File, settings: AppSettings, dict: Clas
     allRows.push(...bomRows); sourceSheets.push(sheetName);
   }
   if(!allRows.length)return {styles:[]};
-  const name=displayStyleName(file.name)||displayStyleName(sourceSheets[0]),audit=buildErpMaterialAudit(allRows),erpMaterialCost=rounded4(audit.reduce((sum,row)=>sum+row.includedAmount,0)); const materials=aggregate(buyerRowsWithoutHierarchyDuplicates(allRows,dict),settings.defaultLoss,dict);
+  const name=displayStyleName(file.name)||displayStyleName(sourceSheets[0]),audit=buildErpMaterialAudit(allRows),erpMaterialCost=roundTo4(audit.reduce((sum,row)=>sum+row.includedAmount,0)); const materials=aggregate(buyerRowsWithoutHierarchyDuplicates(allRows,dict),settings.defaultLoss,dict);
   return {styles:[{id:`${file.name}:${Date.now()}`,name,sourceFile:file.name,sourceSheet:sourceSheets.join(', '),materials,statusDetails:statusDetails(materials),erpMaterialCost,erpAudit:audit,laborRemark:'It also includes the listed special process and packing costs in the factory.'}]};
 }
 

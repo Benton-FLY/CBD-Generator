@@ -30,5 +30,16 @@ export interface AppSettings { exchangeRate: number; defaultLoss: number; }
 export type ClassificationDictionary = Record<string, CbdGroup>;
 export interface ColumnMapping { [field: string]: number | undefined }
 
-export const extendedCost = (m: Material) => m.adjustedCost * m.adjustedUsage * (1 + m.additionalLoss);
 export const visibleGroups: CbdGroup[] = ['OUTSHELL','TRIMS','SEWING THREAD','LABEL & PACKAGING'];
+
+/** Match Excel ROUND(value, 4) before any material subtotal is calculated. */
+export const roundTo4 = (value: number) => {
+  if (!Number.isFinite(value)) return 0;
+  const absolute=Math.abs(value);
+  return Math.sign(value)*Math.round((absolute+Number.EPSILON*Math.max(1,absolute))*10000)/10000;
+};
+
+export const extendedCost = (m: Material) => roundTo4(m.adjustedCost * m.adjustedUsage * (1 + m.additionalLoss));
+export const groupSubtotal = (materials: Material[]) => roundTo4(materials.reduce((sum,m)=>sum+extendedCost(m),0));
+export const totalMaterialCost = (materials: Material[]) => roundTo4(visibleGroups.reduce((total,group)=>
+  total+groupSubtotal(materials.filter(m=>m.included&&m.group===group)),0));

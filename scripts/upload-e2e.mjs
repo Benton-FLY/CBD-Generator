@@ -22,7 +22,7 @@ async function run(browserType,name){
     chooserPromise=page.waitForEvent('filechooser');await box.locator('label').press('Enter');chooser=await chooserPromise;await chooser.setFiles([]);
     chooserPromise=page.waitForEvent('filechooser');await box.locator('label').press('Space');chooser=await chooserPromise;await chooser.setFiles([]);
 
-    await input.setInputFiles(payload('27 LITE PANT BOM.xls',xls,''));await page.getByText('1개 스타일을 분석했습니다.').waitFor();assert.equal(await page.getByText('LITE PANT 사전원가',{exact:true}).count(),1);
+    await input.setInputFiles(payload('27 LITE PANT BOM.xls',xls,''));await page.getByText('1개 스타일을 분석했습니다.').waitFor();assert.equal(await page.getByText('LITE PANT',{exact:true}).count(),1);
     const workspace=page.getByTestId('workspace-bom-uploader'),workspaceInput=page.getByLabel('추가 BOM Excel 파일');
     chooserPromise=page.waitForEvent('filechooser');await workspace.getByText('BOM 추가',{exact:true}).click();chooser=await chooserPromise;await chooser.setFiles([]);
     chooserPromise=page.waitForEvent('filechooser');await workspace.getByRole('button',{name:'파일 선택'}).click();chooser=await chooserPromise;await chooser.setFiles([]);

@@ -1,7 +1,7 @@
 import ExcelJS from 'exceljs';
 import { saveAs } from 'file-saver';
 import type { CbdGroup, StyleData } from './types';
-import { extendedCost } from './types';
+import { extendedCost, groupSubtotal, roundTo4 } from './types';
 import { displayStyleName } from './parser';
 
 const ORDER: CbdGroup[]=['OUTSHELL','TRIMS','SEWING THREAD','LABEL & PACKAGING','SPECIAL PROCESS (LIST ONLY)'];
@@ -10,7 +10,6 @@ const MONEY='$0.0000', DECIMAL='0.0000';
 export const excelStyleName=(name:string)=>displayStyleName(name.replace(/\bMODEL\s+NAME\s*:\s*/ig,''))||'CBD';
 const safeSheet=(name:string,used:Set<string>)=>{let base=excelStyleName(name).replace(/[\\/*?:[\]]/g,' ').trim().slice(0,31)||'CBD';let out=base,n=2;while(used.has(out)){const s=` (${n++})`;out=base.slice(0,31-s.length)+s;}used.add(out);return out;};
 const borders={top:{style:'thin' as const,color:{argb:BORDER}},left:{style:'thin' as const,color:{argb:BORDER}},bottom:{style:'thin' as const,color:{argb:BORDER}},right:{style:'thin' as const,color:{argb:BORDER}}};
-const rounded=(n:number)=>Math.round((n+Number.EPSILON)*10000)/10000;
 
 async function createWorkbook(styles:StyleData[],date=new Date(),internalReview=false):Promise<ExcelJS.Workbook>{
   const wb=new ExcelJS.Workbook();wb.creator='CBD Chart Generator';wb.created=date;
@@ -26,17 +25,17 @@ async function createWorkbook(styles:StyleData[],date=new Date(),internalReview=
     const subtotalCells:string[]=[];
     for(const group of ORDER){
       const items=style.materials.filter(m=>m.group===group&&m.included);if(!items.length)continue;
-      const start=ws.rowCount+1,detailCosts:number[]=[];
+      const start=ws.rowCount+1;
       for(const m of items){
         const listOnly=group==='SPECIAL PROCESS (LIST ONLY)';
         const row=ws.addRow(['',m.item,listOnly?'':m.width,listOnly?'':m.unit,listOnly?null:m.adjustedCost,listOnly?null:m.adjustedUsage,listOnly?null:m.additionalLoss,null,m.remark]);row.height=Math.max(24,18*(String(m.remark||'').split(/\r?\n| \/ /).length));
         row.eachCell({includeEmpty:true},c=>{c.font={name:'Arial',size:10};c.border=borders;c.alignment={vertical:'middle',wrapText:true};});
-        if(!listOnly){const result=rounded(extendedCost(m));row.getCell(8).value={formula:`ROUND(E${row.number}*F${row.number}*(1+G${row.number}),4)`,result};row.getCell(5).numFmt=MONEY;row.getCell(6).numFmt=DECIMAL;row.getCell(7).numFmt='0%';row.getCell(8).numFmt=MONEY;detailCosts.push(result);}
+        if(!listOnly){const result=extendedCost(m);row.getCell(8).value={formula:`ROUND(E${row.number}*F${row.number}*(1+G${row.number}),4)`,result};row.getCell(5).numFmt=MONEY;row.getCell(6).numFmt=DECIMAL;row.getCell(7).numFmt='0%';row.getCell(8).numFmt=MONEY;}
       }
       const end=ws.rowCount;ws.mergeCells(start,1,end,1);const gc=ws.getCell(start,1);gc.value=group==='SPECIAL PROCESS (LIST ONLY)'?'SPECIAL PROCESS\n(LIST ONLY)':group;gc.alignment={textRotation:0,horizontal:'center',vertical:'middle',wrapText:true};gc.font={name:'Arial',bold:true};gc.border=borders;
-      if(group!=='SPECIAL PROCESS (LIST ONLY)'){const result=rounded(detailCosts.reduce((s,n)=>s+n,0));const sub=ws.addRow(['',`${group} SUBTOTAL`,'','','','','',null,'']);sub.getCell(8).value={formula:`SUM(H${start}:H${end})`,result};sub.getCell(8).numFmt=MONEY;subtotalCells.push(`H${sub.number}`);sub.eachCell({includeEmpty:true},c=>{c.fill={type:'pattern',pattern:'solid',fgColor:{argb:YELLOW}};c.font={name:'Arial',bold:true};c.border=borders;c.alignment={vertical:'middle',wrapText:true};});}
+      if(group!=='SPECIAL PROCESS (LIST ONLY)'){const result=groupSubtotal(items);const sub=ws.addRow(['',`${group} SUBTOTAL`,'','','','','',null,'']);sub.getCell(8).value={formula:`SUM(H${start}:H${end})`,result};sub.getCell(8).numFmt=MONEY;subtotalCells.push(`H${sub.number}`);sub.eachCell({includeEmpty:true},c=>{c.fill={type:'pattern',pattern:'solid',fgColor:{argb:YELLOW}};c.font={name:'Arial',bold:true};c.border=borders;c.alignment={vertical:'middle',wrapText:true};});}
     }
-    const materialTotal=rounded(subtotalCells.reduce((sum,address)=>sum+(Number((ws.getCell(address).value as ExcelJS.CellFormulaValue).result)||0),0));
+    const materialTotal=roundTo4(subtotalCells.reduce((sum,address)=>sum+(Number((ws.getCell(address).value as ExcelJS.CellFormulaValue).result)||0),0));
     let materialTotalRow=0,fobRow=0;
     const totals:[string,number|null,string,boolean][]=[['Total material cost',materialTotal,'',true],['Labor cost',null,style.laborRemark,false],['Overhead',null,'',false],['Profit',null,'',false],['FOB PRICE',style.finalFob??null,'',false]];
     totals.forEach(([label,value,remark,isFormula])=>{const row=ws.addRow(['',label,'','','','','',value,remark]);if(label==='Total material cost')materialTotalRow=row.number;if(label==='FOB PRICE')fobRow=row.number;if(isFormula)row.getCell(8).value={formula:`SUM(${subtotalCells.join(',')})`,result:materialTotal};else if(label==='FOB PRICE'&&value!==null)row.getCell(8).value={formula:String(value),result:value};row.getCell(8).numFmt=MONEY;row.eachCell({includeEmpty:true},c=>{c.fill={type:'pattern',pattern:'solid',fgColor:{argb:AQUA}};c.font={name:'Arial',bold:true};c.border=borders;c.alignment={vertical:'middle',wrapText:true};});});
