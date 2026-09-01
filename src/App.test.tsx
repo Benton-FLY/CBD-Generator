@@ -74,6 +74,17 @@ describe('CBD workspace UI',()=>{
     expect(screen.getByText('STYLE TWO 사전원가')).toBeTruthy();expect(screen.getByRole('option',{name:'선택 항목 (1)'})).toBeTruthy();expect(await screen.findByText(/자동 저장됨/)).toBeTruthy();
   });
 
+  it('updates the persisted F-16 CHICRON auto result on restore and protects a manual TRIMS override',async()=>{
+    const item='CHICRON TOUCH (E-SUEDE) 0.6MM (8G060-B000D)',source={id:'f16-row',sourceFile:'28 F-16 GLOVE.xls',sourceSheet:'BOM',sourceRow:12,structure:'PALM',materialType:'자재',sequence:'',itemNo:'8G060-B000D',item,width:'',color:'BLACK',unit:'YD',usage:1,currency:'USD',convertedPrice:1,materialCostAdjustment:0,specialFlag:'',remark:''};
+    const chicron:Material={...material('f16-chicron','TRIMS',1),item,sources:[source]};
+    const f16:StyleData={id:'f16',name:'F-16 GLOVE',sourceFile:'28 F-16 GLOVE.xls',sourceSheet:'BOM',laborRemark:'',materials:[chicron]};
+    const saveF16=(dict:Record<string,CbdGroup>)=>saveWork({styles:[f16],active:'f16',settings:{exchangeRate:900,defaultLoss:.05},dict,selections:{},groupFilters:{},fobs:[],scope:'all',target:'cost',operation:'base-percent',bulkValue:5});
+    await saveF16({});const first=render(<App/>);const group=within((await screen.findByText(item)).closest('tr')!).getByRole('combobox') as HTMLSelectElement;
+    expect(group.value).toBe('OUTSHELL');first.unmount();await clearSavedWork();
+    await saveF16({'ITEM:CHICRON TOUCH (E-SUEDE) 0.6MM (8G060-B000D)':'TRIMS'});render(<App/>);const manual=within((await screen.findByText(item)).closest('tr')!).getByRole('combobox') as HTMLSelectElement;
+    expect(manual.value).toBe('TRIMS');
+  });
+
   it('cancels reset without data loss and clears UI plus IndexedDB after confirmation',async()=>{
     await seed();const user=userEvent.setup();render(<App/>);await screen.findByLabelText('Final FOB');
     vi.spyOn(window,'confirm').mockReturnValueOnce(false);await user.click(screen.getByRole('button',{name:/전체 초기화/}));
