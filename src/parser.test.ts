@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import ExcelJS from 'exceljs';
-import { aggregate, buildErpMaterialAudit, buyerRowsWithoutHierarchyDuplicates, detectHeader, displayStyleName, parseBomFile, rowsFromSheet, statusDetails } from './parser';
+import { aggregate, buildErpMaterialAudit, buyerRowsWithoutHierarchyDuplicates, cbdUsage, detectHeader, displayStyleName, parseBomFile, rowsFromSheet, splitMaterial, statusDetails } from './parser';
 import { matchFob, parseFobFile, type FobRecord } from './fob';
 import { createBuyerWorkbook, createInternalWorkbook } from './exporter';
-import type { BomRow, StyleData } from './types';
+import { extendedCost, roundTo4, type BomRow, type StyleData } from './types';
 
 const settings={exchangeRate:900,defaultLoss:.05};
 const row=(id:string,item:string,usage:number,cost:number,structure='BODY',extra:Partial<BomRow>={}):BomRow=>({id,sourceFile:'27 LITE PANT BOM.xls',sourceSheet:'BOM',sourceRow:+id,structure,materialType:'원부자재',sequence:'',itemNo:'',item,width:'',color:'BLACK',unit:'YD',usage,currency:'USD',convertedPrice:cost,materialCostAdjustment:0,rawPrice:cost,specialFlag:'',remark:'',...extra});
@@ -14,6 +14,29 @@ describe('BOM parsing and aggregation',()=>{
   it('detects a header within 30 rows regardless of column positions',()=>{const rows=[['title'],[],['Item','Structure','소요량','환산단가','Unit','Width']];const found=detectHeader(rows);expect(found?.row).toBe(2);expect(found?.mapping.item).toBe(0);expect(found?.mapping.usage).toBe(2)});
   it('uses Q usage and U converted price without reapplying BOM loss or KRW conversion',()=>{const rows=[['Structure','자재구분','Item','Unit','정소요량','로스율','소요량','Currency','단가','환산단가'],['A','원부자재','NYLON WEBBING (25M/M)','M',1,20,.5,'KRW',214,.2378],['B','원부자재','CARE LABEL','EA',1,10,1,'KRW',65,.0722]];const found=detectHeader(rows)!;const parsed=rowsFromSheet(rows,found.mapping,found.row,{file:'x.xls',sheet:'BOM'},settings);expect(parsed[0].usage).toBe(.5);expect(parsed[0].convertedPrice).toBe(.2378);expect(parsed[1].convertedPrice).toBe(.0722)});
   it('falls back only when Q/U are absent',()=>{const rows=[['Structure','Item','Unit','정소요량','로스율','Currency','단가'],['A','KRW ITEM','EA',2,10,'KRW',900]];const f=detectHeader(rows)!;const r=rowsFromSheet(rows,f.mapping,f.row,{file:'x',sheet:'s'},settings)[0];expect(r.usage).toBeCloseTo(2.2);expect(r.convertedPrice).toBe(1)});
+  it.each([
+    ['PCS',1,1.01,1],
+    ['pcs',2,2.02,2],
+    [' PCS ',3,3.03,3],
+  ])('uses net requirement for exact normalized %s CBD usage', (unit,netUsage,usage,expected)=>{
+    const source=row('1','PACKAGING',usage,.12,'PACKING',{unit,netUsage});
+    const material=aggregate([source],.05,{})[0];
+    expect(cbdUsage(source)).toBe(expected);
+    expect(material.baseUsage).toBe(expected);
+    expect(material.adjustedUsage).toBe(expected);
+    expect(extendedCost(material)).toBe(roundTo4(.12*expected*1.05));
+    expect(splitMaterial(material)[0].baseUsage).toBe(expected);
+  });
+  it.each(['M','CONE','ROLL','YDS','PCS SET'])('keeps the existing usage for non-PCS unit %s',unit=>{
+    const source=row('1','MATERIAL',1.01,.12,'BODY',{unit,netUsage:1});
+    const material=aggregate([source],.05,{})[0];
+    expect(material.baseUsage).toBe(1.01);
+    expect(material.adjustedUsage).toBe(1.01);
+  });
+  it('keeps BOM loss-inclusive usage in the ERP audit fallback',()=>{
+    const source=row('1','PACKAGING',1.01,.12,'PACKING',{unit:'PCS',netUsage:1,amount:undefined,materialType:'자재'});
+    expect(buildErpMaterialAudit([source])[0].includedAmount).toBe(roundTo4(1.01*.12));
+  });
   it('adds the header-matched material cost adjustment before weighted aggregation',()=>{const rows=[['Item','Unit','소요량','자재비용차액대체','환산단가'],['ONE MESH (GSM)','YD',.2,.3,2.7],['ONE MESH (GSM)','YD',.1914,'',2.7]];const f=detectHeader(rows)!;const parsed=rowsFromSheet(rows,f.mapping,f.row,{file:'x',sheet:'s'},settings);expect(parsed[0].convertedPrice).toBe(3);expect(parsed[1].convertedPrice).toBe(2.7);const mesh=aggregate(parsed,.05,{}).find(m=>m.item==='ONE MESH (GSM)')!;expect(mesh.baseCost).toBeCloseTo((3*.2+2.7*.1914)/.3914);});
   it('matches supplied repeated-material validation values and weighted cost',()=>{const rows=[row('1','#7172 STRETCH KEVLAR (WRC0)',.1,21.3),row('2','#7172 STRETCH KEVLAR (WRC0)',.0823,21.3),...Array.from({length:4},(_,i)=>row(`${i+3}`,'ONE MESH (GSM)',.094,2)),row('7','WEBBING POLY 10MM',.1,.0243,'WAIST'),row('8','WEBBING POLY 10MM',.0972,.0241,'BELT')];const m=aggregate(rows,.05,{});const kev=m.find(x=>x.item.startsWith('#7172'))!;expect(kev.sources).toHaveLength(2);expect(kev.baseUsage).toBeCloseTo(.1823);expect(kev.baseCost*kev.baseUsage*1.05).toBeCloseTo(4.0771395);expect(m.find(x=>x.item==='ONE MESH (GSM)')!.baseUsage).toBeCloseTo(.376);const web=m.find(x=>x.item==='WEBBING POLY 10MM')!;expect(web.sources).toHaveLength(2);expect(web.baseUsage).toBeCloseTo(.1972);expect(web.baseCost).toBeCloseTo((.1*.0243+.0972*.0241)/.1972)});
   it('does not merge same material when width or unit differs',()=>{const m=aggregate([row('1','FABRIC',1,2,'A',{width:'50',unit:'YD'}),row('2','FABRIC',1,2,'B',{width:'60',unit:'YD'})],.05,{});expect(m).toHaveLength(2)});
@@ -25,6 +48,16 @@ describe('BOM parsing and aggregation',()=>{
 
 describe('Buyer-only workbook',()=>{
   it('uses clean style-only sheet names and disambiguates duplicates',async()=>{const materials=aggregate([row('1','FABRIC',1,2)],.05,{});const make=(id:string):StyleData=>({id,name:'MODEL NAME : LITE/PANT 사전원가',sourceFile:'x.xlsx',sourceSheet:'BOM',materials,laborRemark:''});const wb=await createBuyerWorkbook([make('a'),make('b')]);expect(wb.worksheets.map(ws=>ws.name)).toEqual(['LITE PANT','LITE PANT (2)']);});
+  it('exports PCS net usage and the matching extended cost',async()=>{
+    const materials=aggregate([row('1','HEADER CARD',1.01,.12,'PACKING',{unit:'PCS',netUsage:1})],.05,{});
+    const style:StyleData={id:'pcs',name:'28 KINETIC 1 GLOVE',sourceFile:'BOM.xls',sourceSheet:'BOM',materials,laborRemark:''};
+    const wb=await createBuyerWorkbook([style]);const ws=wb.worksheets[0];let materialRow=0,totalRow=0;
+    ws.eachRow((r,n)=>{if(r.getCell(2).value==='HEADER CARD')materialRow=n;if(r.getCell(2).value==='Total material cost')totalRow=n});
+    expect(ws.getCell(materialRow,6).value).toBe(1);
+    expect(ws.getCell(materialRow,7).value).toBe(.05);
+    expect(ws.getCell(materialRow,8).value).toEqual({formula:`ROUND(E${materialRow}*F${materialRow}*(1+G${materialRow}),4)`,result:.126});
+    expect((ws.getCell(totalRow,8).value as ExcelJS.CellFormulaValue).result).toBe(.126);
+  });
   it('writes thread costs and formulas while keeping special-process/private data hidden',async()=>{const mats=aggregate([row('1','THREAD 40S',1,2,'재봉사-A'),row('2','SILICON PRINT COST',1,9,'SECRET STRUCTURE',{materialType:'특수공임',remark:'front logo'}),row('3','FABRIC',1,3,'BODY',{remark:'public'})],.05,{});const style:StyleData={id:'s',name:'27 LITE PANT',sourceFile:'secret BOM.xls',sourceSheet:'정소요량',materials:mats,finalFob:10,laborRemark:'It also includes the listed special process and packing costs in the factory.'};const wb=await createBuyerWorkbook([style],new Date('2025-10-17T00:00:00Z'));const buffer=await wb.xlsx.writeBuffer();const reread=new ExcelJS.Workbook();await reread.xlsx.load(buffer);const ws=reread.worksheets[0];const values=ws.getSheetValues().flat(3).join(' | ');expect(values).not.toContain('REFERENCES');expect(values).not.toContain('SECRET STRUCTURE');expect(values).not.toContain('정소요량');expect(values).not.toContain('secret BOM');let specialRow=0,threadRow=0,totalRow=0;ws.eachRow((r,n)=>{if(r.getCell(2).value==='SILICON PRINT COST')specialRow=n;if(r.getCell(2).value==='THREAD 40S')threadRow=n;if(r.getCell(2).value==='Total material cost')totalRow=n});for(let c=5;c<=8;c++)expect(ws.getCell(specialRow,c).value).toBeNull();expect(ws.getCell(threadRow,5).value).toBe(2);expect(ws.getCell(threadRow,6).value).toBe(1);expect(ws.getCell(threadRow,8).formula).toBe(`ROUND(E${threadRow}*F${threadRow}*(1+G${threadRow}),4)`);expect(ws.getCell(totalRow,8).formula).toMatch(/^SUM\(H\d+(,H\d+)*\)$/);expect(ws.getCell('D1').font.size).toBeGreaterThanOrEqual(18);expect(ws.getColumn(1).width).toBeGreaterThanOrEqual(20);expect(ws.getCell(threadRow,1).alignment.textRotation??0).toBe(0);expect(ws.getCell(threadRow,6).numFmt).toBe('0.0000');});
   it('reopens the LITE PANT validation values with formulas, four-decimal formats, and clean branding',async()=>{const source=[row('1','ONE MESH (GSM)',.3914,3),row('2','ZIPPER',.1,.5),row('3','NYLON 210/3 2,000M <SW*TH>',.2142,1.5333,'THREAD'),row('4','SPUN 30/3 5000M <SW*TH>',.098,1.9,'THREAD'),row('5','NYLON 210D/2 2000M <SW*TH>',.005,1.6667,'THREAD'),row('6','KEVLAR 30/3 (3,000M/CONE)',.0064,2.2,'재봉사'),row('7','CARE LABEL',1,.1,'포장-LABEL',{sequence:'100'}),row('8','LASER CUTTING COST',1,50,'PROCESS',{materialType:'특수공임'})];const style:StyleData={id:'lite',name:'LITE PANT 사전원가',sourceFile:'BOM.xls',sourceSheet:'BOM',materials:aggregate(source,.05,{}),finalFob:25,laborRemark:''};const wb=await createBuyerWorkbook([style]);const buffer=await wb.xlsx.writeBuffer();const reopened=new ExcelJS.Workbook();await reopened.xlsx.load(buffer);const ws=reopened.worksheets[0];expect(ws.name).toBe('LITE PANT');expect(ws.getCell('A1').value).toBe('FLY Racing CBD Sheet');expect(ws.getCell('D1').value).toBe('LITE PANT');const values=ws.getSheetValues().flat(3).join(' | ');expect(values).not.toContain('MODEL NAME');expect(values).not.toContain('사전원가');const byItem=new Map<string,number>();let totalRow=0,fobRow=0;const subtotalRows:number[]=[];let formulas=0;ws.eachRow((r,n)=>{const label=String(r.getCell(2).value??'');if(label)byItem.set(label,n);if(label.endsWith(' SUBTOTAL'))subtotalRows.push(n);if(label==='Total material cost')totalRow=n;if(label==='FOB PRICE')fobRow=n;r.eachCell(c=>{if(c.formula)formulas++;});});const expected=[['ONE MESH (GSM)',3,.3914,1.2329],['NYLON 210/3 2,000M <SW*TH>',1.5333,.2142,.3449],['SPUN 30/3 5000M <SW*TH>',1.9,.098,.1955],['NYLON 210D/2 2000M <SW*TH>',1.6667,.005,.0088],['KEVLAR 30/3 (3,000M/CONE)',2.2,.0064,.0148]] as const;for(const [item,cost,usage,result] of expected){const n=byItem.get(item)!;expect(ws.getCell(n,5).value).toBe(cost);expect(ws.getCell(n,5).numFmt).toBe('$0.0000');expect(ws.getCell(n,6).value).toBe(usage);expect(ws.getCell(n,6).numFmt).toBe('0.0000');expect(ws.getCell(n,8).formula).toBe(`ROUND(E${n}*F${n}*(1+G${n}),4)`);expect(ws.getCell(n,8).result).toBe(result);expect(ws.getCell(n,8).numFmt).toBe('$0.0000');}expect(subtotalRows).toHaveLength(4);subtotalRows.forEach(n=>{expect(ws.getCell(n,8).formula).toMatch(/^SUM\(H\d+:H\d+\)$/);expect(ws.getCell(n,8).numFmt).toBe('$0.0000')});expect(ws.getCell(totalRow,8).formula).toMatch(/^SUM\(H\d+,H\d+,H\d+,H\d+\)$/);expect(ws.getCell(totalRow,8).numFmt).toBe('$0.0000');expect(ws.getCell(fobRow,8).formula).toBe('25');expect(ws.getCell(fobRow,8).result).toBe(25);expect(ws.getCell(fobRow,8).numFmt).toBe('$0.0000');expect(formulas).toBeGreaterThan(0);expect([...byItem.keys()]).not.toContain('SURCHARGE');});
 });

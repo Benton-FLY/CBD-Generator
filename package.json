@@ -8,7 +8,8 @@
     "build": "tsc -b && vite build",
     "test": "vitest run",
     "test:e2e": "node scripts/e2e.mjs",
-    "test:upload": "node scripts/upload-e2e.mjs"
+    "test:upload": "node scripts/upload-e2e.mjs",
+    "verify:pcs": "vite-node --script scripts/verify-pcs-usage.mts"
   },
   "dependencies": {
     "exceljs": "^4.4.0",

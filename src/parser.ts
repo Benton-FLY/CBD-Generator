@@ -43,6 +43,12 @@ export function buyerRowsWithoutHierarchyDuplicates(rows:BomRow[],dict:Classific
 export const displayStyleName=(value:string)=>value.normalize('NFKC').replace(/\.(xlsx?|xls)$/i,'').replace(/\bBOM\b/ig,'').replace(/^\s*\d{2}\s+/,'').replace(/\s*사전원가\s*$/,'').replace(/_/g,' ').replace(/\s+/g,' ').trim();
 const combined=(values:string[])=>[...new Set(values.map(v=>v.trim()).filter(Boolean))].join(' / ');
 const keyOf=(r:BomRow)=>[normalizeText(r.item),normalizeText(r.width),normalizeText(r.unit)].join('|');
+/**
+ * PCS materials use the BOM's original net requirement in the CBD. The BOM
+ * loss-inclusive usage remains on BomRow.usage for ERP audit calculations.
+ */
+export const cbdUsage = (row:BomRow) =>
+  normalizeText(row.unit)==='PCS' && row.netUsage !== undefined ? row.netUsage : row.usage;
 export function aggregate(rows: BomRow[], loss: number, dict: ClassificationDictionary): Material[] {
   const buckets=new Map<string,BomRow[]>();
   rows.forEach(r => {
@@ -51,8 +57,8 @@ export function aggregate(rows: BomRow[], loss: number, dict: ClassificationDict
     buckets.set(key,[...(buckets.get(key)||[]),r]);
   });
   return [...buckets.entries()].map(([key,sources])=>{
-    const usage=sources.reduce((s,r)=>s+r.usage,0);
-    const weighted=usage ? sources.reduce((s,r)=>s+r.convertedPrice*r.usage,0)/usage : sources.reduce((s,r)=>s+r.convertedPrice,0)/sources.length;
+    const usage=sources.reduce((s,r)=>s+cbdUsage(r),0);
+    const weighted=usage ? sources.reduce((s,r)=>s+r.convertedPrice*cbdUsage(r),0)/usage : sources.reduce((s,r)=>s+r.convertedPrice,0)/sources.length;
     const first=sources[0], group=classify(first,dict);
     const originalRemark=combined(sources.map(r=>r.remark))||combined(sources.map(r=>r.structure));
     return {id:key,item:first.item,width:first.width,unit:first.unit,group,included:group!=='EXCLUDE',baseCost:weighted||0,adjustedCost:weighted||0,baseUsage:usage,adjustedUsage:usage,additionalLoss:loss,remark:originalRemark,originalRemark,remarkEdited:false,sources,split:false};
@@ -86,4 +92,4 @@ export async function parseBomFile(file: File, settings: AppSettings, dict: Clas
   return {styles:[{id:`${file.name}:${Date.now()}`,name,sourceFile:file.name,sourceSheet:sourceSheets.join(', '),materials,statusDetails:statusDetails(materials),erpMaterialCost,erpAudit:audit,laborRemark:'It also includes the listed special process and packing costs in the factory.'}]};
 }
 
-export const splitMaterial = (m: Material): Material[] => m.sources.map((r,i)=>({ ...m,id:`${m.id}:split:${i}`,sources:[r],baseUsage:r.usage,adjustedUsage:r.usage,baseCost:r.convertedPrice,adjustedCost:r.convertedPrice,remark:r.remark||r.structure,originalRemark:r.remark||r.structure,remarkEdited:false,split:true }));
+export const splitMaterial = (m: Material): Material[] => m.sources.map((r,i)=>({ ...m,id:`${m.id}:split:${i}`,sources:[r],baseUsage:cbdUsage(r),adjustedUsage:cbdUsage(r),baseCost:r.convertedPrice,adjustedCost:r.convertedPrice,remark:r.remark||r.structure,originalRemark:r.remark||r.structure,remarkEdited:false,split:true }));
