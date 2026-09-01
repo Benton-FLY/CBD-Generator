@@ -21,6 +21,26 @@ beforeEach(async()=>{await clearSavedWork();localStorage.clear();vi.restoreAllMo
 afterEach(()=>cleanup());
 
 describe('CBD workspace UI',()=>{
+  it('restores synchronized bulk and material group state per style across repeated switches',async()=>{
+    await seed();const user=userEvent.setup();render(<App/>);await screen.findByLabelText('Final FOB');
+    const bulk=screen.getByLabelText('일괄 조정 대상') as HTMLSelectElement;
+    const filter=screen.getByLabelText('CBD Group 보기') as HTMLSelectElement;
+    const field=screen.getByLabelText('일괄 조정 필드') as HTMLSelectElement;
+    const operation=screen.getByLabelText('일괄 조정 방식') as HTMLSelectElement;
+    await user.selectOptions(field,'usage');await user.selectOptions(operation,'set');
+    await user.selectOptions(bulk,'TRIMS');
+    expect(filter.value).toBe('TRIMS');expect(screen.queryByText('SHELL-1')).toBeNull();expect(screen.getByText('TRIM-1')).toBeTruthy();
+    await user.click(screen.getByRole('button',{name:/STYLE TWO/}));
+    expect(bulk.value).toBe('all');expect(filter.value).toBe('all');expect(field.value).toBe('cost');expect(operation.value).toBe('base-percent');expect(screen.getByText('OTHER')).toBeTruthy();
+    await user.selectOptions(bulk,'TRIMS');
+    await user.click(screen.getByRole('button',{name:/STYLE ONE/}));
+    expect(bulk.value).toBe('TRIMS');expect(filter.value).toBe('TRIMS');expect(field.value).toBe('usage');expect(operation.value).toBe('set');expect(screen.queryByText('SHELL-1')).toBeNull();
+    await user.click(screen.getByRole('button',{name:/STYLE TWO/}));
+    expect(bulk.value).toBe('TRIMS');expect(filter.value).toBe('TRIMS');expect(screen.getByText('OTHER')).toBeTruthy();
+    await user.click(screen.getByRole('button',{name:/STYLE ONE/}));
+    expect(bulk.value).toBe('TRIMS');expect(filter.value).toBe('TRIMS');
+  });
+
   it('accepts a decimal FINAL FOB, formats it to four decimals, and supports undo/redo',async()=>{
     await seed();const user=userEvent.setup();render(<App/>);
     const fob=await screen.findByLabelText('Final FOB') as HTMLInputElement;

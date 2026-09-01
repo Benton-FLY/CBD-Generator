@@ -14,6 +14,10 @@ export interface SavedWork {
   dict:ClassificationDictionary;
   selections:Record<string,string[]>;
   groupFilters:Record<string,string>;
+  /** Style-specific bulk-adjustment target. Optional for existing v1 saves. */
+  scopes?:Record<string,string>;
+  /** Style-specific bulk field, operation, and value. Optional for existing v1 saves. */
+  bulkStates?:Record<string,{target:string;operation:string;value:number}>;
   fobs:FobRecord[];
   fobFile?:{name:string;size:number;lastModified:number;parsedCount:number};
   sidebarScrollTop?:number;
