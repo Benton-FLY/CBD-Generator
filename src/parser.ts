@@ -35,10 +35,26 @@ export function buildErpMaterialAudit(rows:BomRow[]):ErpMaterialAuditRow[]{
   const parentIds=new Set(rows.map(r=>normalizeText(r.parentSerialNo)).filter(Boolean));
   return rows.map(source=>{const isParent=normalizeText(source.hasChildren)==='Y'||Boolean(source.serialNo&&parentIds.has(normalizeText(source.serialNo)));const material=normalizeText(source.materialType)==='자재';const usedFallback=material&&!isParent&&source.amount===undefined;const included=material&&!isParent;const includedAmount=included?(source.amount??roundTo4(source.usage*(source.convertedPrice+(source.ancillaryCost??0)))):0;const reason=!material?`제외: 자재구분=${source.materialType||'공란'}`:isParent?'제외: 상위 복합자재':usedFallback?'검토: 금액 공란으로 fallback 계산':'포함: 말단 자재';return{source,isParent,included,includedAmount,usedFallback,reason};});
 }
+const sequencePath=(row:BomRow)=>{const value=normalizeText(row.sequence);return /^\d+(?:\.\d+)*$/.test(value)?value.split('.'):null};
+const hierarchyParents=(rows:BomRow[])=>{
+  const bySerial=new Map(rows.map(row=>[normalizeText(row.serialNo),row]).filter(([serial])=>Boolean(serial)) as [string,BomRow][]),bySequence=new Map<string,BomRow[]>();
+  rows.forEach(row=>{const path=sequencePath(row);if(!path)return;const key=`${row.sourceFile}|${row.sourceSheet}|${path.join('.')}`;bySequence.set(key,[...(bySequence.get(key)||[]),row])});
+  const parents=new Map<string,BomRow>();
+  rows.forEach(row=>{const explicit=bySerial.get(normalizeText(row.parentSerialNo));if(explicit){parents.set(row.id,explicit);return}const path=sequencePath(row);if(!path||path.length<2)return;for(let length=path.length-1;length>0;length--){const candidates=bySequence.get(`${row.sourceFile}|${row.sourceSheet}|${path.slice(0,length).join('.')}`)||[],parent=candidates.length===1&&normalizeText(candidates[0].hasChildren)==='Y'?candidates[0]:undefined;if(parent){parents.set(row.id,parent);break}}});
+  return parents;
+};
+const sameAmount=(left:number,right:number)=>Math.abs(roundTo4(left)-roundTo4(right))<=.0001;
+export function rollupChildIds(rows:BomRow[],parentIncluded:(parent:BomRow)=>boolean=()=>true):Set<string>{
+  const parents=hierarchyParents(rows),byId=new Map(rows.map(row=>[row.id,row])),childrenByParent=new Map<string,BomRow[]>();
+  parents.forEach((parent,childId)=>{const child=byId.get(childId);if(child)childrenByParent.set(parent.id,[...(childrenByParent.get(parent.id)||[]),child])});
+  const rollupParents=rows.filter(parent=>{const children=childrenByParent.get(parent.id)||[];return children.length>0&&parentIncluded(parent)&&parent.amount!==undefined&&children.every(child=>child.amount!==undefined)&&sameAmount(parent.amount,children.reduce((sum,child)=>sum+child.amount!,0))});
+  const excluded=new Set<string>(),visit=(parentId:string)=>{for(const child of childrenByParent.get(parentId)||[]){excluded.add(child.id);visit(child.id)}};rollupParents.forEach(parent=>visit(parent.id));return excluded;
+}
 export function buyerRowsWithoutHierarchyDuplicates(rows:BomRow[],dict:ClassificationDictionary):BomRow[]{
-  const childrenByParent=new Map<string,BomRow[]>();rows.forEach(r=>{const key=normalizeText(r.parentSerialNo);if(key)childrenByParent.set(key,[...(childrenByParent.get(key)||[]),r])});
-  const descendantIds=new Set<string>();const visit=(serial:string)=>{for(const child of childrenByParent.get(normalizeText(serial))||[]){descendantIds.add(child.id);if(child.serialNo)visit(child.serialNo)}};rows.filter(r=>normalizeText(r.hasChildren)==='Y'||childrenByParent.has(normalizeText(r.serialNo))).forEach(r=>{if(r.serialNo)visit(r.serialNo)});
-  const representatives=rows.filter(r=>!descendantIds.has(r.id));const listOnlyChildren=rows.filter(r=>descendantIds.has(r.id)&&classify(r,dict)==='SPECIAL PROCESS (LIST ONLY)');return [...representatives,...listOnlyChildren];
+  const excluded=rollupChildIds(rows,parent=>classify(parent,dict)!=='EXCLUDE');return rows.filter(row=>!excluded.has(row.id));
+}
+export function migrateStoredRollupChildren(styles:StyleData[]):StyleData[]{
+  return styles.map(style=>{const rows=style.erpAudit?.map(entry=>entry.source)||[];if(!rows.length)return style;const includedSourceIds=new Set(style.materials.filter(material=>material.included&&material.group!=='EXCLUDE').flatMap(material=>material.sources.map(source=>source.id))),excluded=rollupChildIds(rows,parent=>includedSourceIds.has(parent.id));return excluded.size?{...style,materials:style.materials.filter(material=>!material.sources.length||!material.sources.every(source=>excluded.has(source.id)))}:style});
 }
 export const displayStyleName=(value:string)=>value.normalize('NFKC').replace(/\.(xlsx?|xls)$/i,'').replace(/\bBOM\b/ig,'').replace(/^\s*\d{2}\s+/,'').replace(/\s*사전원가\s*$/,'').replace(/_/g,' ').replace(/\s+/g,' ').trim();
 const combined=(values:string[])=>[...new Set(values.map(v=>v.trim()).filter(Boolean))].join(' / ');
