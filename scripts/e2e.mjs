@@ -47,10 +47,13 @@ try{
   await itemRow('TRIM-1').getByRole('checkbox').first().click();assert.equal(await itemRow('TRIM-1').count(),0);
 
   await page.waitForTimeout(700);
-  const downloadPromise=page.waitForEvent('download');await page.getByRole('button',{name:/현재 스타일/}).click();const download=await downloadPromise;
+  const downloadPromise=page.waitForEvent('download');await page.getByRole('button',{name:/Buyer 현재/}).click();const download=await downloadPromise;
   const path=await download.path();const workbook=new ExcelJS.Workbook();await workbook.xlsx.readFile(path);const sheet=workbook.worksheets[0];
   const fobRow=sheet.getRows(1,sheet.rowCount).find(row=>row.getCell(2).value==='FOB PRICE');
   assert.equal(fobRow.getCell(8).result,48.98);assert.equal(fobRow.getCell(8).numFmt,'$0.0000');
+  assert.equal(workbook.getWorksheet('ERP MATERIAL CHECK'),undefined);assert.doesNotMatch(workbook.worksheets.flatMap(ws=>ws.getSheetValues()).flat(5).join(' '),/사전원가|INTERNAL USE ONLY/);
+  const internalPromise=page.waitForEvent('download');await page.getByRole('button',{name:/내부 현재/}).click();const internalDownload=await internalPromise;
+  const internalPath=await internalDownload.path(),internalBook=new ExcelJS.Workbook();await internalBook.xlsx.readFile(internalPath);assert.ok(internalBook.getWorksheet('ERP MATERIAL CHECK'));const internalSheet=internalBook.worksheets[0];const reviewLabels=internalSheet.getColumn(9).values.map(String);assert.ok(reviewLabels.includes('CBD 재료비 / FOB'));assert.ok(reviewLabels.includes('사전원가 재료비'));
 
   await page.reload({waitUntil:'networkidle'});assert.equal(await page.getByLabel('Final FOB').inputValue(),'48.9800');
   assert.equal(await page.getByText('STYLE TWO 사전원가',{exact:true}).count(),1);assert.equal(await page.getByRole('option',{name:'선택 항목 (4)'}).count(),1);

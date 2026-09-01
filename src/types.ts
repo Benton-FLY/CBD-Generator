@@ -3,10 +3,11 @@ export type CbdGroup = typeof GROUPS[number];
 
 export interface BomRow {
   id: string; sourceFile: string; sourceSheet: string; sourceRow: number;
-  structure: string; materialType: string; sequence: string; itemNo: string; item: string;
+  structure: string; materialType: string; sequence: string; serialNo?:string; parentSerialNo?:string; level?:string; hasChildren?:string; itemNo: string; item: string;
   width: string; color: string; unit: string; netUsage?: number; bomLoss?: number; usage: number;
-  currency: string; rawPrice?: number; convertedPrice: number; materialCostAdjustment: number; amount?: number; specialFlag: string; remark: string;
+  currency: string; rawPrice?: number; convertedPrice: number; ancillaryCost?:number; materialCostAdjustment: number; amount?: number; specialFlag: string; remark: string;
 }
+export interface ErpMaterialAuditRow { source:BomRow; isParent:boolean; included:boolean; includedAmount:number; usedFallback:boolean; reason:string }
 export type RowDisposition = 'review'|'separate'|'excluded';
 export interface RowStatusDetail {
   id:string; disposition:RowDisposition; sourceRow:number; itemNo:string; item:string; structure:string;
@@ -22,6 +23,7 @@ export interface StyleData {
   id: string; name: string; sourceFile: string; sourceSheet: string; materials: Material[];
   finalFob?: number; fobMatch?: string; fobMatchMethod?:'Exact'|'Normalized'|'Alias'|'Manual'; fobUnmatchedReason?:string; threadSubtotal?: number;
   statusDetails?:RowStatusDetail[];
+  erpMaterialCost?:number; erpAudit?:ErpMaterialAuditRow[];
   laborRemark: string;
 }
 export interface AppSettings { exchangeRate: number; defaultLoss: number; }
