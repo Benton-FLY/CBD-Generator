@@ -1,0 +1,2 @@
+import {chromium,webkit} from 'playwright';
+for(const engine of [chromium,webkit]){const browser=await engine.launch({headless:true});const page=await browser.newPage();await page.goto('https://cbd-generator.pages.dev/#comparison');await page.getByRole('heading',{name:'CBD 비교'}).waitFor({timeout:60000});await page.getByText('기준 시즌 CBD').waitFor();await page.getByText('비교 시즌 CBD').waitFor();await browser.close();console.log(`${engine.name()}: Cloudflare CBD 비교 screen PASS`)}
