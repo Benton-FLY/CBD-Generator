@@ -9,6 +9,7 @@ import { dictionaryKeys, migrateStoredPriorityGroups as migratePriorityGroups } 
 import { clearSavedWork, loadSavedWork, saveWork } from './persistence';
 import BomUploader, { isExcelFile } from './BomUploader';
 import FobUploader from './FobUploader';
+import ComparisonWorkspace from './comparison/ComparisonWorkspace';
 
 const LEGACY_STORE='cbd-generator-work-v1', LEGACY_DICT='cbd-generator-dictionary-v1';
 const initialSettings:AppSettings={exchangeRate:900,defaultLoss:.05};
@@ -22,6 +23,12 @@ type BulkState={target:string;operation:string;value:number};
 const defaultBulkState:BulkState={target:'cost',operation:'base-percent',value:5};
 
 export default function App(){
+  const [view,setView]=useState<'workspace'|'comparison'>(()=>location.hash==='#comparison'?'comparison':'workspace');
+  const showComparison=()=>{history.replaceState(null,'','#comparison');setView('comparison')},showWorkspace=()=>{history.replaceState(null,' ',location.pathname+location.search);setView('workspace')};
+  return view==='comparison'?<ComparisonWorkspace onBack={showWorkspace}/>:<><button className="comparison-launch" onClick={showComparison}><FileSpreadsheet size={17}/> CBD 비교</button><WorkspaceApp/></>;
+}
+
+function WorkspaceApp(){
   const [styles,setStyles]=useState<StyleData[]>([]),[active,setActive]=useState('');
   const [settings,setSettings]=useState<AppSettings>(initialSettings),[selections,setSelections]=useState<Record<string,string[]>>({});
   const [dict,setDict]=useState<ClassificationDictionary>({});
