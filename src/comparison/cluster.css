@@ -1,0 +1,8 @@
+.matching-toolbar{position:sticky;top:0;z-index:5;display:flex;justify-content:space-between;align-items:center;background:#fff;border-bottom:1px solid #cbd5e1;padding:8px 0}
+.matching-toolbar .comparison-filters{position:static;padding:0}
+.material-status-merged-n-1{background:#ede9fe}
+.match-dialog-backdrop{position:fixed;inset:0;z-index:100;background:#0f172a80;display:grid;place-items:center}
+.match-dialog{width:min(520px,calc(100vw - 32px));background:#fff;border-radius:12px;padding:24px;box-shadow:0 24px 64px #0f172a55}
+.match-dialog h3{margin-top:0}
+.match-dialog>div{display:flex;justify-content:flex-end;gap:8px;margin-top:20px}
+.reference-material .material-name+.material-name{border-top:1px dashed #94a3b8;margin-top:6px;padding-top:6px}
