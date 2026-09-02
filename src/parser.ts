@@ -77,7 +77,7 @@ export function aggregate(rows: BomRow[], loss: number, dict: ClassificationDict
     const weighted=usage ? sources.reduce((s,r)=>s+r.convertedPrice*cbdUsage(r),0)/usage : sources.reduce((s,r)=>s+r.convertedPrice,0)/sources.length;
     const first=sources[0], group=classify(first,dict);
     const originalRemark=combined(sources.map(r=>r.remark))||combined(sources.map(r=>r.structure));
-    return {id:key,item:first.item,width:first.width,unit:first.unit,group,included:group!=='EXCLUDE',baseCost:weighted||0,adjustedCost:weighted||0,baseUsage:usage,adjustedUsage:usage,additionalLoss:loss,remark:originalRemark,originalRemark,remarkEdited:false,sources,split:false};
+    return {id:key,item:first.item,width:first.width,unit:first.unit,group,included:group!=='EXCLUDE',baseCost:weighted||0,adjustedCost:weighted||0,baseUsage:usage,adjustedUsage:usage,baseLoss:loss,additionalLoss:loss,remark:originalRemark,originalRemark,remarkEdited:false,sources,split:false};
   });
 }
 export function statusDetails(materials:Material[]):RowStatusDetail[]{

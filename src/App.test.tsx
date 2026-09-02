@@ -85,11 +85,47 @@ describe('CBD workspace UI',()=>{
     expect(manual.value).toBe('TRIMS');
   });
 
+  it('resets current or all styles atomically while preserving non-adjustment edits and auto-saving',async()=>{
+    const adjusted=(id:string,group:CbdGroup,cost:number,patch:Partial<Material>):Material=>({...material(id,group,cost),baseLoss:.05,...patch});
+    const resetStyles:StyleData[]=[
+      {id:'style-one',name:'F-16 GLOVE',sourceFile:'one.xlsx',sourceSheet:'BOM',laborRemark:'keep labor',finalFob:48.98,materials:[
+        adjusted('shell-item','OUTSHELL',4,{adjustedCost:4.2,remark:'keep remark'}),
+        adjusted('trim-item','TRIMS',2,{adjustedUsage:1.5,included:false}),
+        adjusted('label-item','LABEL & PACKAGING',1,{additionalLoss:.12,group:'LABEL & PACKAGING'}),
+      ]},
+      {id:'style-two',name:'OTHER STYLE',sourceFile:'two.xlsx',sourceSheet:'BOM',laborRemark:'',materials:[adjusted('other','TRIMS',9,{adjustedCost:10})]},
+    ];
+    await saveWork({styles:resetStyles,active:'style-one',settings:{exchangeRate:900,defaultLoss:.05},dict:{},selections:{},groupFilters:{},fobs:[],scope:'all',target:'cost',operation:'base-percent',bulkValue:5});
+    const user=userEvent.setup();const view=render(<App/>);await screen.findByLabelText('Final FOB');
+    await user.click(screen.getByRole('button',{name:'일괄조정 전체 초기화'}));
+    expect((screen.getByRole('radio',{name:'현재 스타일 전체 그룹'}) as HTMLInputElement).checked).toBe(true);
+    expect(screen.getByText(/F-16 GLOVE의 모든 CBD Group/)).toBeTruthy();
+    await user.click(screen.getByRole('button',{name:'초기화 실행'}));
+    expect(await screen.findByText(/F-16 GLOVE의 3개 그룹, 3개 조정값/)).toBeTruthy();
+    expect(adjustedCost('SHELL-ITEM').value).toBe('4.0000');
+    expect((within(row('TRIM-ITEM')).getAllByRole('spinbutton')[1] as HTMLInputElement).value).toBe('1.0000');
+    expect((within(row('LABEL-ITEM')).getAllByRole('spinbutton')[2] as HTMLInputElement).value).toBe('5.0000');
+    expect((within(row('SHELL-ITEM')).getByRole('textbox') as HTMLTextAreaElement).value).toBe('keep remark');
+    expect((within(row('TRIM-ITEM')).getAllByRole('checkbox')[1] as HTMLInputElement).checked).toBe(false);
+    expect((screen.getByLabelText('Final FOB') as HTMLInputElement).value).toBe('48.9800');
+    await user.click(screen.getByRole('button',{name:/Undo/}));expect(adjustedCost('SHELL-ITEM').value).toBe('4.2000');
+    await user.click(screen.getByRole('button',{name:/Redo/}));expect(adjustedCost('SHELL-ITEM').value).toBe('4.0000');
+    await user.click(screen.getByRole('button',{name:/OTHER STYLE/}));expect(adjustedCost('OTHER').value).toBe('10.0000');
+    await user.click(screen.getByRole('button',{name:'일괄조정 전체 초기화'}));await user.click(screen.getByRole('radio',{name:'모든 스타일 전체 그룹'}));
+    expect(screen.getByText(/현재 등록된 2개 스타일/)).toBeTruthy();await user.click(screen.getByRole('button',{name:'초기화 실행'}));
+    expect(await screen.findByText(/2개 스타일의 1개 그룹, 1개 조정값/)).toBeTruthy();expect(adjustedCost('OTHER').value).toBe('9.0000');
+    await user.click(screen.getByRole('button',{name:/Undo/}));expect(adjustedCost('OTHER').value).toBe('10.0000');
+    await user.click(screen.getByRole('button',{name:/Redo/}));expect(adjustedCost('OTHER').value).toBe('9.0000');
+    await waitFor(async()=>expect((await loadSavedWork())?.styles[1].materials[0].adjustedCost).toBe(9),{timeout:2500});
+    view.unmount();render(<App/>);await screen.findByLabelText('Final FOB');await user.click(screen.getByRole('button',{name:/OTHER STYLE/}));expect(adjustedCost('OTHER').value).toBe('9.0000');
+    await user.click(screen.getByRole('button',{name:'일괄조정 전체 초기화'}));await user.click(screen.getByRole('button',{name:'초기화 실행'}));expect(await screen.findByText('초기화할 조정값이 없습니다.')).toBeTruthy();
+  });
+
   it('cancels reset without data loss and clears UI plus IndexedDB after confirmation',async()=>{
     await seed();const user=userEvent.setup();render(<App/>);await screen.findByLabelText('Final FOB');
-    vi.spyOn(window,'confirm').mockReturnValueOnce(false);await user.click(screen.getByRole('button',{name:/전체 초기화/}));
+    vi.spyOn(window,'confirm').mockReturnValueOnce(false);await user.click(screen.getByRole('button',{name:'전체 초기화'}));
     expect(screen.getByText('STYLE ONE 사전원가')).toBeTruthy();expect(await loadSavedWork()).not.toBeNull();
-    vi.spyOn(window,'confirm').mockReturnValueOnce(true);await user.click(screen.getByRole('button',{name:/전체 초기화/}));
+    vi.spyOn(window,'confirm').mockReturnValueOnce(true);await user.click(screen.getByRole('button',{name:'전체 초기화'}));
     expect(await screen.findByText('새 작업 시작')).toBeTruthy();expect(await loadSavedWork()).toBeNull();
   });
 });

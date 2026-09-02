@@ -16,7 +16,7 @@ export interface RowStatusDetail {
 }
 export interface Material {
   id: string; item: string; width: string; unit: string; group: CbdGroup; included: boolean;
-  baseCost: number; adjustedCost: number; baseUsage: number; adjustedUsage: number; additionalLoss: number;
+  baseCost: number; adjustedCost: number; baseUsage: number; adjustedUsage: number; baseLoss?: number; additionalLoss: number;
   remark: string; originalRemark?:string; remarkEdited?:boolean; sources: BomRow[]; split: boolean;
 }
 export interface StyleData {

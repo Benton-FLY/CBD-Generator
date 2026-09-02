@@ -59,8 +59,8 @@ try{
   assert.equal(await page.getByText('STYLE TWO 사전원가',{exact:true}).count(),1);assert.equal(await page.getByRole('option',{name:'선택 항목 (4)'}).count(),1);
   assert.match(await page.locator('footer').innerText(),/자동 저장됨/);
 
-  page.once('dialog',dialog=>dialog.dismiss());await page.getByRole('button',{name:/전체 초기화/}).click();assert.equal(await page.getByLabel('Final FOB').inputValue(),'48.9800');
-  page.once('dialog',dialog=>dialog.accept());await page.getByRole('button',{name:/전체 초기화/}).click();await page.getByText('새 작업 시작').waitFor();
+  page.once('dialog',dialog=>dialog.dismiss());await page.getByRole('button',{name:'전체 초기화'}).click();assert.equal(await page.getByLabel('Final FOB').inputValue(),'48.9800');
+  page.once('dialog',dialog=>dialog.accept());await page.getByRole('button',{name:'전체 초기화'}).click();await page.getByText('새 작업 시작').waitFor();
   const persisted=await page.evaluate(async()=>new Promise((resolve,reject)=>{const request=indexedDB.open('cbd-generator-local',1);request.onerror=()=>reject(request.error);request.onsuccess=()=>{const db=request.result,get=db.transaction('work').objectStore('work').get('latest');get.onsuccess=()=>{db.close();resolve(get.result??null)};get.onerror=()=>reject(get.error)}}));assert.equal(persisted,null);
   console.log(`E2E passed: ${baseUrl}`);
 }finally{await browser.close()}
