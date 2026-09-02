@@ -16,6 +16,7 @@ export interface RowStatusDetail {
 }
 export interface Material {
   id: string; item: string; width: string; unit: string; group: CbdGroup; included: boolean;
+  groupSource?: 'auto'|'manual'; classificationVersion?: number;
   baseCost: number; adjustedCost: number; baseUsage: number; adjustedUsage: number; baseLoss?: number; additionalLoss: number;
   remark: string; originalRemark?:string; remarkEdited?:boolean; sources: BomRow[]; split: boolean;
 }
@@ -25,6 +26,7 @@ export interface StyleData {
   statusDetails?:RowStatusDetail[];
   erpMaterialCost?:number; erpAudit?:ErpMaterialAuditRow[];
   laborRemark: string;
+  classificationVersion?: number;
 }
 export interface AppSettings { exchangeRate: number; defaultLoss: number; }
 export type ClassificationDictionary = Record<string, CbdGroup>;

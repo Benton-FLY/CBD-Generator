@@ -1,4 +1,4 @@
-import { classify, normalizeText } from './classifier';
+import { CLASSIFICATION_VERSION, classify, normalizeText } from './classifier';
 import { readTabularWorkbook } from './spreadsheet';
 import { roundTo4, type AppSettings, type BomRow, type ClassificationDictionary, type ColumnMapping, type ErpMaterialAuditRow, type Material, type RowStatusDetail, type StyleData } from './types';
 
@@ -77,22 +77,21 @@ export function aggregate(rows: BomRow[], loss: number, dict: ClassificationDict
     const weighted=usage ? sources.reduce((s,r)=>s+r.convertedPrice*cbdUsage(r),0)/usage : sources.reduce((s,r)=>s+r.convertedPrice,0)/sources.length;
     const first=sources[0], group=classify(first,dict);
     const originalRemark=combined(sources.map(r=>r.remark))||combined(sources.map(r=>r.structure));
-    return {id:key,item:first.item,width:first.width,unit:first.unit,group,included:group!=='EXCLUDE',baseCost:weighted||0,adjustedCost:weighted||0,baseUsage:usage,adjustedUsage:usage,baseLoss:loss,additionalLoss:loss,remark:originalRemark,originalRemark,remarkEdited:false,sources,split:false};
+    return {id:key,item:first.item,width:first.width,unit:first.unit,group,groupSource:'auto',classificationVersion:CLASSIFICATION_VERSION,included:group!=='EXCLUDE',baseCost:weighted||0,adjustedCost:weighted||0,baseUsage:usage,adjustedUsage:usage,baseLoss:loss,additionalLoss:loss,remark:originalRemark,originalRemark,remarkEdited:false,sources,split:false};
   });
 }
 export function statusDetails(materials:Material[]):RowStatusDetail[]{
-  return materials.flatMap(m=>m.sources.flatMap(r=>{
+  return materials.flatMap(m=>{if(m.group==='NEEDS REVIEW'){const r=m.sources[0];return r?[{id:r.id,disposition:'review' as const,sourceRow:r.sourceRow,itemNo:r.itemNo,item:r.item,structure:r.structure,materialType:r.materialType,unit:r.unit,convertedPrice:r.convertedPrice,materialCostAdjustment:r.materialCostAdjustment,remark:r.remark,result:'검토 대기',reason:'분류 규칙을 찾지 못해 검토 필요'}]:[]}return m.sources.flatMap(r=>{
     let disposition:RowStatusDetail['disposition']|undefined,reason='',result='';
     const type=normalizeText(r.materialType),item=normalizeText(r.item);
     if(type.includes('봉제공임')||/SEWING COST/.test(item)){disposition='separate';reason='Buyer CBD 상세목록 비공개 – Internal Sewing으로 반영';result='INTERNAL SEWING';}
     else if(type.includes('포장공임')||/PACKING COST/.test(item)){disposition='separate';reason='Buyer CBD 상세목록 비공개 – Internal Packing으로 반영';result='INTERNAL PACKING';}
     else if(!m.included){disposition='excluded';reason='사용자가 Include 해제';result='계산 및 목록에서 제외';}
-    else if(m.group==='NEEDS REVIEW'){disposition='review';reason='분류 규칙을 찾지 못해 검토 필요';result='검토 대기';}
     else if(m.group==='SPECIAL PROCESS (LIST ONLY)'){disposition='separate';reason='SPECIAL PROCESS (LIST ONLY)에 별도 반영';result='INTERNAL SPECIAL PROCESS 및 Buyer 목록';}
     else if(m.group==='EXCLUDE'){disposition='excluded';reason='완전 제외';result='계산 및 목록에서 제외';}
     if(!disposition)return [];
     return [{id:r.id,disposition,sourceRow:r.sourceRow,itemNo:r.itemNo,item:r.item,structure:r.structure,materialType:r.materialType,unit:r.unit,convertedPrice:r.convertedPrice,materialCostAdjustment:r.materialCostAdjustment,remark:r.remark,result,reason}];
-  }));
+  })});
 }
 export async function parseBomFile(file: File, settings: AppSettings, dict: ClassificationDictionary): Promise<{styles:StyleData[]; unmapped?:{sheet:string; rows:unknown[][]}}> {
   const sheets=await readTabularWorkbook(file); const allRows:BomRow[]=[]; const sourceSheets:string[]=[];
@@ -105,7 +104,7 @@ export async function parseBomFile(file: File, settings: AppSettings, dict: Clas
   }
   if(!allRows.length)return {styles:[]};
   const name=displayStyleName(file.name)||displayStyleName(sourceSheets[0]),audit=buildErpMaterialAudit(allRows),erpMaterialCost=roundTo4(audit.reduce((sum,row)=>sum+row.includedAmount,0)); const materials=aggregate(buyerRowsWithoutHierarchyDuplicates(allRows,dict),settings.defaultLoss,dict);
-  return {styles:[{id:`${file.name}:${Date.now()}`,name,sourceFile:file.name,sourceSheet:sourceSheets.join(', '),materials,statusDetails:statusDetails(materials),erpMaterialCost,erpAudit:audit,laborRemark:'It also includes the listed special process and packing costs in the factory.'}]};
+  return {styles:[{id:`${file.name}:${Date.now()}`,name,sourceFile:file.name,sourceSheet:sourceSheets.join(', '),materials,statusDetails:statusDetails(materials),erpMaterialCost,erpAudit:audit,laborRemark:'It also includes the listed special process and packing costs in the factory.',classificationVersion:CLASSIFICATION_VERSION}]};
 }
 
 export const splitMaterial = (m: Material): Material[] => m.sources.map((r,i)=>({ ...m,id:`${m.id}:split:${i}`,sources:[r],baseUsage:cbdUsage(r),adjustedUsage:cbdUsage(r),baseCost:r.convertedPrice,adjustedCost:r.convertedPrice,remark:r.remark||r.structure,originalRemark:r.remark||r.structure,remarkEdited:false,split:true }));

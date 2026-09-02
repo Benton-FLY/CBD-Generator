@@ -23,17 +23,17 @@ async function createWorkbook(styles:StyleData[],date=new Date(),internalReview=
     ws.mergeCells('G3:I3');const dc=ws.getCell('G3');dc.value=`Date : ${date.getFullYear()}.${String(date.getMonth()+1).padStart(2,'0')}.${String(date.getDate()).padStart(2,'0')}`;dc.font={name:'Arial',size:9};dc.alignment={horizontal:'right',vertical:'middle'};ws.getRow(1).height=28;ws.getRow(2).height=28;
     const header=ws.addRow(['Group of','Material','Size','Unit','Cost per Unit','Usage','Loss','Extended Cost','Remark']);header.height=28;header.eachCell(c=>{c.font={name:'Arial',bold:true,color:{argb:WHITE}};c.fill={type:'pattern',pattern:'solid',fgColor:{argb:BLUE}};c.alignment={horizontal:'center',vertical:'middle',wrapText:true};c.border=borders;});
     const subtotalCells:string[]=[];
-    for(const group of ORDER){
+    for(const group of internalReview?[...ORDER,'NEEDS REVIEW' as CbdGroup]:ORDER){
       const items=style.materials.filter(m=>m.group===group&&m.included);if(!items.length)continue;
       const start=ws.rowCount+1;
       for(const m of items){
         const listOnly=group==='SPECIAL PROCESS (LIST ONLY)';
         const row=ws.addRow(['',m.item,listOnly?'':m.width,listOnly?'':m.unit,listOnly?null:m.adjustedCost,listOnly?null:m.adjustedUsage,listOnly?null:m.additionalLoss,null,m.remark]);row.height=Math.max(24,18*(String(m.remark||'').split(/\r?\n| \/ /).length));
-        row.eachCell({includeEmpty:true},c=>{c.font={name:'Arial',size:10};c.border=borders;c.alignment={vertical:'middle',wrapText:true};});
+        row.eachCell({includeEmpty:true},c=>{c.font={name:'Arial',size:10,...(group==='NEEDS REVIEW'?{bold:true,color:{argb:'FFDC2626'}}:{})};c.border=borders;c.alignment={vertical:'middle',wrapText:true};if(group==='NEEDS REVIEW')c.fill={type:'pattern',pattern:'solid',fgColor:{argb:'FFFEF2F2'}};});
         if(!listOnly){const result=extendedCost(m);row.getCell(8).value={formula:`ROUND(E${row.number}*F${row.number}*(1+G${row.number}),4)`,result};row.getCell(5).numFmt=MONEY;row.getCell(6).numFmt=DECIMAL;row.getCell(7).numFmt='0%';row.getCell(8).numFmt=MONEY;}
       }
       const end=ws.rowCount;ws.mergeCells(start,1,end,1);const gc=ws.getCell(start,1);gc.value=group==='SPECIAL PROCESS (LIST ONLY)'?'SPECIAL PROCESS\n(LIST ONLY)':group;gc.alignment={textRotation:0,horizontal:'center',vertical:'middle',wrapText:true};gc.font={name:'Arial',bold:true};gc.border=borders;
-      if(group!=='SPECIAL PROCESS (LIST ONLY)'){const result=groupSubtotal(items);const sub=ws.addRow(['',`${group} SUBTOTAL`,'','','','','',null,'']);sub.getCell(8).value={formula:`SUM(H${start}:H${end})`,result};sub.getCell(8).numFmt=MONEY;subtotalCells.push(`H${sub.number}`);sub.eachCell({includeEmpty:true},c=>{c.fill={type:'pattern',pattern:'solid',fgColor:{argb:YELLOW}};c.font={name:'Arial',bold:true};c.border=borders;c.alignment={vertical:'middle',wrapText:true};});}
+      if(group!=='SPECIAL PROCESS (LIST ONLY)'&&group!=='NEEDS REVIEW'){const result=groupSubtotal(items);const sub=ws.addRow(['',`${group} SUBTOTAL`,'','','','','',null,'']);sub.getCell(8).value={formula:`SUM(H${start}:H${end})`,result};sub.getCell(8).numFmt=MONEY;subtotalCells.push(`H${sub.number}`);sub.eachCell({includeEmpty:true},c=>{c.fill={type:'pattern',pattern:'solid',fgColor:{argb:YELLOW}};c.font={name:'Arial',bold:true};c.border=borders;c.alignment={vertical:'middle',wrapText:true};});}
     }
     const materialTotal=roundTo4(subtotalCells.reduce((sum,address)=>sum+(Number((ws.getCell(address).value as ExcelJS.CellFormulaValue).result)||0),0));
     let materialTotalRow=0,fobRow=0;

@@ -85,6 +85,18 @@ describe('CBD workspace UI',()=>{
     expect(manual.value).toBe('TRIMS');
   });
 
+  it('shows one consistent red review count and clears every warning after manual classification',async()=>{
+    const source={id:'review-row',sourceFile:'review.xlsx',sourceSheet:'BOM',sourceRow:8,structure:'UNKNOWN',materialType:'',sequence:'',itemNo:'',item:'UNKNOWN ITEM',width:'',color:'',unit:'',usage:1,currency:'USD',convertedPrice:1,materialCostAdjustment:0,specialFlag:'',remark:''};
+    const review={...material('unknown-item','NEEDS REVIEW',1),sources:[source]};
+    const reviewStyle:StyleData={id:'review-style',name:'REVIEW STYLE',sourceFile:'review.xlsx',sourceSheet:'BOM',laborRemark:'',materials:[review]};
+    await saveWork({styles:[reviewStyle],active:'review-style',settings:{exchangeRate:900,defaultLoss:.05},dict:{},selections:{},groupFilters:{},fobs:[],scope:'all',target:'cost',operation:'base-percent',bulkValue:5});
+    const user=userEvent.setup();render(<App/>);const select=await screen.findByLabelText('UNKNOWN-ITEM CBD Group');
+    expect(screen.getByText('검토 필요 1건').className).toContain('needs-review-status');expect(select.className).toContain('needs-review-select');
+    const badge=screen.getByRole('button',{name:/검토 1/});expect(badge.className).toContain('review-count-badge');await user.click(badge);expect(screen.getByRole('heading',{name:'검토 상세 (1)'})).toBeTruthy();expect(document.querySelectorAll('.review-detail-row')).toHaveLength(1);
+    await user.click(screen.getByRole('button',{name:'닫기'}));await user.selectOptions(select,'OUTSHELL');
+    expect(screen.getByText('준비됨')).toBeTruthy();expect(select.className).not.toContain('needs-review-select');expect(screen.getByRole('button',{name:/검토 0/}).className).not.toContain('review-count-badge');
+  });
+
   it('resets current or all styles atomically while preserving non-adjustment edits and auto-saving',async()=>{
     const adjusted=(id:string,group:CbdGroup,cost:number,patch:Partial<Material>):Material=>({...material(id,group,cost),baseLoss:.05,...patch});
     const resetStyles:StyleData[]=[
