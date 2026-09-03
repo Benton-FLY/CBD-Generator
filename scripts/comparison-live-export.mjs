@@ -9,7 +9,7 @@ await page.locator('input[type=file]').nth(1).setInputFiles('reference/FLY RACIN
 await page.getByRole('heading',{name:'Review Style Matches'}).waitFor({timeout:60000});
 await page.getByRole('button',{name:'Confirm Style Matches'}).click();
 await page.getByRole('heading',{name:'Review Material Matches'}).waitFor({timeout:60000});
-const event=page.waitForEvent('download');await page.getByRole('button',{name:'Export Comparison'}).click();
+const event=page.waitForEvent('download');await page.getByRole('button',{name:'Export Comparison',exact:true}).click();
 const download=await event,path=await download.path();if(!path)throw new Error('download path unavailable');
 const workbook=new ExcelJS.Workbook();await workbook.xlsx.readFile(path);const formulas=[];
 for(const sheet of workbook.worksheets)sheet.eachRow(row=>row.eachCell(cell=>{if(cell.formula)formulas.push(cell.formula)}));
