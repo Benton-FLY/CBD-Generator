@@ -9,6 +9,7 @@
 .comparison-steps li.active button{font-weight:700;background:#dbeafe}
 .exclude-master{display:flex;align-items:center;gap:5px;white-space:nowrap}
 .export-preview>.primary{float:right;margin-top:14px}
+.export-actions{justify-content:flex-end;margin-top:14px}
 .material-status-merged-n-1{background:#ede9fe}
 .match-dialog-backdrop{position:fixed;inset:0;z-index:100;background:#0f172a80;display:grid;place-items:center}
 .match-dialog{width:min(520px,calc(100vw - 32px));background:#fff;border-radius:12px;padding:24px;box-shadow:0 24px 64px #0f172a55}

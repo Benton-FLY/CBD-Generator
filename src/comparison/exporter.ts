@@ -16,14 +16,16 @@ const formula=(text:string,result:number|string):ExcelJS.CellFormulaValue=>({for
 const sheetReference=(name:string,cell:string)=>`'${name.replace(/'/g,"''")}'!${cell}`;
 
 type Subtotal={row:number;reference:number;comparison:number};
+export type ComparisonExportOptions={scope:'current'|'all';stylePairIds?:string[]};
 
-export function buildComparisonWorkbook(state:ComparisonState){
+export function buildComparisonWorkbook(state:ComparisonState,options?:Pick<ComparisonExportOptions,'stylePairIds'>){
  const workbook=new ExcelJS.Workbook(),summary=workbook.addWorksheet('STYLE MATCH'),used=new Set<string>(['STYLE MATCH']);
  workbook.calcProperties.fullCalcOnLoad=true;
  summary.views=[{state:'frozen',ySplit:1}];
  summary.addRow([`기준 시즌 ${state.referenceSeason}`,'기준 STYLE',`비교 시즌 ${state.currentSeason}`,'비교 STYLE','매칭 방식','상태','기준 총 재료비','비교 총 재료비','기준 FOB','비교 FOB']);
  summary.getRow(1).font={bold:true,color:{argb:'FFFFFF'}};summary.getRow(1).fill=fill('1E3A8A');
- for(const styleMatch of state.styleMatches.filter(match=>!match.excluded)){
+ const selectedIds=options?.stylePairIds?.length?new Set(options.stylePairIds):null;
+ for(const styleMatch of state.styleMatches.filter(match=>!match.excluded&&(!selectedIds||selectedIds.has(match.id)))){
   const reference=style(state,styleMatch.referenceId),comparison=style(state,styleMatch.currentId),clusters=state.materialMatches.find(set=>set.styleMatchId===styleMatch.id)?.clusters||[],sheet=workbook.addWorksheet(safeName(comparison?.styleName||reference?.styleName||'Unmatched',used));
   sheet.pageSetup={orientation:'landscape',fitToPage:true,fitToWidth:1,fitToHeight:0};sheet.views=[{state:'frozen',ySplit:15,showGridLines:false}];
   sheet.mergeCells('A1:O1');sheet.getCell('A1').value='FLY Racing CBD 비교표';sheet.getCell('A1').font={bold:true,size:16,color:{argb:'FFFFFF'}};sheet.getCell('A1').fill=fill('1E3A8A');sheet.getCell('A1').alignment={horizontal:'center'};
@@ -34,7 +36,7 @@ export function buildComparisonWorkbook(state:ComparisonState){
   sheet.mergeCells('B14:C14');sheet.getCell('B14').value='자재';sheet.mergeCells('E14:G14');sheet.getCell('E14').value='단가';sheet.mergeCells('H14:J14');sheet.getCell('H14').value='소요량';sheet.mergeCells('K14:M14');sheet.getCell('K14').value='재료비';sheet.getCell('A14').value='그룹';sheet.getCell('D14').value='단위';sheet.getCell('N14').value='상태';sheet.getCell('O14').value='비고';sheet.getRow(14).font={bold:true,color:{argb:'FFFFFF'}};sheet.getRow(14).fill=fill('1E3A8A');
   sheet.getRow(15).values=['','기준 시즌 자재','비교 시즌 자재','단위','기준','비교','차액','기준','비교','차액','기준','비교','차액','상태','비고'];sheet.getRow(15).font={bold:true};sheet.getRow(15).fill=fill('BFDBFE');
 
-  const present=new Set([...(reference?.groupOrder||[]),...(comparison?.groupOrder||[]),...Object.keys(reference?.groupTotals||{}),...Object.keys(comparison?.groupTotals||{}),...clusters.map(cluster=>cluster.finalGroup)].filter(Boolean)),groups=[...new Set([...DEFAULT_GROUPS,...present])].filter(group=>present.has(group)&&!/SPECIAL PROCESS|LIST ONLY/i.test(group));
+  const present=new Set([...(reference?.groupOrder||[]),...(comparison?.groupOrder||[]),...Object.keys(reference?.groupTotals||{}),...Object.keys(comparison?.groupTotals||{}),...clusters.map(cluster=>cluster.finalGroup)].filter(Boolean)),groups=[...new Set([...DEFAULT_GROUPS,...present])].filter(group=>present.has(group)),costGroups=groups.filter(group=>!/SPECIAL PROCESS|LIST ONLY/i.test(group));
   const subtotals=new Map<string,Subtotal>();let row=16;
   for(const group of groups){
    const grouped=clusters.filter(cluster=>cluster.finalGroup===group).sort((a,b)=>(material(comparison,a.currentRowId||undefined)?.order??99999)-(material(comparison,b.currentRowId||undefined)?.order??99999)),start=row;
@@ -59,8 +61,8 @@ export function buildComparisonWorkbook(state:ComparisonState){
 
   sheet.getRow(6).values=['CBD 그룹',`기준 시즌 ${state.referenceSeason}`,`비교 시즌 ${state.currentSeason}`,'차액','변동률'];sheet.getRow(6).font={bold:true,color:{argb:'FFFFFF'}};sheet.getRow(6).fill=fill('1E3A8A');
   let groupRow=7;
-  for(const group of groups){const subtotal=subtotals.get(group)!;sheet.getCell(groupRow,1).value=group;sheet.getCell(groupRow,2).value=formula(`K${subtotal.row}`,subtotal.reference);sheet.getCell(groupRow,3).value=formula(`L${subtotal.row}`,subtotal.comparison);sheet.getCell(groupRow,4).value=formula(`C${groupRow}-B${groupRow}`,subtotal.comparison-subtotal.reference);sheet.getCell(groupRow,5).value=formula(`IF(B${groupRow}=0,"",D${groupRow}/B${groupRow})`,subtotal.reference===0?'':(subtotal.comparison-subtotal.reference)/subtotal.reference);groupRow++}
-  const totalRow=groupRow,firstGroupRow=7,lastGroupRow=groupRow-1,referenceTotal=sum([...subtotals.values()].map(item=>item.reference)),comparisonTotal=sum([...subtotals.values()].map(item=>item.comparison));
+  for(const group of costGroups){const subtotal=subtotals.get(group)!;sheet.getCell(groupRow,1).value=group;sheet.getCell(groupRow,2).value=formula(`K${subtotal.row}`,subtotal.reference);sheet.getCell(groupRow,3).value=formula(`L${subtotal.row}`,subtotal.comparison);sheet.getCell(groupRow,4).value=formula(`C${groupRow}-B${groupRow}`,subtotal.comparison-subtotal.reference);sheet.getCell(groupRow,5).value=formula(`IF(B${groupRow}=0,"",D${groupRow}/B${groupRow})`,subtotal.reference===0?'':(subtotal.comparison-subtotal.reference)/subtotal.reference);groupRow++}
+  const totalRow=groupRow,firstGroupRow=7,lastGroupRow=groupRow-1,referenceTotal=sum(costGroups.map(group=>subtotals.get(group)!.reference)),comparisonTotal=sum(costGroups.map(group=>subtotals.get(group)!.comparison));
   sheet.getCell(totalRow,1).value='TOTAL MATERIAL COST';sheet.getCell(totalRow,2).value=formula(`SUM(B${firstGroupRow}:B${lastGroupRow})`,referenceTotal);sheet.getCell(totalRow,3).value=formula(`SUM(C${firstGroupRow}:C${lastGroupRow})`,comparisonTotal);sheet.getCell(totalRow,4).value=formula(`C${totalRow}-B${totalRow}`,comparisonTotal-referenceTotal);sheet.getCell(totalRow,5).value=formula(`IF(B${totalRow}=0,"",D${totalRow}/B${totalRow})`,referenceTotal===0?'':(comparisonTotal-referenceTotal)/referenceTotal);sheet.getRow(totalRow).fill=fill('DBEAFE');sheet.getRow(totalRow).font={bold:true};
   for(let index=7;index<=totalRow;index++){for(const column of [2,3,4])sheet.getCell(index,column).numFmt='$0.0000';sheet.getCell(index,5).numFmt='0.0%'}
   for(let index=16;index<row;index++){for(const column of [5,6,7,11,12,13])sheet.getCell(index,column).numFmt='$0.0000';for(const column of [8,9,10])sheet.getCell(index,column).numFmt='0.0000';sheet.getRow(index).height=32}
@@ -70,4 +72,5 @@ export function buildComparisonWorkbook(state:ComparisonState){
  return workbook;
 }
 
-export async function exportComparison(state:ComparisonState){const workbook=buildComparisonWorkbook(state),buffer=await workbook.xlsx.writeBuffer();saveAs(new Blob([buffer],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}),`CBD_Comparison_${state.referenceSeason||'Reference'}_vs_${state.currentSeason||'Comparison'}.xlsx`)}
+const filePart=(value:string)=>value.normalize('NFKC').replace(/[<>:"/\\|?*]+/g,' ').trim().replace(/[^\p{L}\p{N}._-]+/gu,'_').replace(/^_+|_+$/g,'')||'STYLE';
+export async function exportComparison(state:ComparisonState,options:ComparisonExportOptions={scope:'all'}){const stylePairIds=options.scope==='current'?options.stylePairIds:undefined,workbook=buildComparisonWorkbook(state,{stylePairIds}),buffer=await workbook.xlsx.writeBuffer(),selected=options.scope==='current'?state.styleMatches.find(match=>stylePairIds?.includes(match.id)):undefined,currentStyle=style(state,selected?.currentId)?.styleName||style(state,selected?.referenceId)?.styleName,fileName=options.scope==='current'?`CBD_비교_${filePart(state.referenceSeason)}_vs_${filePart(state.currentSeason)}_${filePart(currentStyle||'STYLE')}.xlsx`:`CBD_Comparison_${state.referenceSeason||'Reference'}_vs_${state.currentSeason||'Comparison'}.xlsx`;saveAs(new Blob([buffer],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}),fileName)}
