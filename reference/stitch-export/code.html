@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "on-secondary-fixed": "#00174b", "on-primary-fixed": "#131b2e", "on-tertiary": "#ffffff", "secondary-container": "#316bf3", "surface-container-low": "#eff4ff", "surface-container-high": "#dce9ff", "surface": "#f8f9ff", "surface-container-highest": "#d3e4fe", "error-container": "#ffdad6", "error": "#ba1a1a", "tertiary-fixed": "#6ffbbe", "surface-dim": "#cbdbf5", "secondary-fixed-dim": "#b4c5ff", "on-error-container": "#93000a", "on-tertiary-container": "#009668", "tertiary-fixed-dim": "#4edea3", "background": "#f8f9ff", "on-secondary-fixed-variant": "#003ea8", "primary": "#000000", "inverse-on-surface": "#eaf1ff", "primary-container": "#131b2e", "on-tertiary-fixed": "#002113", "surface-bright": "#f8f9ff", "inverse-primary": "#bec6e0", "on-surface-variant": "#45464d", "tertiary-container": "#002113", "primary-fixed-dim": "#bec6e0", "surface-variant": "#d3e4fe", "on-primary-fixed-variant": "#3f465c", "secondary-fixed": "#dbe1ff", "tertiary": "#000000", "surface-container-lowest": "#ffffff", "on-background": "#0b1c30", "on-secondary-container": "#fefcff", "outline-variant": "#c6c6cd", "on-secondary": "#ffffff", "secondary": "#0051d5", "primary-fixed": "#dae2fd", "on-primary": "#ffffff", "on-tertiary-fixed-variant": "#005236", "inverse-surface": "#213145", "on-primary-container": "#7c839b", "surface-container": "#e5eeff", "on-error": "#ffffff", "outline": "#76777d", "surface-tint": "#565e74", "on-surface": "#0b1c30" }, "borderRadius": { "DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem" }, "spacing": { "gap-sm": "8px", "table-cell-py": "6px", "panel-padding": "16px", "gap-md": "12px", "gap-lg": "16px", "gap-xs": "4px", "table-cell-px": "10px", "header-height": "48px", "sidebar-width": "240px", "gap-xl": "24px" }, "fontFamily": { "headline-xl": [ "Inter" ], "caption": [ "Inter" ], "headline-md": [ "Inter" ], "body-md": [ "Inter" ], "table-header": [ "Inter" ], "body-sm": [ "Inter" ], "metric-delta": [ "JetBrains Mono" ], "headline-lg": [ "Inter" ], "metric-tabular": [ "JetBrains Mono" ] }, "fontSize": { "headline-xl": [ "24px", { "lineHeight": "32px", "letterSpacing": "-0.02em", "fontWeight": "700" } ], "caption": [ "11px", { "lineHeight": "14px", "letterSpacing": "0.01em", "fontWeight": "500" } ], "headline-md": [ "15px", { "lineHeight": "20px", "letterSpacing": "-0.01em", "fontWeight": "600" } ], "body-md": [ "13px", { "lineHeight": "18px", "letterSpacing": "0em", "fontWeight": "400" } ], "table-header": [ "11px", { "lineHeight": "14px", "letterSpacing": "0.06em", "fontWeight": "700" } ], "body-sm": [ "12px", { "lineHeight": "16px", "letterSpacing": "0em", "fontWeight": "400" } ], "metric-delta": [ "11px", { "lineHeight": "14px", "letterSpacing": "0em", "fontWeight": "600" } ], "headline-lg": [ "18px", { "lineHeight": "24px", "letterSpacing": "-0.015em", "fontWeight": "600" } ], "metric-tabular": [ "12px", { "lineHeight": "16px", "letterSpacing": "-0.02em", "fontWeight": "500" } ] } } } };</script></head><body class="bg-surface font-body-md text-body-md text-on-surface antialiased"><aside class="fixed left-0 top-0 h-screen w-sidebar-width bg-primary-container text-on-primary-container z-50 flex flex-col justify-between shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="flex flex-col"><div class="h-header-height px-panel-padding flex items-center gap-gap-sm bg-primary-container"><img alt="CBD Manager Enterprise Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1Xgw9DWa_P9H6GJlzYCmQC9FJfxyIBX13n7SYmHutRXW9ANxxbmapI67BAPGn-UBiLr5k4Ls7B2j6zb6CNCh4no8m2YYIIOEUKap-WDEaM2qwSUNiHcyYomaz03hlMzjkq72nqsCqhDkmyBJmUmXmhJLrnbpSQ5kNjJEKUi7bOBgONey_P9eDp3b4_mO4ylMcXLIkJcQ0rh9cFXG6I1qBojy3p2O2a4VvFd-AdamblKWmCzVAPnYIujqTo"/><div class="flex flex-col"><span class="font-headline-md text-headline-md text-inverse-on-surface tracking-tight leading-none">CBD Manager</span><span class="font-caption text-caption text-inverse-primary uppercase tracking-wider">Enterprise ERP</span></div></div><div class="px-panel-padding py-table-cell-py"><div class="bg-surface-container-highest/10 px-table-cell-px py-table-cell-py rounded-lg flex items-center justify-between"><span class="font-caption text-caption text-inverse-primary uppercase font-bold">Workspace</span><span class="font-caption text-caption text-tertiary-fixed font-semibold">S28 Active</span></div></div><nav class="px-gap-sm mt-gap-xs flex flex-col gap-gap-xs" data-active-classes="bg-secondary-container text-on-secondary font-headline-md"><a class="flex items-center gap-gap-sm px-table-cell-px py-table-cell-py rounded text-inverse-on-surface/70 hover:bg-surface-container-highest/20 hover:text-inverse-on-surface transition-colors" data-path="bom-management" href="#"><span class="material-symbols-outlined text-[18px]">schema</span><span class="font-body-md text-body-md">BOM Management</span></a><a aria-current="page" class="flex items-center gap-gap-sm px-table-cell-px py-table-cell-py rounded transition-colors bg-secondary-container text-on-secondary font-headline-md" data-path="cbd-comparison" href="#"><span class="material-symbols-outlined text-[18px]">compare_arrows</span><span class="font-body-md text-body-md">CBD Comparison</span></a><a class="flex items-center gap-gap-sm px-table-cell-px py-table-cell-py rounded text-inverse-on-surface/70 hover:bg-surface-container-highest/20 hover:text-inverse-on-surface transition-colors" data-path="cost-catalogs" href="#"><span class="material-symbols-outlined text-[18px]">inventory_2</span><span class="font-body-md text-body-md">Cost Catalogs &amp; FOB</span></a><a class="flex items-center gap-gap-sm px-table-cell-px py-table-cell-py rounded text-inverse-on-surface/70 hover:bg-surface-container-highest/20 hover:text-inverse-on-surface transition-colors" data-path="vendor-rate-cards" href="#"><span class="material-symbols-outlined text-[18px]">request_quote</span><span class="font-body-md text-body-md">Vendor Rate Cards</span></a><a class="flex items-center gap-gap-sm px-table-cell-px py-table-cell-py rounded text-inverse-on-surface/70 hover:bg-surface-container-highest/20 hover:text-inverse-on-surface transition-colors" data-path="analytics-reports" href="#"><span class="material-symbols-outlined text-[18px]">monitoring</span><span class="font-body-md text-body-md">Analytics &amp; Reports</span></a></nav></div><div class="p-panel-padding flex flex-col gap-gap-md"><div class="bg-surface-container-highest/10 p-panel-padding rounded-lg flex flex-col gap-gap-xs"><div class="flex items-center justify-between"><span class="font-caption text-caption text-inverse-primary uppercase tracking-wider">ERP Connection</span><span class="w-2 h-2 rounded-full bg-tertiary-fixed"></span></div><span class="font-caption text-caption text-inverse-on-surface font-semibold">SAP S/4HANA Sync Live</span><span class="font-caption text-caption text-inverse-on-surface/60">Updated 4 mins ago</span></div><div class="flex flex-col gap-gap-xs pt-gap-xs"><a class="flex items-center gap-gap-sm px-table-cell-px py-table-cell-py rounded text-inverse-on-surface/70 hover:bg-surface-container-highest/20 hover:text-inverse-on-surface transition-colors" data-path="system-settings" href="#"><span class="material-symbols-outlined text-[18px]">settings</span><span class="font-body-sm text-body-sm">Settings</span></a><a class="flex items-center gap-gap-sm px-table-cell-px py-table-cell-py rounded text-inverse-on-surface/70 hover:bg-surface-container-highest/20 hover:text-inverse-on-surface transition-colors" data-path="help-documentation" href="#"><span class="material-symbols-outlined text-[18px]">help</span><span class="font-body-sm text-body-sm">Help &amp; Docs</span></a></div><div class="pt-gap-xs flex items-center justify-between"><div class="flex items-center gap-gap-sm"><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div><div class="flex flex-col"><span class="font-body-sm text-body-sm text-inverse-on-surface font-semibold leading-tight">Global Sourcing HQ</span><span class="font-caption text-caption text-inverse-primary leading-tight">Lead Cost Engineer</span></div></div><span class="material-symbols-outlined text-inverse-on-surface/60 text-[18px]">more_vert</span></div></div></aside><div class="pl-sidebar-width"><header class="fixed top-0 left-sidebar-width right-0 h-header-height bg-surface-container-lowest shadow-[0_1px_8px_rgba(0,0,0,0.04)] z-40 px-panel-padding flex items-center justify-between"><div class="flex items-center gap-gap-sm"><span class="font-body-sm text-body-sm text-on-surface-variant font-medium">Internal Cost Review</span><span class="font-caption text-caption text-outline">/</span><span class="font-body-sm text-body-sm text-on-surface font-semibold">Season 28 vs Season 27</span><span class="font-caption text-caption text-outline">/</span><span class="font-body-sm text-body-sm text-on-surface-variant font-medium">Fly Racing Line</span></div><div class="flex items-center gap-gap-md"><div class="relative flex items-center"><span class="material-symbols-outlined absolute left-2.5 text-[16px] text-outline">search</span><input class="bg-surface-container-low pl-8 pr-3 py-1 text-body-sm font-body-sm rounded-lg text-on-surface placeholder:text-outline focus:outline-none w-64" placeholder="Search BOM, materials, SKUs... (Ctrl+K)" type="text"/></div><div class="flex items-center gap-gap-xs bg-surface-container-low px-table-cell-px py-1 rounded-lg"><span class="material-symbols-outlined text-[16px] text-secondary">calendar_today</span><select class="bg-transparent text-body-sm font-body-sm text-on-surface focus:outline-none cursor-pointer font-semibold"><option>Season 28 (Active Review)</option><option>Season 27 (Final Closed)</option><option>Season 29 (Planning)</option></select></div><div class="flex items-center gap-gap-xs bg-surface-container-low px-table-cell-px py-1 rounded-lg"><span class="font-body-sm font-body-sm text-on-surface-variant font-bold">$</span><select class="bg-transparent text-body-sm font-body-sm text-on-surface focus:outline-none cursor-pointer"><option>USD ($)</option><option>EUR (€)</option><option>VND (đ)</option><option>RMB (¥)</option></select></div><button class="flex items-center gap-gap-xs px-table-cell-px py-1 bg-surface-container text-on-surface rounded-lg hover:bg-surface-container-high transition-colors text-body-sm font-body-sm"><span class="material-symbols-outlined text-[16px]">file_download</span><span>Export</span></button><button class="relative p-1 rounded-lg hover:bg-surface-container-low text-on-surface-variant transition-colors"><span class="material-symbols-outlined text-[20px]">notifications</span><span class="absolute top-1 right-1 w-2 h-2 rounded-full bg-error"></span></button><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></header><div class="fixed top-header-height left-sidebar-width right-0 bg-surface-container-lowest z-30 px-panel-padding py-table-cell-py shadow-[0_1px_4px_rgba(0,0,0,0.02)]"><div class="w-full flex items-center justify-between"><div class="flex items-center gap-gap-md"><div class="flex items-center gap-gap-xs"><span class="w-6 h-6 rounded-full bg-primary-container text-inverse-on-surface flex items-center justify-center font-caption text-caption font-bold">1</span><span class="font-body-sm text-body-sm text-on-surface font-semibold">Upload CBD Files</span></div><span class="w-8 h-px bg-surface-container-high"></span><div class="flex items-center gap-gap-xs"><span class="w-6 h-6 rounded-full bg-secondary text-on-secondary flex items-center justify-center font-caption text-caption font-bold">2</span><span class="font-body-sm text-body-sm text-secondary font-semibold">Match Styles</span></div><span class="w-8 h-px bg-surface-container-high"></span><div class="flex items-center gap-gap-xs"><span class="w-6 h-6 rounded-full bg-surface-container-highest text-on-surface-variant flex items-center justify-center font-caption text-caption font-semibold">3</span><span class="font-body-sm text-body-sm text-on-surface-variant font-medium">Review Material Matches</span></div><span class="w-8 h-px bg-surface-container-high"></span><div class="flex items-center gap-gap-xs"><span class="w-6 h-6 rounded-full bg-surface-container-highest text-on-surface-variant flex items-center justify-center font-caption text-caption font-semibold">4</span><span class="font-body-sm text-body-sm text-on-surface-variant font-medium">Comparison Preview</span></div><span class="w-8 h-px bg-surface-container-high"></span><div class="flex items-center gap-gap-xs"><span class="w-6 h-6 rounded-full bg-surface-container-highest text-on-surface-variant flex items-center justify-center font-caption text-caption font-semibold">5</span><span class="font-body-sm text-body-sm text-on-surface-variant font-medium">Export Comparison</span></div></div><div class="flex items-center gap-gap-sm"><span class="font-caption text-caption uppercase text-outline font-bold">Delta Status:</span><span class="font-metric-tabular text-metric-tabular px-table-cell-px py-0.5 rounded bg-surface-container-high text-on-surface font-semibold">Parity Base: S27 Final</span></div></div></div><main class="relative pt-[92px] min-h-screen w-full px-panel-padding pb-panel-padding bg-surface"><div class="flex flex-col w-full gap-gap-md pb-gap-xl">
+<!-- Top Stepper Override Sync (Visual Confirmation Banner) -->
+<div class="bg-surface-container-lowest shadow-sm rounded-xl p-panel-padding flex flex-col md:flex-row items-start md:items-center justify-between gap-gap-md">
+<div class="flex items-center gap-gap-md">
+<div class="flex items-center gap-gap-xs bg-surface-container-low px-table-cell-px py-1 rounded-lg">
+<span class="w-2 h-2 rounded-full bg-secondary-container animate-pulse"></span>
+<span class="font-caption text-caption text-secondary font-bold uppercase tracking-wider">Active Reconciliation</span>
+</div>
+<div class="flex items-center gap-gap-xs text-on-surface">
+<span class="font-headline-md text-headline-md">Step 3: Review Material Matches</span>
+<span class="font-caption text-caption px-2 py-0.5 rounded bg-surface-container-high text-on-surface-variant font-medium">19 Styles Loaded</span>
+</div>
+</div>
+<div class="flex items-center gap-gap-sm self-stretch md:self-auto justify-end">
+<div class="flex items-center gap-1.5 px-table-cell-px py-1 bg-surface-container-low text-on-surface-variant rounded-lg font-caption text-caption font-semibold">
+<span class="material-symbols-outlined text-[16px] text-tertiary-fixed-dim" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span>1. Upload (Complete)</span>
+</div>
+<div class="flex items-center gap-1.5 px-table-cell-px py-1 bg-surface-container-low text-on-surface-variant rounded-lg font-caption text-caption font-semibold">
+<span class="material-symbols-outlined text-[16px] text-tertiary-fixed-dim" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span>2. Match Styles (Complete)</span>
+</div>
+<div class="flex items-center gap-1.5 px-table-cell-px py-1 bg-secondary-container text-on-secondary rounded-lg font-caption text-caption font-bold shadow-sm">
+<span class="material-symbols-outlined text-[16px]">tune</span>
+<span>3. Review Matches (Current)</span>
+</div>
+</div>
+</div>
+<!-- Style Selector & Comparison Metadata Bar -->
+<div class="bg-surface-container-lowest shadow-sm rounded-xl p-panel-padding flex flex-col lg:flex-row lg:items-center justify-between gap-gap-md">
+<div class="flex flex-col gap-gap-xs">
+<div class="flex flex-wrap items-center gap-gap-sm">
+<span class="px-2 py-0.5 bg-primary-container text-inverse-on-surface rounded font-caption text-caption font-bold">REFERENCE BASE</span>
+<span class="font-headline-md text-headline-md text-on-surface">Season 27 — 27 RAYCE PANT</span>
+<span class="font-caption text-caption text-outline font-medium">(Material fixed / Audit locked)</span>
+</div>
+<div class="flex flex-wrap items-center gap-gap-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-[16px] text-secondary">sync_alt</span>
+<span class="font-body-sm text-body-sm font-medium">Comparison Season 28 — <strong class="text-on-surface font-semibold">RAYCE PANT</strong> (Match assignments editable)</span>
+<span class="w-1.5 h-1.5 rounded-full bg-outline-variant"></span>
+<span class="font-caption text-caption text-on-secondary-fixed-variant font-semibold">BOM ID: BOM-28-RAYCE-004</span>
+</div>
+</div>
+<!-- Right Style Switcher & Action buttons -->
+<div class="flex flex-wrap items-center gap-gap-sm">
+<div class="flex items-center bg-surface-container-low rounded-lg p-0.5">
+<button class="p-1 rounded text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors" title="Previous Style">
+<span class="material-symbols-outlined text-[18px]">chevron_left</span>
+</button>
+<div class="flex items-center gap-gap-xs px-table-cell-px py-1">
+<span class="material-symbols-outlined text-[16px] text-secondary">checkroom</span>
+<select class="bg-transparent font-body-sm text-body-sm font-semibold text-on-surface focus:outline-none cursor-pointer pr-2">
+<option selected="">27 RAYCE PANT &lt;&gt; RAYCE PANT (Style 4 of 19)</option>
+<option>27 FLY KINETIC JERSEY &lt;&gt; FLY KINETIC JERSEY (Style 1 of 19)</option>
+<option>27 PRO TECH GLOVE &lt;&gt; PRO TECH GLOVE V2 (Style 2 of 19)</option>
+<option>27 SECTOR VEST &lt;&gt; SECTOR VEST ELITE (Style 3 of 19)</option>
+<option>27 LITE HYDRO PANT &lt;&gt; LITE HYDRO PANT (Style 5 of 19)</option>
+</select>
+</div>
+<button class="p-1 rounded text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors" title="Next Style">
+<span class="material-symbols-outlined text-[18px]">chevron_right</span>
+</button>
+</div>
+<div class="flex items-center gap-gap-xs">
+<button class="flex items-center gap-1 px-table-cell-px py-1.5 bg-surface-container-low hover:bg-surface-container-high text-on-surface rounded-lg font-caption text-caption font-semibold transition-colors" id="undoBtn" title="Undo change (Ctrl+Z)">
+<span class="material-symbols-outlined text-[16px]">undo</span>
+<span>Undo</span>
+</button>
+<button class="flex items-center gap-1 px-table-cell-px py-1.5 bg-surface-container-low hover:bg-surface-container-high text-on-surface rounded-lg font-caption text-caption font-semibold transition-colors opacity-50 cursor-not-allowed" id="redoBtn" title="Redo change">
+<span class="material-symbols-outlined text-[16px]">redo</span>
+<span>Redo</span>
+</button>
+<button class="flex items-center gap-1 px-table-cell-px py-1.5 bg-secondary-container hover:bg-secondary text-on-secondary rounded-lg font-caption text-caption font-bold transition-colors shadow-sm">
+<span class="material-symbols-outlined text-[16px]">download</span>
+<span>Export Style</span>
+</button>
+<button class="flex items-center gap-1 px-table-cell-px py-1.5 bg-surface-container text-on-surface hover:bg-surface-container-high rounded-lg font-caption text-caption font-semibold transition-colors">
+<span>All Styles</span>
+<span class="material-symbols-outlined text-[16px]">expand_more</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Bento Section: Group Cost Aggregate Summary & Delta Viz -->
+<div class="grid grid-cols-1 xl:grid-cols-12 gap-gap-md">
+<!-- Group-Level Cost Summary Table (8 Cols) -->
+<div class="xl:col-span-8 bg-surface-container-lowest rounded-xl p-panel-padding shadow-sm flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between pb-gap-sm">
+<div class="flex items-center gap-gap-xs">
+<span class="material-symbols-outlined text-secondary text-[20px]">table_chart</span>
+<h3 class="font-headline-md text-headline-md text-on-surface">Material Cost Comparison by Group — RAYCE PANT</h3>
+</div>
+<span class="font-caption text-caption text-outline font-medium">Currency: USD ($) • Fixed 4-decimal precision</span>
+</div>
+<div class="overflow-x-auto rounded-lg">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-primary-container text-inverse-on-surface">
+<th class="py-table-cell-py px-table-cell-px font-table-header text-table-header uppercase">CBD Group</th>
+<th class="py-table-cell-py px-table-cell-px font-table-header text-table-header text-right uppercase">Reference Season 27</th>
+<th class="py-table-cell-py px-table-cell-px font-table-header text-table-header text-right uppercase">Comparison Season 28</th>
+<th class="py-table-cell-py px-table-cell-px font-table-header text-table-header text-right uppercase">Cost Difference</th>
+<th class="py-table-cell-py px-table-cell-px font-table-header text-table-header text-right uppercase">Change %</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-transparent font-body-sm text-body-sm">
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="py-table-cell-py px-table-cell-px font-semibold text-on-surface flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-secondary"></span>
+<span>OUTSHELL</span>
+</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-on-surface">$11.5201</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-on-surface font-semibold">$12.5276</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-error font-bold">+$1.0075</td>
+<td class="py-table-cell-py px-table-cell-px text-right">
+<span class="font-caption text-caption font-bold px-2 py-0.5 rounded bg-error-container text-on-error-container">+8.7%</span>
+</td>
+</tr>
+<tr class="bg-surface-container-lowest hover:bg-surface-container-low transition-colors">
+<td class="py-table-cell-py px-table-cell-px font-semibold text-on-surface flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-tertiary-fixed-dim"></span>
+<span>TRIMS</span>
+</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-on-surface">$3.9537</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-on-surface font-semibold">$3.9086</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-on-tertiary-container font-bold">-$0.0451</td>
+<td class="py-table-cell-py px-table-cell-px text-right">
+<span class="font-caption text-caption font-bold px-2 py-0.5 rounded bg-surface-container text-on-tertiary-container">-1.1%</span>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="py-table-cell-py px-table-cell-px font-semibold text-on-surface-variant flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-outline-variant"></span>
+<span>SEWING THREAD</span>
+</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-outline">—</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-outline">—</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-outline">—</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-outline">—</td>
+</tr>
+<tr class="bg-surface-container-lowest hover:bg-surface-container-low transition-colors">
+<td class="py-table-cell-py px-table-cell-px font-semibold text-on-surface flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-on-secondary-fixed"></span>
+<span>LABEL &amp; PACKAGING</span>
+</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-on-surface">$0.8844</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-on-surface font-semibold">$0.6563</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-on-tertiary-container font-bold">-$0.2281</td>
+<td class="py-table-cell-py px-table-cell-px text-right">
+<span class="font-caption text-caption font-bold px-2 py-0.5 rounded bg-surface-container text-on-tertiary-container">-25.8%</span>
+</td>
+</tr>
+<tr class="bg-surface-container font-headline-md text-headline-md font-bold text-on-surface">
+<td class="py-table-cell-py px-table-cell-px uppercase tracking-wider text-on-surface">TOTAL MATERIAL COST</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular">$16.3581</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-secondary font-bold">$17.0925</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-error">+$0.7344</td>
+<td class="py-table-cell-py px-table-cell-px text-right">
+<span class="font-caption text-caption font-bold px-2.5 py-1 rounded-lg bg-error text-on-error shadow-sm">+4.3% Net Creep</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<!-- Right Margin Impact & Reconciliation Gauge (4 Cols) -->
+<div class="xl:col-span-4 bg-surface-container-lowest rounded-xl p-panel-padding shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="font-caption text-caption uppercase text-outline font-bold">Margin Drift Impact</span>
+<span class="font-caption text-caption text-error font-semibold bg-error-container/50 px-2 py-0.5 rounded">+4.49% Target Variance</span>
+</div>
+<div class="py-gap-xs flex items-center justify-around">
+<div class="flex flex-col items-center">
+<div class="relative w-24 h-24 flex items-center justify-center">
+<svg class="w-24 h-24 transform -rotate-90" viewbox="0 0 36 36">
+<path class="text-surface-container" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-width="3.5"></path>
+<path class="text-secondary" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-dasharray="78, 100" stroke-linecap="round" stroke-width="3.5"></path>
+</svg>
+<div class="absolute flex flex-col items-center">
+<span class="font-headline-lg text-headline-lg text-on-surface font-bold leading-none">78%</span>
+<span class="font-caption text-caption text-on-surface-variant font-medium text-[10px]">AUTO-MATCH</span>
+</div>
+</div>
+<span class="font-caption text-caption text-on-surface font-semibold mt-1">15 of 19 Items</span>
+</div>
+<div class="flex flex-col gap-1.5 text-body-sm font-body-sm">
+<div class="flex items-center justify-between gap-3">
+<span class="flex items-center gap-1.5 text-on-surface-variant">
+<span class="w-2 h-2 rounded-full bg-secondary"></span> Exact BOM Match:
+            </span>
+<span class="font-metric-tabular font-bold text-on-surface">11</span>
+</div>
+<div class="flex items-center justify-between gap-3">
+<span class="flex items-center gap-1.5 text-on-surface-variant">
+<span class="w-2 h-2 rounded-full bg-secondary-container"></span> Name Realigned:
+            </span>
+<span class="font-metric-tabular font-bold text-on-surface">4</span>
+</div>
+<div class="flex items-center justify-between gap-3">
+<span class="flex items-center gap-1.5 text-on-surface-variant">
+<span class="w-2 h-2 rounded-full bg-surface-dim"></span> Group Changed:
+            </span>
+<span class="font-metric-tabular font-bold text-on-surface">2</span>
+</div>
+<div class="flex items-center justify-between gap-3">
+<span class="flex items-center gap-1.5 text-error font-medium">
+<span class="w-2 h-2 rounded-full bg-error"></span> Requires Action:
+            </span>
+<span class="font-metric-tabular font-bold text-error">1</span>
+</div>
+</div>
+</div>
+<div class="bg-surface-container-low p-2 rounded-lg flex items-center justify-between text-body-sm font-body-sm">
+<span class="text-on-surface font-medium">Outshell cost surge driver:</span>
+<span class="font-metric-tabular text-error font-bold">+0.9328 Extended (Ripstop poly)</span>
+</div>
+</div>
+</div>
+<!-- Filter & Granular Search Toolbar -->
+<div class="bg-surface-container-lowest rounded-xl shadow-sm px-panel-padding py-table-cell-py flex flex-wrap items-center justify-between gap-gap-sm">
+<div class="flex flex-wrap items-center gap-gap-sm">
+<div class="flex items-center gap-gap-xs bg-surface-container-low px-table-cell-px py-1 rounded-lg">
+<span class="font-caption text-caption text-outline uppercase font-bold">Group:</span>
+<select class="bg-transparent font-body-sm text-body-sm font-semibold text-on-surface focus:outline-none cursor-pointer" id="groupFilter">
+<option value="ALL">All Materials (19)</option>
+<option value="OUTSHELL">OUTSHELL (4)</option>
+<option value="TRIMS">TRIMS (13)</option>
+<option value="LABEL &amp; PACKAGING">LABEL &amp; PACKAGING (2)</option>
+<option value="SEWING THREAD">SEWING THREAD (0)</option>
+</select>
+</div>
+<div class="flex items-center gap-gap-xs bg-surface-container-low px-table-cell-px py-1 rounded-lg">
+<span class="font-caption text-caption text-outline uppercase font-bold">Status:</span>
+<select class="bg-transparent font-body-sm text-body-sm font-semibold text-on-surface focus:outline-none cursor-pointer" id="statusFilter">
+<option value="ALL">All Statuses (19)</option>
+<option value="NEEDS REVIEW">Needs Review (1)</option>
+<option value="NAME CHANGED">Name Changed (4)</option>
+<option value="GROUP CHANGED">Group Changed (2)</option>
+<option value="MATCH">Exact Match (8)</option>
+<option value="Comparison Only">Comparison Only (4)</option>
+</select>
+</div>
+<div class="flex items-center gap-gap-xs bg-surface-container-low px-table-cell-px py-1 rounded-lg">
+<span class="font-caption text-caption text-outline uppercase font-bold">Sort:</span>
+<select class="bg-transparent font-body-sm text-body-sm font-medium text-on-surface focus:outline-none cursor-pointer">
+<option>Comparison Season Order</option>
+<option>Highest Extended Delta</option>
+<option>Highest Cost Delta</option>
+<option>Reference BOM Sequence</option>
+</select>
+</div>
+</div>
+<div class="flex items-center gap-gap-sm">
+<span class="font-caption text-caption text-outline">Viewing 16 of 16 visible BOM items</span>
+<div class="flex items-center gap-1">
+<button class="p-1 rounded bg-surface-container-low text-on-surface hover:bg-surface-container-high transition-colors" title="Compact View">
+<span class="material-symbols-outlined text-[16px]">density_small</span>
+</button>
+<button class="p-1 rounded bg-secondary-container text-on-secondary shadow-sm" title="Standard View">
+<span class="material-symbols-outlined text-[16px]">density_medium</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Enterprise Item-Level Material Matching Matrix -->
+<div class="bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden">
+<div class="overflow-x-auto w-full">
+<table class="w-full text-left border-collapse min-w-[1340px]">
+<thead>
+<tr class="bg-primary-container text-inverse-on-surface">
+<th class="py-table-cell-py px-table-cell-px font-table-header text-table-header uppercase w-28">Final Group</th>
+<th class="py-table-cell-py px-table-cell-px font-table-header text-table-header uppercase w-72">Reference Material — Fixed</th>
+<th class="py-table-cell-py px-table-cell-px font-table-header text-table-header uppercase w-80">Comparison Material — Change Match</th>
+<th class="py-table-cell-py px-table-cell-px font-table-header text-table-header text-center uppercase w-14">Unit</th>
+<th class="py-table-cell-py px-table-cell-px font-table-header text-table-header text-right uppercase w-20">Ref Cost</th>
+<th class="py-table-cell-py px-table-cell-px font-table-header text-table-header text-right uppercase w-20">Comp Cost</th>
+<th class="py-table-cell-py px-table-cell-px font-table-header text-table-header text-right uppercase w-24">Cost Diff</th>
+<th class="py-table-cell-py px-table-cell-px font-table-header text-table-header text-right uppercase w-20">Ref Usage</th>
+<th class="py-table-cell-py px-table-cell-px font-table-header text-table-header text-right uppercase w-20">Comp Usage</th>
+<th class="py-table-cell-py px-table-cell-px font-table-header text-table-header text-right uppercase w-24">Usage Diff</th>
+<th class="py-table-cell-py px-table-cell-px font-table-header text-table-header text-right uppercase w-24">Ref Ext</th>
+<th class="py-table-cell-py px-table-cell-px font-table-header text-table-header text-right uppercase w-24">Comp Ext</th>
+<th class="py-table-cell-py px-table-cell-px font-table-header text-table-header text-right uppercase w-28">Ext Diff</th>
+<th class="py-table-cell-py px-table-cell-px font-table-header text-table-header text-center uppercase w-32">Status</th>
+</tr>
+</thead>
+<tbody class="font-body-sm text-body-sm divide-y divide-surface-container" id="bomMatrixBody">
+<!-- ITEM 1: Outshell primary fabric -->
+<tr class="hover:bg-surface-container-low transition-colors group-row" data-group="OUTSHELL" data-status="NAME CHANGED">
+<td class="py-table-cell-py px-table-cell-px">
+<select class="bg-surface-container-low py-0.5 px-1.5 rounded font-caption text-caption font-semibold text-on-surface focus:outline-none w-full">
+<option selected="">OUTSHELL</option>
+<option>TRIMS</option>
+<option>LABEL &amp; PACKAGING</option>
+</select>
+</td>
+<td class="py-table-cell-py px-table-cell-px">
+<div class="font-caption text-caption font-semibold text-on-surface leading-snug">PRINTED FLY RACING 27 RAYCE PANT+ES#PSDW02 - RIP-290 C0 WR (POLY)</div>
+<span class="font-caption text-caption text-outline text-[10px]">SRC-S27-FAB-0019</span>
+</td>
+<td class="py-table-cell-py px-table-cell-px">
+<div class="relative">
+<select class="w-full bg-surface-container-low border-0 py-1 px-2 rounded text-body-sm font-body-sm text-on-surface font-medium focus:ring-1 focus:ring-secondary">
+<option selected="">[OUTSHELL] PRINTED FLY RACING 28 F-16 PANT+ES#PSDW02- RIP-290 C0 WR (POLY)</option>
+<option>[OUTSHELL] SOLID FLY RACING 28 RAYCE PANT+600 POLY</option>
+<option>[OUTSHELL] ONE MESH (GSM)</option>
+<option>[CUSTOM] Unlink / Leave Unmatched</option>
+</select>
+</div>
+</td>
+<td class="py-table-cell-py px-table-cell-px text-center font-metric-tabular text-on-surface-variant font-semibold">YD</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-on-surface">5.8800</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-on-surface font-semibold">6.8100</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-error font-bold">+0.9300</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-on-surface">1.5744</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-on-surface">1.4825</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-on-tertiary-container font-semibold">-0.0919</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-on-surface">$9.2587</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-on-surface font-semibold">$10.2893</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-error font-bold">+$0.9328</td>
+<td class="py-table-cell-py px-table-cell-px text-center">
+<span class="inline-flex items-center gap-1 font-caption text-caption font-bold px-2 py-0.5 rounded bg-surface-container-high text-on-secondary-fixed">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span> NAME CHANGED
+              </span>
+</td>
+</tr>
+<!-- ITEM 2: Outshell Comparison Only -->
+<tr class="hover:bg-surface-container-low transition-colors group-row bg-surface-container-lowest" data-group="OUTSHELL" data-status="Comparison Only">
+<td class="py-table-cell-py px-table-cell-px">
+<select class="bg-surface-container-low py-0.5 px-1.5 rounded font-caption text-caption font-semibold text-on-surface focus:outline-none w-full">
+<option selected="">OUTSHELL</option>
+<option>TRIMS</option>
+</select>
+</td>
+<td class="py-table-cell-py px-table-cell-px text-outline font-metric-tabular">—</td>
+<td class="py-table-cell-py px-table-cell-px">
+<div class="relative">
+<select class="w-full bg-surface-container-low border-0 py-1 px-2 rounded text-body-sm font-body-sm text-on-surface font-medium focus:ring-1 focus:ring-secondary">
+<option selected="">[OUTSHELL] PRINTED SOLID FLY RACING 28 RAYCE PANT+600 POLY (78T) - 800MM CHINA WR C0</option>
+<option>[CUSTOM] Unlink / Leave Unmatched</option>
+</select>
+</div>
+</td>
+<td class="py-table-cell-py px-table-cell-px text-center font-metric-tabular text-on-surface-variant font-semibold">YD</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-outline">—</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-on-surface font-semibold">3.7700</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-error font-bold">+3.7700</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-outline">—</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-on-surface">0.2143</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-error font-semibold">+0.2143</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-outline">—</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-on-surface font-semibold">$0.8483</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-error font-bold">+$0.8483</td>
+<td class="py-table-cell-py px-table-cell-px text-center">
+<span class="inline-flex items-center gap-1 font-caption text-caption font-bold px-2 py-0.5 rounded bg-surface-container text-on-surface-variant">
+                Comparison Only
+              </span>
+</td>
+</tr>
+<!-- ITEM 3: Outshell exact match -->
+<tr class="hover:bg-surface-container-low transition-colors group-row" data-group="OUTSHELL" data-status="MATCH">
+<td class="py-table-cell-py px-table-cell-px">
+<select class="bg-surface-container-low py-0.5 px-1.5 rounded font-caption text-caption font-semibold text-on-surface focus:outline-none w-full">
+<option selected="">OUTSHELL</option>
+<option>TRIMS</option>
+</select>
+</td>
+<td class="py-table-cell-py px-table-cell-px font-caption text-caption font-semibold text-on-surface">ONE MESH (GSM)</td>
+<td class="py-table-cell-py px-table-cell-px">
+<select class="w-full bg-surface-container-low border-0 py-1 px-2 rounded text-body-sm font-body-sm text-on-surface font-medium focus:ring-1 focus:ring-secondary">
+<option selected="">[OUTSHELL] ONE MESH (GSM)</option>
+</select>
+</td>
+<td class="py-table-cell-py px-table-cell-px text-center font-metric-tabular text-on-surface-variant font-semibold">YD</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-on-surface">3.0000</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-on-surface">3.0000</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-outline">—</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-on-surface">0.2585</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-on-surface">0.2585</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-outline">—</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-on-surface">$0.8080</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-on-surface">$0.8080</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-outline">—</td>
+<td class="py-table-cell-py px-table-cell-px text-center">
+<span class="inline-flex items-center gap-1 font-caption text-caption font-bold px-2 py-0.5 rounded bg-surface-container text-on-tertiary-container">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary-fixed-dim"></span> MATCH
+              </span>
+</td>
+</tr>
+<!-- ITEM 4: Outshell 3:1 Mesh minor drift -->
+<tr class="hover:bg-surface-container-low transition-colors group-row" data-group="OUTSHELL" data-status="MATCH">
+<td class="py-table-cell-py px-table-cell-px">
+<select class="bg-surface-container-low py-0.5 px-1.5 rounded font-caption text-caption font-semibold text-on-surface focus:outline-none w-full">
+<option selected="">OUTSHELL</option>
+<option>TRIMS</option>
+</select>
+</td>
+<td class="py-table-cell-py px-table-cell-px font-caption text-caption font-semibold text-on-surface">3:1 MESH (POLY)</td>
+<td class="py-table-cell-py px-table-cell-px">
+<select class="w-full bg-surface-container-low border-0 py-1 px-2 rounded text-body-sm font-body-sm text-on-surface font-medium focus:ring-1 focus:ring-secondary">
+<option selected="">[OUTSHELL] 3:1 MESH (POLY)</option>
+</select>
+</td>
+<td class="py-table-cell-py px-table-cell-px text-center font-metric-tabular text-on-surface-variant font-semibold">YD</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-on-surface">0.5100</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-on-surface">0.5200</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-error font-bold">+0.0100</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-on-surface">1.0880</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-on-surface">1.0880</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-outline">—</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-on-surface">$0.5708</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-on-surface font-semibold">$0.5820</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-error font-bold">+$0.0112</td>
+<td class="py-table-cell-py px-table-cell-px text-center">
+<span class="inline-flex items-center gap-1 font-caption text-caption font-bold px-2 py-0.5 rounded bg-surface-container text-on-tertiary-container">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary-fixed-dim"></span> MATCH
+              </span>
+</td>
+</tr>
+<!-- GROUP DIVIDER: TRIMS -->
+<tr class="bg-surface-container-high/60">
+<td class="py-1 px-table-cell-px font-caption text-caption font-bold text-on-surface uppercase tracking-wider" colspan="14">
+              Category Group: TRIMS (12 Line Items)
+            </td>
+</tr>
+<!-- ITEM 5: Needs Review Action Item -->
+<tr class="bg-error-container/20 hover:bg-error-container/30 transition-colors group-row" data-group="TRIMS" data-status="NEEDS REVIEW">
+<td class="py-table-cell-py px-table-cell-px">
+<select class="bg-surface-container-lowest py-0.5 px-1.5 rounded font-caption text-caption font-semibold text-on-surface focus:outline-none w-full">
+<option selected="">TRIMS</option>
+<option>OUTSHELL</option>
+<option>LABEL &amp; PACKAGING</option>
+</select>
+</td>
+<td class="py-table-cell-py px-table-cell-px text-error font-metric-tabular font-bold flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-error">warning</span>
+<span>— (Unmapped)</span>
+</td>
+<td class="py-table-cell-py px-table-cell-px">
+<div class="relative">
+<select class="w-full bg-surface-container-lowest border-0 py-1 px-2 rounded text-body-sm font-body-sm text-error font-bold focus:ring-1 focus:ring-error shadow-sm">
+<option selected="">[TRIMS] PRINT MATERIAL (PCS 5.000)</option>
+<option>[TRIMS] TPR FLY RACING 27 RAYCE PANT</option>
+<option>[LABEL &amp; PACKAGING] BARCODE STICKER</option>
+</select>
+</div>
+</td>
+<td class="py-table-cell-py px-table-cell-px text-center font-metric-tabular text-on-surface-variant font-semibold">PCS</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-outline">—</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-error font-bold">0.1183</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-error font-bold">+0.1183</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-outline">—</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-error font-bold">5.0000</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-error font-bold">+5.0000</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-outline">—</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-error font-bold">$0.6211</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-error font-bold">+$0.6211</td>
+<td class="py-table-cell-py px-table-cell-px text-center">
+<span class="inline-flex items-center gap-1 font-caption text-caption font-bold px-2 py-0.5 rounded bg-error text-on-error shadow-sm">
+                Needs Review
+              </span>
+</td>
+</tr>
+<!-- ITEM 6: Chicron Trim Match with Price Creep -->
+<tr class="hover:bg-surface-container-low transition-colors group-row" data-group="TRIMS" data-status="MATCH">
+<td class="py-table-cell-py px-table-cell-px">
+<select class="bg-surface-container-low py-0.5 px-1.5 rounded font-caption text-caption font-semibold text-on-surface focus:outline-none w-full">
+<option selected="">TRIMS</option>
+<option>OUTSHELL</option>
+</select>
+</td>
+<td class="py-table-cell-py px-table-cell-px font-caption text-caption font-semibold text-on-surface">CHICRON 0.8MM 8000 (LOW PRICE)</td>
+<td class="py-table-cell-py px-table-cell-px">
+<select class="w-full bg-surface-container-low border-0 py-1 px-2 rounded text-body-sm font-body-sm text-on-surface font-medium focus:ring-1 focus:ring-secondary">
+<option selected="">[TRIMS] CHICRON 0.8MM 8000 (LOW PRICE)</option>
+</select>
+</td>
+<td class="py-table-cell-py px-table-cell-px text-center font-metric-tabular text-on-surface-variant font-semibold">M</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-on-surface">6.8000</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-on-surface font-semibold">6.9300</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-error font-bold">+0.1300</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-on-surface">0.0185</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-on-surface">0.0185</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-outline">—</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-on-surface">$0.1321</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-on-surface font-semibold">$0.1346</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-error font-bold">+$0.0025</td>
+<td class="py-table-cell-py px-table-cell-px text-center">
+<span class="inline-flex items-center gap-1 font-caption text-caption font-bold px-2 py-0.5 rounded bg-surface-container text-on-tertiary-container">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary-fixed-dim"></span> MATCH
+              </span>
+</td>
+</tr>
+<!-- ITEM 7: ES#N Group Changed -->
+<tr class="hover:bg-surface-container-low transition-colors group-row" data-group="TRIMS" data-status="GROUP CHANGED">
+<td class="py-table-cell-py px-table-cell-px">
+<select class="bg-surface-container-low py-0.5 px-1.5 rounded font-caption text-caption font-semibold text-on-surface focus:outline-none w-full">
+<option selected="">TRIMS</option>
+<option>OUTSHELL</option>
+</select>
+</td>
+<td class="py-table-cell-py px-table-cell-px font-caption text-caption font-semibold text-on-surface">ES#N FD 160D (PU 1 TIME)</td>
+<td class="py-table-cell-py px-table-cell-px">
+<select class="w-full bg-surface-container-low border-0 py-1 px-2 rounded text-body-sm font-body-sm text-on-surface font-medium focus:ring-1 focus:ring-secondary">
+<option selected="">[TRIMS] ES#N FD 160D (PU 1 TIME)</option>
+</select>
+</td>
+<td class="py-table-cell-py px-table-cell-px text-center font-metric-tabular text-on-surface-variant font-semibold">YD</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-on-surface">2.9130</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-on-surface">2.9130</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-outline">—</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-on-surface">0.0494</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-on-surface">0.0494</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-outline">—</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-on-surface">$0.1511</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-on-surface">$0.1511</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-outline">—</td>
+<td class="py-table-cell-py px-table-cell-px text-center">
+<span class="inline-flex items-center gap-1 font-caption text-caption font-bold px-2 py-0.5 rounded bg-surface-dim text-on-secondary-fixed-variant">
+                GROUP CHANGED
+              </span>
+</td>
+</tr>
+<!-- ITEM 8: Poly Taslan Savings -->
+<tr class="hover:bg-surface-container-low transition-colors group-row" data-group="TRIMS" data-status="GROUP CHANGED">
+<td class="py-table-cell-py px-table-cell-px">
+<select class="bg-surface-container-low py-0.5 px-1.5 rounded font-caption text-caption font-semibold text-on-surface focus:outline-none w-full">
+<option selected="">TRIMS</option>
+<option>OUTSHELL</option>
+</select>
+</td>
+<td class="py-table-cell-py px-table-cell-px font-caption text-caption font-semibold text-on-surface">POLY TASLAN PA COATED (WRC0) (CN)</td>
+<td class="py-table-cell-py px-table-cell-px">
+<select class="w-full bg-surface-container-low border-0 py-1 px-2 rounded text-body-sm font-body-sm text-on-surface font-medium focus:ring-1 focus:ring-secondary">
+<option selected="">[TRIMS] POLY TASLAN PA COATED (WRC0) (CN)</option>
+</select>
+</td>
+<td class="py-table-cell-py px-table-cell-px text-center font-metric-tabular text-on-surface-variant font-semibold">YD</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-on-surface">1.2700</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-on-surface">1.2400</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-on-tertiary-container font-bold">-0.0300</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-on-surface">0.0237</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-on-surface">0.0237</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-outline">—</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-on-surface">$0.0318</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-on-surface">$0.0309</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-on-tertiary-container font-bold">-$0.0007</td>
+<td class="py-table-cell-py px-table-cell-px text-center">
+<span class="inline-flex items-center gap-1 font-caption text-caption font-bold px-2 py-0.5 rounded bg-surface-dim text-on-secondary-fixed-variant">
+                GROUP CHANGED
+              </span>
+</td>
+</tr>
+<!-- ITEM 9: TPR FLY RACING Name Changed -->
+<tr class="hover:bg-surface-container-low transition-colors group-row" data-group="TRIMS" data-status="NAME CHANGED">
+<td class="py-table-cell-py px-table-cell-px">
+<select class="bg-surface-container-low py-0.5 px-1.5 rounded font-caption text-caption font-semibold text-on-surface focus:outline-none w-full">
+<option selected="">TRIMS</option>
+</select>
+</td>
+<td class="py-table-cell-py px-table-cell-px font-caption text-caption font-semibold text-on-surface">TPR FLY RACING 28 RAYCE PANT</td>
+<td class="py-table-cell-py px-table-cell-px">
+<select class="w-full bg-surface-container-low border-0 py-1 px-2 rounded text-body-sm font-body-sm text-on-surface font-medium focus:ring-1 focus:ring-secondary">
+<option selected="">[TRIMS] TPR FLY RACING 27 RAYCE PANT</option>
+</select>
+</td>
+<td class="py-table-cell-py px-table-cell-px text-center font-metric-tabular text-on-surface-variant font-semibold">SET</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-on-surface">0.4989</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-on-surface">0.4989</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-outline">—</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-on-surface">1.0000</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-on-surface">1.0100</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-error font-semibold">+0.0100</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-on-surface">$0.5238</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-on-surface font-semibold">$0.5291</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-error font-bold">+$0.0053</td>
+<td class="py-table-cell-py px-table-cell-px text-center">
+<span class="inline-flex items-center gap-1 font-caption text-caption font-bold px-2 py-0.5 rounded bg-surface-container-high text-on-secondary-fixed">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span> NAME CHANGED
+              </span>
+</td>
+</tr>
+<!-- ITEM 10: NYLEX NYLON Exact Match -->
+<tr class="hover:bg-surface-container-low transition-colors group-row" data-group="TRIMS" data-status="MATCH">
+<td class="py-table-cell-py px-table-cell-px">
+<select class="bg-surface-container-low py-0.5 px-1.5 rounded font-caption text-caption font-semibold text-on-surface focus:outline-none w-full">
+<option selected="">TRIMS</option>
+</select>
+</td>
+<td class="py-table-cell-py px-table-cell-px font-caption text-caption font-semibold text-on-surface">NYLEX NYLON</td>
+<td class="py-table-cell-py px-table-cell-px">
+<select class="w-full bg-surface-container-low border-0 py-1 px-2 rounded text-body-sm font-body-sm text-on-surface font-medium focus:ring-1 focus:ring-secondary">
+<option selected="">[TRIMS] NYLEX NYLON</option>
+</select>
+</td>
+<td class="py-table-cell-py px-table-cell-px text-center font-metric-tabular text-on-surface-variant font-semibold">YD</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-on-surface">5.8000</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-on-surface">5.8000</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-outline">—</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-on-surface">0.0029</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-on-surface">0.0029</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-outline">—</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-on-surface">$0.0171</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-on-surface">$0.0171</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-outline">—</td>
+<td class="py-table-cell-py px-table-cell-px text-center">
+<span class="inline-flex items-center gap-1 font-caption text-caption font-bold px-2 py-0.5 rounded bg-surface-container text-on-tertiary-container">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary-fixed-dim"></span> MATCH
+              </span>
+</td>
+</tr>
+<!-- ITEM 11: Elastic Band Minor Creep -->
+<tr class="hover:bg-surface-container-low transition-colors group-row" data-group="TRIMS" data-status="MATCH">
+<td class="py-table-cell-py px-table-cell-px">
+<select class="bg-surface-container-low py-0.5 px-1.5 rounded font-caption text-caption font-semibold text-on-surface focus:outline-none w-full">
+<option selected="">TRIMS</option>
+</select>
+</td>
+<td class="py-table-cell-py px-table-cell-px font-caption text-caption font-semibold text-on-surface">E/BAND 50MM</td>
+<td class="py-table-cell-py px-table-cell-px">
+<select class="w-full bg-surface-container-low border-0 py-1 px-2 rounded text-body-sm font-body-sm text-on-surface font-medium focus:ring-1 focus:ring-secondary">
+<option selected="">[TRIMS] E/BAND 50MM</option>
+</select>
+</td>
+<td class="py-table-cell-py px-table-cell-px text-center font-metric-tabular text-on-surface-variant font-semibold">YD</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-on-surface">0.2514</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-on-surface">0.2544</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-error font-bold">+0.0030</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-on-surface">0.4881</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-on-surface">0.4728</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-error font-semibold">+0.0047</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-on-surface">$0.1238</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-on-surface font-semibold">$0.1283</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-error font-bold">+$0.0027</td>
+<td class="py-table-cell-py px-table-cell-px text-center">
+<span class="inline-flex items-center gap-1 font-caption text-caption font-bold px-2 py-0.5 rounded bg-surface-container text-on-tertiary-container">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary-fixed-dim"></span> MATCH
+              </span>
+</td>
+</tr>
+<!-- ITEM 12: Plastic Square Buckle -->
+<tr class="hover:bg-surface-container-low transition-colors group-row" data-group="TRIMS" data-status="MATCH">
+<td class="py-table-cell-py px-table-cell-px">
+<select class="bg-surface-container-low py-0.5 px-1.5 rounded font-caption text-caption font-semibold text-on-surface focus:outline-none w-full">
+<option selected="">TRIMS</option>
+</select>
+</td>
+<td class="py-table-cell-py px-table-cell-px font-caption text-caption font-semibold text-on-surface">PLASTIC SQUARE BUCKLE 30MM</td>
+<td class="py-table-cell-py px-table-cell-px">
+<select class="w-full bg-surface-container-low border-0 py-1 px-2 rounded text-body-sm font-body-sm text-on-surface font-medium focus:ring-1 focus:ring-secondary">
+<option selected="">[TRIMS] PLASTIC SQUARE BUCKLE 30MM - INNER/OUTER</option>
+</select>
+</td>
+<td class="py-table-cell-py px-table-cell-px text-center font-metric-tabular text-on-surface-variant font-semibold">PCS</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-on-surface">0.0300</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-on-surface">0.0300</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-outline">—</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-on-surface">2.0000</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-on-surface">2.0000</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-outline">—</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-on-surface">$0.0830</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-on-surface">$0.0830</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-outline">—</td>
+<td class="py-table-cell-py px-table-cell-px text-center">
+<span class="inline-flex items-center gap-1 font-caption text-caption font-bold px-2 py-0.5 rounded bg-surface-container text-on-tertiary-container">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary-fixed-dim"></span> MATCH
+              </span>
+</td>
+</tr>
+<!-- ITEM 13: FLY RACING MAIN BUCKLE Comparison Only -->
+<tr class="hover:bg-surface-container-low transition-colors group-row" data-group="TRIMS" data-status="Comparison Only">
+<td class="py-table-cell-py px-table-cell-px">
+<select class="bg-surface-container-low py-0.5 px-1.5 rounded font-caption text-caption font-semibold text-on-surface focus:outline-none w-full">
+<option selected="">TRIMS</option>
+</select>
+</td>
+<td class="py-table-cell-py px-table-cell-px text-outline font-metric-tabular">—</td>
+<td class="py-table-cell-py px-table-cell-px">
+<select class="w-full bg-surface-container-low border-0 py-1 px-2 rounded text-body-sm font-body-sm text-on-surface font-medium focus:ring-1 focus:ring-secondary">
+<option selected="">[TRIMS] FLY RACING MAIN BUCKLE SET</option>
+</select>
+</td>
+<td class="py-table-cell-py px-table-cell-px text-center font-metric-tabular text-on-surface-variant font-semibold">SET</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-outline">—</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-on-surface font-semibold">0.6500</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-error font-bold">+0.6500</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-outline">—</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-on-surface">1.0100</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-error font-semibold">+1.0100</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-outline">—</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-on-surface font-semibold">$0.6893</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-error font-bold">+$0.6893</td>
+<td class="py-table-cell-py px-table-cell-px text-center">
+<span class="inline-flex items-center gap-1 font-caption text-caption font-bold px-2 py-0.5 rounded bg-surface-container text-on-surface-variant">
+                Comparison Only
+              </span>
+</td>
+</tr>
+<!-- ITEM 14: Zipper #8 Name Realigned -->
+<tr class="hover:bg-surface-container-low transition-colors group-row" data-group="TRIMS" data-status="NAME CHANGED">
+<td class="py-table-cell-py px-table-cell-px">
+<select class="bg-surface-container-low py-0.5 px-1.5 rounded font-caption text-caption font-semibold text-on-surface focus:outline-none w-full">
+<option selected="">TRIMS</option>
+</select>
+</td>
+<td class="py-table-cell-py px-table-cell-px font-caption text-caption font-semibold text-on-surface">VT_#8 VISLON ZIPPER (VSC-88 DA EF) PB18 GREEN</td>
+<td class="py-table-cell-py px-table-cell-px">
+<select class="w-full bg-surface-container-low border-0 py-1 px-2 rounded text-body-sm font-body-sm text-on-surface font-medium focus:ring-1 focus:ring-secondary">
+<option selected="">[TRIMS] #8 VISLON ZIPPER (VSC-88 DA EF) GREEN F N-ANTI</option>
+</select>
+</td>
+<td class="py-table-cell-py px-table-cell-px text-center font-metric-tabular text-on-surface-variant font-semibold">PCS</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-on-surface">0.3411</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-on-surface">0.3411</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-outline">—</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-on-surface">1.0000</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-on-surface">1.0000</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-outline">—</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-on-surface">$0.3582</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-on-surface">$0.3582</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-outline">—</td>
+<td class="py-table-cell-py px-table-cell-px text-center">
+<span class="inline-flex items-center gap-1 font-caption text-caption font-bold px-2 py-0.5 rounded bg-surface-container-high text-on-secondary-fixed">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span> NAME CHANGED
+              </span>
+</td>
+</tr>
+<!-- GROUP DIVIDER: LABEL & PACKAGING -->
+<tr class="bg-surface-container-high/60">
+<td class="py-1 px-table-cell-px font-caption text-caption font-bold text-on-surface uppercase tracking-wider" colspan="14">
+              Category Group: LABEL &amp; PACKAGING (2 Line Items)
+            </td>
+</tr>
+<!-- ITEM 15: Polybag Packaging Savings -->
+<tr class="hover:bg-surface-container-low transition-colors group-row" data-group="LABEL &amp; PACKAGING" data-status="MATCH">
+<td class="py-table-cell-py px-table-cell-px">
+<select class="bg-surface-container-low py-0.5 px-1.5 rounded font-caption text-caption font-semibold text-on-surface focus:outline-none w-full">
+<option selected="">LABEL &amp; PACKAGING</option>
+<option>TRIMS</option>
+</select>
+</td>
+<td class="py-table-cell-py px-table-cell-px font-caption text-caption font-semibold text-on-surface">POLYBAG RECYCLED 40X60CM 0.05MM</td>
+<td class="py-table-cell-py px-table-cell-px">
+<select class="w-full bg-surface-container-low border-0 py-1 px-2 rounded text-body-sm font-body-sm text-on-surface font-medium focus:ring-1 focus:ring-secondary">
+<option selected="">[LABEL] POLYBAG RECYCLED 40X60CM 0.05MM GRS</option>
+</select>
+</td>
+<td class="py-table-cell-py px-table-cell-px text-center font-metric-tabular text-on-surface-variant font-semibold">PCS</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-on-surface">0.4500</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-on-surface">0.3200</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-on-tertiary-container font-bold">-0.1300</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-on-surface">1.0000</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-on-surface">1.0000</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-outline">—</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-on-surface">$0.4500</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-on-surface font-semibold">$0.3200</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-on-tertiary-container font-bold">-$0.1300</td>
+<td class="py-table-cell-py px-table-cell-px text-center">
+<span class="inline-flex items-center gap-1 font-caption text-caption font-bold px-2 py-0.5 rounded bg-surface-container text-on-tertiary-container">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary-fixed-dim"></span> MATCH
+              </span>
+</td>
+</tr>
+<!-- ITEM 16: Barcode & Woven Label Bundle -->
+<tr class="hover:bg-surface-container-low transition-colors group-row" data-group="LABEL &amp; PACKAGING" data-status="MATCH">
+<td class="py-table-cell-py px-table-cell-px">
+<select class="bg-surface-container-low py-0.5 px-1.5 rounded font-caption text-caption font-semibold text-on-surface focus:outline-none w-full">
+<option selected="">LABEL &amp; PACKAGING</option>
+<option>TRIMS</option>
+</select>
+</td>
+<td class="py-table-cell-py px-table-cell-px font-caption text-caption font-semibold text-on-surface">FLY RACING CARE &amp; MAIN WOVEN LABEL</td>
+<td class="py-table-cell-py px-table-cell-px">
+<select class="w-full bg-surface-container-low border-0 py-1 px-2 rounded text-body-sm font-body-sm text-on-surface font-medium focus:ring-1 focus:ring-secondary">
+<option selected="">[LABEL] FLY RACING CARE &amp; MAIN WOVEN LABEL</option>
+</select>
+</td>
+<td class="py-table-cell-py px-table-cell-px text-center font-metric-tabular text-on-surface-variant font-semibold">SET</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-on-surface">0.4344</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-on-surface">0.3363</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-on-tertiary-container font-bold">-0.0981</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-on-surface">1.0000</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-on-surface">1.0000</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-outline">—</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-on-surface">$0.4344</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-on-surface font-semibold">$0.3363</td>
+<td class="py-table-cell-py px-table-cell-px text-right font-metric-tabular text-metric-tabular text-on-tertiary-container font-bold">-$0.0981</td>
+<td class="py-table-cell-py px-table-cell-px text-center">
+<span class="inline-flex items-center gap-1 font-caption text-caption font-bold px-2 py-0.5 rounded bg-surface-container text-on-tertiary-container">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary-fixed-dim"></span> MATCH
+              </span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Bottom Global Sticky Action Footer -->
+<div class="sticky bottom-0 bg-surface-container-lowest/95 backdrop-blur-md rounded-xl p-panel-padding shadow-xl flex flex-col sm:flex-row items-center justify-between gap-gap-md border-t border-surface-container-high/40">
+<div class="flex items-center gap-gap-md">
+<button class="flex items-center gap-1.5 px-table-cell-px py-2 rounded-lg text-on-surface-variant hover:text-error hover:bg-error-container/20 font-body-sm text-body-sm font-semibold transition-colors" id="resetMatchesBtn">
+<span class="material-symbols-outlined text-[18px]">restart_alt</span>
+<span>Reset Matches to Auto-BOM</span>
+</button>
+<span class="w-px h-5 bg-surface-container-high hidden sm:inline-block"></span>
+<div class="flex items-center gap-2 text-on-surface-variant font-caption text-caption">
+<span class="w-2 h-2 rounded-full bg-tertiary-fixed-dim"></span>
+<span>All group overrides autosaved to Cloud Stage DB</span>
+</div>
+</div>
+<div class="flex items-center gap-gap-sm w-full sm:w-auto justify-end">
+<button class="flex items-center gap-1.5 px-table-cell-px py-2 rounded-lg bg-surface-container text-on-surface hover:bg-surface-container-high font-body-sm text-body-sm font-semibold transition-colors">
+<span class="material-symbols-outlined text-[18px]">save</span>
+<span>Save Draft</span>
+</button>
+<button class="flex items-center gap-2 px-gap-lg py-2 rounded-lg bg-secondary text-on-secondary hover:bg-secondary-container font-headline-md text-headline-md font-semibold transition-all shadow-md hover:shadow-lg">
+<span>Proceed to Step 4: Comparison Preview</span>
+<span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+<script>
+  (function() {
+    const groupFilter = document.getElementById('groupFilter');
+    const statusFilter = document.getElementById('statusFilter');
+    const rows = document.querySelectorAll('.group-row');
+    const undoBtn = document.getElementById('undoBtn');
+    const resetMatchesBtn = document.getElementById('resetMatchesBtn');
+
+    function filterTable() {
+      const selectedGroup = groupFilter.value;
+      const selectedStatus = statusFilter.value;
+
+      rows.forEach(row => {
+        const rowGroup = row.getAttribute('data-group');
+        const rowStatus = row.getAttribute('data-status');
+
+        const groupMatch = selectedGroup === 'ALL' || rowGroup === selectedGroup;
+        const statusMatch = selectedStatus === 'ALL' || rowStatus === selectedStatus;
+
+        if (groupMatch && statusMatch) {
+          row.classList.remove('hidden');
+        } else {
+          row.classList.add('hidden');
+        }
+      });
+    }
+
+    if (groupFilter) groupFilter.addEventListener('change', filterTable);
+    if (statusFilter) statusFilter.addEventListener('change', filterTable);
+
+    if (undoBtn) {
+      undoBtn.addEventListener('click', () => {
+        alert('Last material override reverted to baseline suggested match.');
+      });
+    }
+
+    if (resetMatchesBtn) {
+      resetMatchesBtn.addEventListener('click', () => {
+        if (confirm('Re-run fuzzy matching algorithm on all 19 BOM elements for 27 RAYCE PANT? Manual adjustments will be reset.')) {
+          alert('BOM matches refreshed from SAP S/4HANA Master Catalog.');
+        }
+      });
+    }
+  })();
+</script></main></div></body></html>
