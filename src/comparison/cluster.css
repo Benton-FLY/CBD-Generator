@@ -16,4 +16,5 @@
 .match-dialog h3{margin-top:0}
 .match-dialog>div{display:flex;justify-content:flex-end;gap:8px;margin-top:20px}
 .reference-material .material-name+.material-name{border-top:1px dashed #94a3b8;margin-top:6px;padding-top:6px}
+.match-evidence{display:inline-flex;align-items:center;gap:5px;cursor:help}.match-evidence small{padding:1px 4px;border-radius:4px;background:#e2e8f0;color:#334155;font-size:10px}
 @media(max-width:900px){.matching-toolbar{top:6px}.matching-toolbar .comparison-actions{width:100%;justify-content:flex-end}.matching-toolbar .comparison-filters{width:100%}}
