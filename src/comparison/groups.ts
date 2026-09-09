@@ -1,11 +1,13 @@
+import {comparisonRows} from './relations';
 import type {CbdMaterialRow,MaterialMatchCluster} from './types';
 export const normalizeGroup=(value:string)=>value.trim().toUpperCase().replace(/^TRIM$/,'TRIMS');
 export function resolveGroup(cluster:MaterialMatchCluster,reference:CbdMaterialRow[],comparison:CbdMaterialRow[]):MaterialMatchCluster {
- const refs=reference.filter(r=>cluster.referenceRowIds.includes(r.id)),cur=comparison.find(r=>r.id===cluster.currentRowId);
- const referenceOriginalGroup=[...new Set(refs.map(r=>normalizeGroup(r.group)))].join(' + '),comparisonOriginalGroup=cur?normalizeGroup(cur.group):'';
+ const refs=reference.filter(r=>cluster.referenceRowIds.includes(r.id)),curs=comparisonRows(cluster,comparison),cur=curs[0];
+ const referenceOriginalGroup=[...new Set(refs.map(r=>normalizeGroup(r.group)))].join(' + '),comparisonOriginalGroup=[...new Set(curs.map(r=>normalizeGroup(r.group)))].join(' + ');
  const manualGroupOverride=cluster.manualGroupOverride??((!!cluster.manualLocked||cluster.matchSource==='manual')&&normalizeGroup(cluster.finalGroup)!==(comparisonOriginalGroup||referenceOriginalGroup));
  const effectiveGroup=normalizeGroup(manualGroupOverride?cluster.finalGroup:comparisonOriginalGroup||referenceOriginalGroup||cluster.finalGroup);
- return {...cluster,referenceOriginalGroup,comparisonOriginalGroup,effectiveGroup,finalGroup:effectiveGroup,manualGroupOverride,groupAssignmentSource:manualGroupOverride?'manual':cur?'comparison':'referenceFallback'};
+ const from=referenceOriginalGroup!==effectiveGroup?referenceOriginalGroup:comparisonOriginalGroup!==effectiveGroup?comparisonOriginalGroup:'';
+ return {...cluster,groupChangedFrom:from||undefined,groupChangedTo:from?effectiveGroup:undefined,groupChangeSource:from?(manualGroupOverride?'manual':'automatic'):undefined,referenceOriginalGroup,comparisonOriginalGroup,effectiveGroup,finalGroup:effectiveGroup,manualGroupOverride,groupAssignmentSource:manualGroupOverride?'manual':cur?'comparison':'referenceFallback'};
 }
 export const unitChanged=(refs:CbdMaterialRow[],cur?:CbdMaterialRow)=>!!cur&&refs.some(r=>r.unit.trim().toUpperCase()!==cur.unit.trim().toUpperCase());
 export function relationPresentation(cluster:MaterialMatchCluster,refs:CbdMaterialRow[],cur?:CbdMaterialRow,ko=false){
@@ -22,5 +24,5 @@ export function relationPresentation(cluster:MaterialMatchCluster,refs:CbdMateri
 }
 export function groupAmounts(clusters:MaterialMatchCluster[],reference:CbdMaterialRow[],comparison:CbdMaterialRow[]){
  const totals:Record<string,{reference:number;comparison:number}>={};
- for(const raw of clusters){const c=resolveGroup(raw,reference,comparison),t=totals[c.effectiveGroup!]??={reference:0,comparison:0};for(const id of c.referenceRowIds)t.reference+=reference.find(r=>r.id===id)?.extended??0;t.comparison+=comparison.find(r=>r.id===c.currentRowId)?.extended??0;}return totals;
+ for(const raw of clusters){const c=resolveGroup(raw,reference,comparison),t=totals[c.effectiveGroup!]??={reference:0,comparison:0};for(const id of c.referenceRowIds)t.reference+=reference.find(r=>r.id===id)?.extended??0;for(const row of comparisonRows(c,comparison))t.comparison+=row.extended??0;}return totals;
 }

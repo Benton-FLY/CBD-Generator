@@ -1,9 +1,11 @@
-import {resolveGroup,relationPresentation,unitChanged} from './groups';
+import {comparisonRows} from './relations';
+import {comparisonModel,COST_GROUPS} from './model';
+import {relationPresentation,unitChanged} from './groups';
 import ExcelJS from 'exceljs';
 import {saveAs} from 'file-saver';
 import type {CbdMaterialRow,CbdStyle,ComparisonFinancials,ComparisonState,MaterialMatchCluster} from './types';
 
-const DEFAULT_GROUPS=['OUTSHELL','TRIMS','SEWING THREAD','LABEL & PACKAGING'];
+const DEFAULT_GROUPS=COST_GROUPS;
 const fill=(argb:string):ExcelJS.Fill=>({type:'pattern',pattern:'solid',fgColor:{argb}});
 const numeric=(input?:number)=>input===undefined?null:input;
 const style=(state:ComparisonState,id?:string)=>state.styles.find(item=>item.id===id);
@@ -32,7 +34,7 @@ export function buildComparisonWorkbook(state:ComparisonState,options?:Pick<Comp
  summary.getRow(1).font={bold:true,color:{argb:'FFFFFF'}};summary.getRow(1).fill=fill('1E3A8A');
  const selectedIds=options?.stylePairIds?.length?new Set(options.stylePairIds):null;
  for(const styleMatch of state.styleMatches.filter(match=>!match.excluded&&(!selectedIds||selectedIds.has(match.id)))){
-  const reference=style(state,styleMatch.referenceId),comparison=style(state,styleMatch.currentId),financials=comparisonFinancials(reference,comparison),clusters=state.materialMatches.find(set=>set.styleMatchId===styleMatch.id)?.clusters.map(c=>resolveGroup(c,reference?.materials||[],comparison?.materials||[]))||[],summaryRow=summary.addRow([state.referenceSeason,reference?.styleName||'—',state.currentSeason,comparison?.styleName||'—',styleMatch.method,excelStatus(styleMatch.status),null,null,financials.referenceFob??null,financials.comparisonFob??null]),sheet=workbook.addWorksheet(safeName(comparison?.styleName||reference?.styleName||'Unmatched',used));
+  const {reference,comparison,clusters}=comparisonModel(state,styleMatch),financials=comparisonFinancials(reference,comparison),summaryRow=summary.addRow([state.referenceSeason,reference?.styleName||'—',state.currentSeason,comparison?.styleName||'—',styleMatch.method,excelStatus(styleMatch.status),null,null,financials.referenceFob??null,financials.comparisonFob??null]),sheet=workbook.addWorksheet(safeName(comparison?.styleName||reference?.styleName||'Unmatched',used));
   sheet.pageSetup={orientation:'landscape',fitToPage:true,fitToWidth:1,fitToHeight:0};sheet.views=[{state:'frozen',ySplit:15,showGridLines:false}];
   sheet.mergeCells('A1:O1');sheet.getCell('A1').value='FLY Racing CBD 비교표';sheet.getCell('A1').font={bold:true,size:16,color:{argb:'FFFFFF'}};sheet.getCell('A1').fill=fill('1E3A8A');sheet.getCell('A1').alignment={horizontal:'center'};
   sheet.mergeCells('A2:O2');sheet.getCell('A2').value=`기준 시즌 ${state.referenceSeason} – ${stripSeasonPrefix(reference?.styleName,state.referenceSeason)}    |    비교 시즌 ${state.currentSeason} – ${stripSeasonPrefix(comparison?.styleName,state.currentSeason)}`;sheet.getCell('A2').font={bold:true};sheet.getCell('A2').fill=fill('DBEAFE');
@@ -49,14 +51,15 @@ export function buildComparisonWorkbook(state:ComparisonState,options?:Pick<Comp
    const grouped=clusters.filter(cluster=>cluster.finalGroup===group).sort((a,b)=>(material(comparison,a.currentRowId||undefined)?.order??99999)-(material(comparison,b.currentRowId||undefined)?.order??99999)),start=row;
    let referenceDetail=0,comparisonDetail=0;
    for(const cluster of grouped){
-    const references=cluster.referenceRowIds.map(id=>material(reference,id)).filter((item):item is CbdMaterialRow=>!!item),comparisonRow=material(comparison,cluster.currentRowId||undefined),total=(key:'cost'|'usage'|'extended')=>references.length?sum(references.map(item=>item[key])):undefined;
-    const referenceCost=total('cost'),comparisonCost=comparisonRow?.cost,referenceUsage=total('usage'),comparisonUsage=comparisonRow?.usage,referenceExtended=total('extended'),comparisonExtended=comparisonRow?.extended;
+    const references=cluster.referenceRowIds.map(id=>material(reference,id)).filter((item):item is CbdMaterialRow=>!!item),comparisonMaterials=comparisonRows(cluster,comparison?.materials||[]),comparisonRow=comparisonMaterials[0],total=(key:'cost'|'usage'|'extended')=>references.length?sum(references.map(item=>item[key])):undefined;
+    const referenceCost=total('cost'),comparisonCost=comparisonMaterials.length>1?sum(comparisonMaterials.map(r=>r.cost)):comparisonRow?.cost,referenceUsage=total('usage'),comparisonUsage=comparisonMaterials.length>1?sum(comparisonMaterials.map(r=>r.usage)):comparisonRow?.usage,referenceExtended=total('extended'),comparisonExtended=comparisonMaterials.length>1?sum(comparisonMaterials.map(r=>r.extended)):comparisonRow?.extended;
     referenceDetail+=referenceExtended??0;comparisonDetail+=comparisonExtended??0;
-    sheet.getCell(row,1).value=group;sheet.getCell(row,2).value=references.map(item=>item.material).join('\n');sheet.getCell(row,3).value=comparisonRow?.material||null;sheet.getCell(row,4).value=comparisonRow?.unit||references[0]?.unit||null;
+    sheet.getCell(row,1).value=group;sheet.getCell(row,2).value=references.map(item=>item.material).join('\n');sheet.getCell(row,3).value=comparisonMaterials.map(r=>r.material).join('\n')||null;sheet.getCell(row,4).value=comparisonRow?.unit||references[0]?.unit||null;
     sheet.getCell(row,5).value=numeric(referenceCost);sheet.getCell(row,6).value=numeric(comparisonCost);sheet.getCell(row,7).value=formula(`F${row}-E${row}`,(comparisonCost??0)-(referenceCost??0));
     sheet.getCell(row,8).value=numeric(referenceUsage);sheet.getCell(row,9).value=numeric(comparisonUsage);sheet.getCell(row,10).value=formula(`I${row}-H${row}`,(comparisonUsage??0)-(referenceUsage??0));
     sheet.getCell(row,11).value=numeric(referenceExtended);sheet.getCell(row,12).value=numeric(comparisonExtended);sheet.getCell(row,13).value=formula(`L${row}-K${row}`,(comparisonExtended??0)-(referenceExtended??0));
     const presentation=relationPresentation(cluster,references,comparisonRow,true);sheet.getCell(row,14).value=presentation.status;sheet.getCell(row,15).value=presentation.notes;if(unitChanged(references,comparisonRow)){sheet.getCell(row,4).value=`${references.map(r=>r.unit).join(' + ')} → ${comparisonRow!.unit}`;sheet.getCell(row,7).value=null;sheet.getCell(row,10).value=null;}
+    if(comparisonMaterials.length>1){sheet.getCell(row,7).value=null;sheet.getCell(row,10).value=null;sheet.getCell(row,14).value='일대다 연결';sheet.getCell(row,15).value=[presentation.notes,...comparisonMaterials.slice(1).map(r=>r.remark)].filter(Boolean).join('\n');}
     if(cluster.status==='REVIEW')sheet.getRow(row).font={bold:true,color:{argb:'DC2626'}};else if(cluster.status==='CURRENT ONLY')sheet.getRow(row).fill=fill('DCFCE7');else if(cluster.status==='REFERENCE ONLY')sheet.getRow(row).fill=fill('F3F4F6');else if(cluster.status==='GROUP CHANGED')sheet.getRow(row).fill=fill('FFEDD5');else if(cluster.status==='NAME CHANGED')sheet.getRow(row).fill=fill('FEF3C7');else if(cluster.status==='MERGED N:1')sheet.getRow(row).fill=fill('EDE9FE');row++;
    }
    const referenceOriginal=groupTotal(reference,group),comparisonOriginal=groupTotal(comparison,group),useReferenceOriginal=referenceOriginal!==undefined&&Math.abs(referenceOriginal-referenceDetail)>.00005,useComparisonOriginal=comparisonOriginal!==undefined&&Math.abs(comparisonOriginal-comparisonDetail)>.00005;

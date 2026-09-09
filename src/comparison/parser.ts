@@ -39,7 +39,7 @@ export async function parseCbdFiles(files:File[],side:ComparisonSide):Promise<{f
     }
     if(!materials.length)continue;
     validateFob(summary);const id=`${side}::${fileId}::${sheet.name}`;
-    styles.push({id,side,fileName:file.name,sheetName:sheet.name,styleName:styleName(sheet.rows,sheet.name,file.name),materials,summary,groupOrder,groupTotals});styleIds.push(id);
+    styles.push({id,side,fileName:file.name,sheetName:sheet.name,styleName:styleName(sheet.rows,sheet.name,file.name),sourceDate:sheet.rows.slice(0,5).flat().map(v=>String(v??'').trim()).find(v=>/^Date\s*:/i.test(v)),materials,summary,groupOrder,groupTotals});styleIds.push(id);
    }
    parsedFiles.push({id:fileId,name:file.name,size:file.size,lastModified:file.lastModified,side,styleIds});
   }catch(error){errors.push(`${file.name}: ${error instanceof Error?error.message:'Parsing failed'}`)}
