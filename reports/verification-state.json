@@ -1,0 +1,769 @@
+{
+  "version": 2,
+  "matcherVersion": 4,
+  "referenceSeason": "27",
+  "currentSeason": "28",
+  "styles": [
+    {
+      "id": "reference1",
+      "side": "reference",
+      "styleName": "FIXTURE 1",
+      "sheetName": "FIXTURE 1",
+      "fileName": "synthetic.xlsx",
+      "materials": [
+        {
+          "id": "1-reference-0",
+          "material": "HANG TAG FLY RACING 26 RAYCE PANT",
+          "unit": "PCS",
+          "group": "TRIMS",
+          "extended": 1,
+          "cost": 2,
+          "usage": 0.5,
+          "size": "",
+          "width": "",
+          "remark": "",
+          "order": 0
+        },
+        {
+          "id": "1-reference-1",
+          "material": "FLY RACING MAIN BUCKLE",
+          "unit": "PCS",
+          "group": "TRIMS",
+          "extended": 1,
+          "cost": 2,
+          "usage": 0.5,
+          "size": "",
+          "width": "",
+          "remark": "",
+          "order": 1
+        },
+        {
+          "id": "1-reference-2",
+          "material": "NYLON WEBBING (30M/M)",
+          "unit": "YD",
+          "group": "TRIMS",
+          "extended": 1,
+          "cost": 2,
+          "usage": 0.5,
+          "size": "",
+          "width": "",
+          "remark": "",
+          "order": 2
+        },
+        {
+          "id": "1-reference-3",
+          "material": "ES#N FD 160D (PU 1TIME)",
+          "unit": "YD",
+          "group": "OUTSHELL",
+          "extended": 0.1511,
+          "cost": 2,
+          "usage": 0.5,
+          "size": "",
+          "width": "",
+          "remark": "",
+          "order": 3
+        },
+        {
+          "id": "1-reference-4",
+          "material": "POLY TASLAN PA COATED (WRCO) (CN)",
+          "unit": "YD",
+          "group": "OUTSHELL",
+          "extended": 0.022,
+          "cost": 2,
+          "usage": 0.5,
+          "size": "",
+          "width": "",
+          "remark": "",
+          "order": 4
+        }
+      ],
+      "summary": {
+        "totalMaterialCost": 3.1731,
+        "finalFob": 5,
+        "fobEvidence": "explicit"
+      },
+      "groupOrder": [
+        "OUTSHELL",
+        "TRIMS"
+      ],
+      "groupTotals": {
+        "OUTSHELL": 0.1731,
+        "TRIMS": 3
+      }
+    },
+    {
+      "id": "current1",
+      "side": "current",
+      "styleName": "FIXTURE 1",
+      "sheetName": "FIXTURE 1",
+      "fileName": "synthetic.xlsx",
+      "materials": [
+        {
+          "id": "1-current-0",
+          "material": "HANG TAG FLY RACING 25 RAYCE JERSEY",
+          "unit": "PCS",
+          "group": "TRIMS",
+          "extended": 1,
+          "cost": 2,
+          "usage": 0.5,
+          "size": "",
+          "width": "",
+          "remark": "",
+          "order": 0
+        },
+        {
+          "id": "1-current-1",
+          "material": "FLY RACING MAIN BUCKLE SET",
+          "unit": "SET",
+          "group": "TRIMS",
+          "extended": 1,
+          "cost": 2,
+          "usage": 0.5,
+          "size": "",
+          "width": "",
+          "remark": "",
+          "order": 1
+        },
+        {
+          "id": "1-current-2",
+          "material": "NEW - NYLON WEBBING (30M/M) P",
+          "unit": "M",
+          "group": "TRIMS",
+          "extended": 1,
+          "cost": 2,
+          "usage": 0.5,
+          "size": "",
+          "width": "",
+          "remark": "",
+          "order": 2
+        },
+        {
+          "id": "1-current-3",
+          "material": "ES#N FD 160D (PU 1TIME)",
+          "unit": "YD",
+          "group": "TRIMS",
+          "extended": 0.1511,
+          "cost": 2,
+          "usage": 0.5,
+          "size": "",
+          "width": "",
+          "remark": "",
+          "order": 3
+        },
+        {
+          "id": "1-current-4",
+          "material": "POLY TASLAN PA COATED (WRCO) (CN)",
+          "unit": "YD",
+          "group": "TRIMS",
+          "extended": 0.022,
+          "cost": 2,
+          "usage": 0.5,
+          "size": "",
+          "width": "",
+          "remark": "",
+          "order": 4
+        }
+      ],
+      "summary": {
+        "totalMaterialCost": 3.1731,
+        "finalFob": 5,
+        "fobEvidence": "explicit"
+      },
+      "groupOrder": [
+        "OUTSHELL",
+        "TRIMS"
+      ],
+      "groupTotals": {
+        "OUTSHELL": 0,
+        "TRIMS": 3.1731
+      }
+    },
+    {
+      "id": "reference2",
+      "side": "reference",
+      "styleName": "FIXTURE 2",
+      "sheetName": "FIXTURE 2",
+      "fileName": "synthetic.xlsx",
+      "materials": [
+        {
+          "id": "2-reference-0",
+          "material": "HANG TAG FLY RACING 26 RAYCE PANT",
+          "unit": "PCS",
+          "group": "TRIMS",
+          "extended": 1,
+          "cost": 2,
+          "usage": 0.5,
+          "size": "",
+          "width": "",
+          "remark": "",
+          "order": 0
+        },
+        {
+          "id": "2-reference-1",
+          "material": "FLY RACING MAIN BUCKLE",
+          "unit": "PCS",
+          "group": "TRIMS",
+          "extended": 1,
+          "cost": 2,
+          "usage": 0.5,
+          "size": "",
+          "width": "",
+          "remark": "",
+          "order": 1
+        },
+        {
+          "id": "2-reference-2",
+          "material": "NYLON WEBBING (30M/M)",
+          "unit": "YD",
+          "group": "TRIMS",
+          "extended": 1,
+          "cost": 2,
+          "usage": 0.5,
+          "size": "",
+          "width": "",
+          "remark": "",
+          "order": 2
+        },
+        {
+          "id": "2-reference-3",
+          "material": "ES#N FD 160D (PU 1TIME)",
+          "unit": "YD",
+          "group": "OUTSHELL",
+          "extended": 0.1511,
+          "cost": 2,
+          "usage": 0.5,
+          "size": "",
+          "width": "",
+          "remark": "",
+          "order": 3
+        },
+        {
+          "id": "2-reference-4",
+          "material": "POLY TASLAN PA COATED (WRCO) (CN)",
+          "unit": "YD",
+          "group": "OUTSHELL",
+          "extended": 0.022,
+          "cost": 2,
+          "usage": 0.5,
+          "size": "",
+          "width": "",
+          "remark": "",
+          "order": 4
+        }
+      ],
+      "summary": {
+        "totalMaterialCost": 3.1731,
+        "finalFob": 5,
+        "fobEvidence": "explicit"
+      },
+      "groupOrder": [
+        "OUTSHELL",
+        "TRIMS"
+      ],
+      "groupTotals": {
+        "OUTSHELL": 0.1731,
+        "TRIMS": 3
+      }
+    },
+    {
+      "id": "current2",
+      "side": "current",
+      "styleName": "FIXTURE 2",
+      "sheetName": "FIXTURE 2",
+      "fileName": "synthetic.xlsx",
+      "materials": [
+        {
+          "id": "2-current-0",
+          "material": "HANG TAG FLY RACING 25 RAYCE JERSEY",
+          "unit": "PCS",
+          "group": "TRIMS",
+          "extended": 1,
+          "cost": 2,
+          "usage": 0.5,
+          "size": "",
+          "width": "",
+          "remark": "",
+          "order": 0
+        },
+        {
+          "id": "2-current-1",
+          "material": "FLY RACING MAIN BUCKLE SET",
+          "unit": "SET",
+          "group": "TRIMS",
+          "extended": 1,
+          "cost": 2,
+          "usage": 0.5,
+          "size": "",
+          "width": "",
+          "remark": "",
+          "order": 1
+        },
+        {
+          "id": "2-current-2",
+          "material": "NEW - NYLON WEBBING (30M/M) P",
+          "unit": "M",
+          "group": "TRIMS",
+          "extended": 1,
+          "cost": 2,
+          "usage": 0.5,
+          "size": "",
+          "width": "",
+          "remark": "",
+          "order": 2
+        },
+        {
+          "id": "2-current-3",
+          "material": "ES#N FD 160D (PU 1TIME)",
+          "unit": "YD",
+          "group": "TRIMS",
+          "extended": 0.1511,
+          "cost": 2,
+          "usage": 0.5,
+          "size": "",
+          "width": "",
+          "remark": "",
+          "order": 3
+        },
+        {
+          "id": "2-current-4",
+          "material": "POLY TASLAN PA COATED (WRCO) (CN)",
+          "unit": "YD",
+          "group": "TRIMS",
+          "extended": 0.022,
+          "cost": 2,
+          "usage": 0.5,
+          "size": "",
+          "width": "",
+          "remark": "",
+          "order": 4
+        }
+      ],
+      "summary": {
+        "totalMaterialCost": 3.1731,
+        "finalFob": 5,
+        "fobEvidence": "explicit"
+      },
+      "groupOrder": [
+        "OUTSHELL",
+        "TRIMS"
+      ],
+      "groupTotals": {
+        "OUTSHELL": 0,
+        "TRIMS": 3.1731
+      }
+    }
+  ],
+  "files": [],
+  "styleMatches": [
+    {
+      "id": "pair1",
+      "referenceId": "reference1",
+      "currentId": "current1",
+      "method": "Normalized",
+      "confidence": 1,
+      "status": "Normalized"
+    },
+    {
+      "id": "pair2",
+      "referenceId": "reference2",
+      "currentId": "current2",
+      "method": "Normalized",
+      "confidence": 1,
+      "status": "Normalized"
+    }
+  ],
+  "materialMatches": [
+    {
+      "styleMatchId": "pair1",
+      "matcherVersion": 4,
+      "clusters": [
+        {
+          "id": "baaa25f7-202c-4e8e-8ed0-395aa92a6197",
+          "referenceRowIds": [
+            "1-reference-0"
+          ],
+          "currentRowId": "1-current-0",
+          "relationType": "one-to-one",
+          "matchSource": "auto",
+          "manualLocked": false,
+          "finalGroup": "TRIMS",
+          "status": "CONTEXT MATCH",
+          "confidence": 0.96,
+          "evidence": {
+            "score": 96,
+            "method": "Context Match",
+            "matchedCodes": [],
+            "matchedTokens": [
+              "FLY",
+              "HANG",
+              "RACING",
+              "RAYCE",
+              "TAG"
+            ],
+            "ignoredReference": [
+              "26",
+              "PANT"
+            ],
+            "ignoredComparison": [
+              "25",
+              "JERSEY"
+            ],
+            "groupAssessment": "Same group",
+            "unitAssessment": "Compatible",
+            "reason": "Context Match – season and garment label changed"
+          },
+          "referenceOriginalGroup": "TRIMS",
+          "comparisonOriginalGroup": "TRIMS",
+          "effectiveGroup": "TRIMS",
+          "manualGroupOverride": false,
+          "groupAssignmentSource": "comparison"
+        },
+        {
+          "id": "df3d0839-e71c-4d37-a5c1-a3ae41f18de8",
+          "referenceRowIds": [
+            "1-reference-1"
+          ],
+          "currentRowId": "1-current-1",
+          "relationType": "one-to-one",
+          "matchSource": "auto",
+          "manualLocked": false,
+          "finalGroup": "TRIMS",
+          "status": "TOKEN MATCH",
+          "confidence": 0.94,
+          "evidence": {
+            "score": 94,
+            "method": "Token Match",
+            "matchedCodes": [],
+            "matchedTokens": [
+              "BUCKLE",
+              "FLY",
+              "MAIN",
+              "RACING"
+            ],
+            "ignoredReference": [],
+            "ignoredComparison": [
+              "SET"
+            ],
+            "groupAssessment": "Same group",
+            "unitAssessment": "Unit changed: PCS → SET",
+            "reason": "Distinctive core tokens and attributes match; word order or auxiliary text differs."
+          },
+          "referenceOriginalGroup": "TRIMS",
+          "comparisonOriginalGroup": "TRIMS",
+          "effectiveGroup": "TRIMS",
+          "manualGroupOverride": false,
+          "groupAssignmentSource": "comparison"
+        },
+        {
+          "id": "2b3d5c26-6c44-4802-9e39-e9b4f68775b2",
+          "referenceRowIds": [
+            "1-reference-2"
+          ],
+          "currentRowId": "1-current-2",
+          "relationType": "one-to-one",
+          "matchSource": "auto",
+          "manualLocked": false,
+          "finalGroup": "TRIMS",
+          "status": "TOKEN MATCH",
+          "confidence": 0.94,
+          "evidence": {
+            "score": 94,
+            "method": "Token Match",
+            "matchedCodes": [],
+            "matchedTokens": [
+              "30MM",
+              "NYLON",
+              "WEBBING"
+            ],
+            "ignoredReference": [],
+            "ignoredComparison": [
+              "NEW",
+              "P"
+            ],
+            "groupAssessment": "Same group",
+            "unitAssessment": "Unit changed: YD → M",
+            "reason": "Distinctive core tokens and attributes match; word order or auxiliary text differs."
+          },
+          "referenceOriginalGroup": "TRIMS",
+          "comparisonOriginalGroup": "TRIMS",
+          "effectiveGroup": "TRIMS",
+          "manualGroupOverride": false,
+          "groupAssignmentSource": "comparison"
+        },
+        {
+          "id": "24c8225e-765e-406a-b7c5-a70459db7f5c",
+          "referenceRowIds": [
+            "1-reference-3"
+          ],
+          "currentRowId": "1-current-3",
+          "relationType": "one-to-one",
+          "matchSource": "auto",
+          "manualLocked": false,
+          "finalGroup": "TRIMS",
+          "status": "GROUP CHANGED",
+          "confidence": 0.99,
+          "evidence": {
+            "score": 99,
+            "method": "Exact",
+            "matchedCodes": [
+              "#N",
+              "FD 160D"
+            ],
+            "matchedTokens": [
+              "1TIME",
+              "ES#N",
+              "PU"
+            ],
+            "ignoredReference": [],
+            "ignoredComparison": [],
+            "groupAssessment": "Group changed",
+            "unitAssessment": "Compatible",
+            "reason": "Normalized full material name is identical."
+          },
+          "referenceOriginalGroup": "OUTSHELL",
+          "comparisonOriginalGroup": "TRIMS",
+          "effectiveGroup": "TRIMS",
+          "manualGroupOverride": false,
+          "groupAssignmentSource": "comparison"
+        },
+        {
+          "id": "88cca574-fb25-4cdd-b827-cc0efdef9741",
+          "referenceRowIds": [
+            "1-reference-4"
+          ],
+          "currentRowId": "1-current-4",
+          "relationType": "one-to-one",
+          "matchSource": "auto",
+          "manualLocked": false,
+          "finalGroup": "TRIMS",
+          "status": "GROUP CHANGED",
+          "confidence": 0.99,
+          "evidence": {
+            "score": 99,
+            "method": "Exact",
+            "matchedCodes": [],
+            "matchedTokens": [
+              "COATED",
+              "PA",
+              "POLY",
+              "TASLAN"
+            ],
+            "ignoredReference": [
+              "CN",
+              "WRCO"
+            ],
+            "ignoredComparison": [
+              "CN",
+              "WRCO"
+            ],
+            "groupAssessment": "Group changed",
+            "unitAssessment": "Compatible",
+            "reason": "Normalized full material name is identical."
+          },
+          "referenceOriginalGroup": "OUTSHELL",
+          "comparisonOriginalGroup": "TRIMS",
+          "effectiveGroup": "TRIMS",
+          "manualGroupOverride": false,
+          "groupAssignmentSource": "comparison"
+        }
+      ]
+    },
+    {
+      "styleMatchId": "pair2",
+      "matcherVersion": 4,
+      "clusters": [
+        {
+          "id": "365f0953-390f-4df6-823e-bf952e4b737e",
+          "referenceRowIds": [
+            "2-reference-0"
+          ],
+          "currentRowId": "2-current-0",
+          "relationType": "one-to-one",
+          "matchSource": "auto",
+          "manualLocked": false,
+          "finalGroup": "TRIMS",
+          "status": "CONTEXT MATCH",
+          "confidence": 0.96,
+          "evidence": {
+            "score": 96,
+            "method": "Context Match",
+            "matchedCodes": [],
+            "matchedTokens": [
+              "FLY",
+              "HANG",
+              "RACING",
+              "RAYCE",
+              "TAG"
+            ],
+            "ignoredReference": [
+              "26",
+              "PANT"
+            ],
+            "ignoredComparison": [
+              "25",
+              "JERSEY"
+            ],
+            "groupAssessment": "Same group",
+            "unitAssessment": "Compatible",
+            "reason": "Context Match – season and garment label changed"
+          },
+          "referenceOriginalGroup": "TRIMS",
+          "comparisonOriginalGroup": "TRIMS",
+          "effectiveGroup": "TRIMS",
+          "manualGroupOverride": false,
+          "groupAssignmentSource": "comparison"
+        },
+        {
+          "id": "bcb8637e-dccb-4f89-ae14-caba5659fd37",
+          "referenceRowIds": [
+            "2-reference-1"
+          ],
+          "currentRowId": "2-current-1",
+          "relationType": "one-to-one",
+          "matchSource": "auto",
+          "manualLocked": false,
+          "finalGroup": "TRIMS",
+          "status": "TOKEN MATCH",
+          "confidence": 0.94,
+          "evidence": {
+            "score": 94,
+            "method": "Token Match",
+            "matchedCodes": [],
+            "matchedTokens": [
+              "BUCKLE",
+              "FLY",
+              "MAIN",
+              "RACING"
+            ],
+            "ignoredReference": [],
+            "ignoredComparison": [
+              "SET"
+            ],
+            "groupAssessment": "Same group",
+            "unitAssessment": "Unit changed: PCS → SET",
+            "reason": "Distinctive core tokens and attributes match; word order or auxiliary text differs."
+          },
+          "referenceOriginalGroup": "TRIMS",
+          "comparisonOriginalGroup": "TRIMS",
+          "effectiveGroup": "TRIMS",
+          "manualGroupOverride": false,
+          "groupAssignmentSource": "comparison"
+        },
+        {
+          "id": "6e9805f8-ac5f-4b1d-93af-61ce790a605c",
+          "referenceRowIds": [
+            "2-reference-2"
+          ],
+          "currentRowId": "2-current-2",
+          "relationType": "one-to-one",
+          "matchSource": "auto",
+          "manualLocked": false,
+          "finalGroup": "TRIMS",
+          "status": "TOKEN MATCH",
+          "confidence": 0.94,
+          "evidence": {
+            "score": 94,
+            "method": "Token Match",
+            "matchedCodes": [],
+            "matchedTokens": [
+              "30MM",
+              "NYLON",
+              "WEBBING"
+            ],
+            "ignoredReference": [],
+            "ignoredComparison": [
+              "NEW",
+              "P"
+            ],
+            "groupAssessment": "Same group",
+            "unitAssessment": "Unit changed: YD → M",
+            "reason": "Distinctive core tokens and attributes match; word order or auxiliary text differs."
+          },
+          "referenceOriginalGroup": "TRIMS",
+          "comparisonOriginalGroup": "TRIMS",
+          "effectiveGroup": "TRIMS",
+          "manualGroupOverride": false,
+          "groupAssignmentSource": "comparison"
+        },
+        {
+          "id": "ad398796-26e0-4362-a754-f3e6f95df8b0",
+          "referenceRowIds": [
+            "2-reference-3"
+          ],
+          "currentRowId": "2-current-3",
+          "relationType": "one-to-one",
+          "matchSource": "auto",
+          "manualLocked": false,
+          "finalGroup": "TRIMS",
+          "status": "GROUP CHANGED",
+          "confidence": 0.99,
+          "evidence": {
+            "score": 99,
+            "method": "Exact",
+            "matchedCodes": [
+              "#N",
+              "FD 160D"
+            ],
+            "matchedTokens": [
+              "1TIME",
+              "ES#N",
+              "PU"
+            ],
+            "ignoredReference": [],
+            "ignoredComparison": [],
+            "groupAssessment": "Group changed",
+            "unitAssessment": "Compatible",
+            "reason": "Normalized full material name is identical."
+          },
+          "referenceOriginalGroup": "OUTSHELL",
+          "comparisonOriginalGroup": "TRIMS",
+          "effectiveGroup": "TRIMS",
+          "manualGroupOverride": false,
+          "groupAssignmentSource": "comparison"
+        },
+        {
+          "id": "d93c3c23-f36f-4cb4-b943-c94490f23077",
+          "referenceRowIds": [
+            "2-reference-4"
+          ],
+          "currentRowId": "2-current-4",
+          "relationType": "one-to-one",
+          "matchSource": "auto",
+          "manualLocked": false,
+          "finalGroup": "TRIMS",
+          "status": "GROUP CHANGED",
+          "confidence": 0.99,
+          "evidence": {
+            "score": 99,
+            "method": "Exact",
+            "matchedCodes": [],
+            "matchedTokens": [
+              "COATED",
+              "PA",
+              "POLY",
+              "TASLAN"
+            ],
+            "ignoredReference": [
+              "CN",
+              "WRCO"
+            ],
+            "ignoredComparison": [
+              "CN",
+              "WRCO"
+            ],
+            "groupAssessment": "Group changed",
+            "unitAssessment": "Compatible",
+            "reason": "Normalized full material name is identical."
+          },
+          "referenceOriginalGroup": "OUTSHELL",
+          "comparisonOriginalGroup": "TRIMS",
+          "effectiveGroup": "TRIMS",
+          "manualGroupOverride": false,
+          "groupAssignmentSource": "comparison"
+        }
+      ]
+    }
+  ],
+  "step": 3,
+  "activeMatchId": "pair1"
+}

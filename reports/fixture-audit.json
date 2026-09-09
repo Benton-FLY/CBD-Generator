@@ -1,0 +1,382 @@
+[
+  {
+    "style": "FIXTURE 1",
+    "before": {
+      "referenceOnly": 0,
+      "comparisonOnly": 0,
+      "needsReview": 0
+    },
+    "after": {
+      "referenceOnly": 0,
+      "comparisonOnly": 0,
+      "needsReview": 0
+    },
+    "totals": {
+      "TRIMS": {
+        "reference": 3.1731,
+        "comparison": 3.1731
+      }
+    },
+    "integrity": {
+      "valid": true,
+      "errors": [],
+      "referenceTotal": 3.1731,
+      "comparisonTotal": 3.1731,
+      "coveredReferenceTotal": 3.1731,
+      "coveredComparisonTotal": 3.1731
+    },
+    "sourceSummary": {
+      "reference": 3.1731,
+      "comparison": 3.1731
+    },
+    "summaryMatches": {
+      "reference": true,
+      "comparison": true
+    },
+    "newMatches": [],
+    "unitChanged": [
+      {
+        "id": "65b21864-d5e9-4578-899e-d51b7928bda6",
+        "referenceRowIds": [
+          "1-reference-1"
+        ],
+        "currentRowId": "1-current-1",
+        "relationType": "one-to-one",
+        "matchSource": "auto",
+        "manualLocked": false,
+        "finalGroup": "TRIMS",
+        "status": "TOKEN MATCH",
+        "confidence": 0.94,
+        "evidence": {
+          "score": 94,
+          "method": "Token Match",
+          "matchedCodes": [],
+          "matchedTokens": [
+            "BUCKLE",
+            "FLY",
+            "MAIN",
+            "RACING"
+          ],
+          "ignoredReference": [],
+          "ignoredComparison": [
+            "SET"
+          ],
+          "groupAssessment": "Same group",
+          "unitAssessment": "Unit changed: PCS → SET",
+          "reason": "Distinctive core tokens and attributes match; word order or auxiliary text differs."
+        },
+        "referenceOriginalGroup": "TRIMS",
+        "comparisonOriginalGroup": "TRIMS",
+        "effectiveGroup": "TRIMS",
+        "manualGroupOverride": false,
+        "groupAssignmentSource": "comparison"
+      },
+      {
+        "id": "898d5ae3-5935-4797-be4d-139045d87b06",
+        "referenceRowIds": [
+          "1-reference-2"
+        ],
+        "currentRowId": "1-current-2",
+        "relationType": "one-to-one",
+        "matchSource": "auto",
+        "manualLocked": false,
+        "finalGroup": "TRIMS",
+        "status": "TOKEN MATCH",
+        "confidence": 0.94,
+        "evidence": {
+          "score": 94,
+          "method": "Token Match",
+          "matchedCodes": [],
+          "matchedTokens": [
+            "30MM",
+            "NYLON",
+            "WEBBING"
+          ],
+          "ignoredReference": [],
+          "ignoredComparison": [
+            "NEW",
+            "P"
+          ],
+          "groupAssessment": "Same group",
+          "unitAssessment": "Unit changed: YD → M",
+          "reason": "Distinctive core tokens and attributes match; word order or auxiliary text differs."
+        },
+        "referenceOriginalGroup": "TRIMS",
+        "comparisonOriginalGroup": "TRIMS",
+        "effectiveGroup": "TRIMS",
+        "manualGroupOverride": false,
+        "groupAssignmentSource": "comparison"
+      }
+    ],
+    "groupChanged": [
+      {
+        "id": "124aad26-f593-483e-9f47-90ef282a1bed",
+        "referenceRowIds": [
+          "1-reference-3"
+        ],
+        "currentRowId": "1-current-3",
+        "relationType": "one-to-one",
+        "matchSource": "auto",
+        "manualLocked": false,
+        "finalGroup": "TRIMS",
+        "status": "GROUP CHANGED",
+        "confidence": 0.99,
+        "evidence": {
+          "score": 99,
+          "method": "Exact",
+          "matchedCodes": [
+            "#N",
+            "FD 160D"
+          ],
+          "matchedTokens": [
+            "1TIME",
+            "ES#N",
+            "PU"
+          ],
+          "ignoredReference": [],
+          "ignoredComparison": [],
+          "groupAssessment": "Group changed",
+          "unitAssessment": "Compatible",
+          "reason": "Normalized full material name is identical."
+        },
+        "referenceOriginalGroup": "OUTSHELL",
+        "comparisonOriginalGroup": "TRIMS",
+        "effectiveGroup": "TRIMS",
+        "manualGroupOverride": false,
+        "groupAssignmentSource": "comparison"
+      },
+      {
+        "id": "ccc04016-b439-4a38-bf78-1bfbe8af54f3",
+        "referenceRowIds": [
+          "1-reference-4"
+        ],
+        "currentRowId": "1-current-4",
+        "relationType": "one-to-one",
+        "matchSource": "auto",
+        "manualLocked": false,
+        "finalGroup": "TRIMS",
+        "status": "GROUP CHANGED",
+        "confidence": 0.99,
+        "evidence": {
+          "score": 99,
+          "method": "Exact",
+          "matchedCodes": [],
+          "matchedTokens": [
+            "COATED",
+            "PA",
+            "POLY",
+            "TASLAN"
+          ],
+          "ignoredReference": [
+            "CN",
+            "WRCO"
+          ],
+          "ignoredComparison": [
+            "CN",
+            "WRCO"
+          ],
+          "groupAssessment": "Group changed",
+          "unitAssessment": "Compatible",
+          "reason": "Normalized full material name is identical."
+        },
+        "referenceOriginalGroup": "OUTSHELL",
+        "comparisonOriginalGroup": "TRIMS",
+        "effectiveGroup": "TRIMS",
+        "manualGroupOverride": false,
+        "groupAssignmentSource": "comparison"
+      }
+    ],
+    "manyToOne": [],
+    "unresolved": []
+  },
+  {
+    "style": "FIXTURE 2",
+    "before": {
+      "referenceOnly": 0,
+      "comparisonOnly": 0,
+      "needsReview": 0
+    },
+    "after": {
+      "referenceOnly": 0,
+      "comparisonOnly": 0,
+      "needsReview": 0
+    },
+    "totals": {
+      "TRIMS": {
+        "reference": 3.1731,
+        "comparison": 3.1731
+      }
+    },
+    "integrity": {
+      "valid": true,
+      "errors": [],
+      "referenceTotal": 3.1731,
+      "comparisonTotal": 3.1731,
+      "coveredReferenceTotal": 3.1731,
+      "coveredComparisonTotal": 3.1731
+    },
+    "sourceSummary": {
+      "reference": 3.1731,
+      "comparison": 3.1731
+    },
+    "summaryMatches": {
+      "reference": true,
+      "comparison": true
+    },
+    "newMatches": [],
+    "unitChanged": [
+      {
+        "id": "d309f3b0-6286-4a1f-bda3-6b73d5b29506",
+        "referenceRowIds": [
+          "2-reference-1"
+        ],
+        "currentRowId": "2-current-1",
+        "relationType": "one-to-one",
+        "matchSource": "auto",
+        "manualLocked": false,
+        "finalGroup": "TRIMS",
+        "status": "TOKEN MATCH",
+        "confidence": 0.94,
+        "evidence": {
+          "score": 94,
+          "method": "Token Match",
+          "matchedCodes": [],
+          "matchedTokens": [
+            "BUCKLE",
+            "FLY",
+            "MAIN",
+            "RACING"
+          ],
+          "ignoredReference": [],
+          "ignoredComparison": [
+            "SET"
+          ],
+          "groupAssessment": "Same group",
+          "unitAssessment": "Unit changed: PCS → SET",
+          "reason": "Distinctive core tokens and attributes match; word order or auxiliary text differs."
+        },
+        "referenceOriginalGroup": "TRIMS",
+        "comparisonOriginalGroup": "TRIMS",
+        "effectiveGroup": "TRIMS",
+        "manualGroupOverride": false,
+        "groupAssignmentSource": "comparison"
+      },
+      {
+        "id": "5c36428d-3266-4ece-a5b2-a543ed1e037d",
+        "referenceRowIds": [
+          "2-reference-2"
+        ],
+        "currentRowId": "2-current-2",
+        "relationType": "one-to-one",
+        "matchSource": "auto",
+        "manualLocked": false,
+        "finalGroup": "TRIMS",
+        "status": "TOKEN MATCH",
+        "confidence": 0.94,
+        "evidence": {
+          "score": 94,
+          "method": "Token Match",
+          "matchedCodes": [],
+          "matchedTokens": [
+            "30MM",
+            "NYLON",
+            "WEBBING"
+          ],
+          "ignoredReference": [],
+          "ignoredComparison": [
+            "NEW",
+            "P"
+          ],
+          "groupAssessment": "Same group",
+          "unitAssessment": "Unit changed: YD → M",
+          "reason": "Distinctive core tokens and attributes match; word order or auxiliary text differs."
+        },
+        "referenceOriginalGroup": "TRIMS",
+        "comparisonOriginalGroup": "TRIMS",
+        "effectiveGroup": "TRIMS",
+        "manualGroupOverride": false,
+        "groupAssignmentSource": "comparison"
+      }
+    ],
+    "groupChanged": [
+      {
+        "id": "73b45fb8-e600-4c4d-aa4f-1f7fba742cc4",
+        "referenceRowIds": [
+          "2-reference-3"
+        ],
+        "currentRowId": "2-current-3",
+        "relationType": "one-to-one",
+        "matchSource": "auto",
+        "manualLocked": false,
+        "finalGroup": "TRIMS",
+        "status": "GROUP CHANGED",
+        "confidence": 0.99,
+        "evidence": {
+          "score": 99,
+          "method": "Exact",
+          "matchedCodes": [
+            "#N",
+            "FD 160D"
+          ],
+          "matchedTokens": [
+            "1TIME",
+            "ES#N",
+            "PU"
+          ],
+          "ignoredReference": [],
+          "ignoredComparison": [],
+          "groupAssessment": "Group changed",
+          "unitAssessment": "Compatible",
+          "reason": "Normalized full material name is identical."
+        },
+        "referenceOriginalGroup": "OUTSHELL",
+        "comparisonOriginalGroup": "TRIMS",
+        "effectiveGroup": "TRIMS",
+        "manualGroupOverride": false,
+        "groupAssignmentSource": "comparison"
+      },
+      {
+        "id": "cda2d15a-4ee8-4f89-8645-c924d39d450f",
+        "referenceRowIds": [
+          "2-reference-4"
+        ],
+        "currentRowId": "2-current-4",
+        "relationType": "one-to-one",
+        "matchSource": "auto",
+        "manualLocked": false,
+        "finalGroup": "TRIMS",
+        "status": "GROUP CHANGED",
+        "confidence": 0.99,
+        "evidence": {
+          "score": 99,
+          "method": "Exact",
+          "matchedCodes": [],
+          "matchedTokens": [
+            "COATED",
+            "PA",
+            "POLY",
+            "TASLAN"
+          ],
+          "ignoredReference": [
+            "CN",
+            "WRCO"
+          ],
+          "ignoredComparison": [
+            "CN",
+            "WRCO"
+          ],
+          "groupAssessment": "Group changed",
+          "unitAssessment": "Compatible",
+          "reason": "Normalized full material name is identical."
+        },
+        "referenceOriginalGroup": "OUTSHELL",
+        "comparisonOriginalGroup": "TRIMS",
+        "effectiveGroup": "TRIMS",
+        "manualGroupOverride": false,
+        "groupAssignmentSource": "comparison"
+      }
+    ],
+    "manyToOne": [],
+    "unresolved": []
+  }
+]

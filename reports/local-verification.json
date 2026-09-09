@@ -1,0 +1,22 @@
+{
+  "base": "http://localhost:5173",
+  "data": "Synthetic verification fixture; original CBD files unavailable",
+  "results": [
+    {
+      "scope": "current",
+      "sheets": 2,
+      "moved": true,
+      "unit": true,
+      "total": 3.1731,
+      "path": "reports/local-current.xlsx"
+    },
+    {
+      "scope": "all",
+      "sheets": 3,
+      "moved": true,
+      "unit": true,
+      "total": 3.1731,
+      "path": "reports/local-all.xlsx"
+    }
+  ]
+}

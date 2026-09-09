@@ -1,0 +1,13 @@
+import {writeFile} from 'node:fs/promises';
+import {assignMaterialMatches} from '../src/comparison/matcher';
+import {buildComparisonWorkbook} from '../src/comparison/exporter';
+import {auditComparison} from '../src/comparison/audit';
+import type {ComparisonState,CbdMaterialRow,CbdStyle} from '../src/comparison/types';
+const names=[['HANG TAG FLY RACING 26 RAYCE PANT','HANG TAG FLY RACING 25 RAYCE JERSEY','PCS','PCS'],['FLY RACING MAIN BUCKLE','FLY RACING MAIN BUCKLE SET','PCS','SET'],['NYLON WEBBING (30M/M)','NEW - NYLON WEBBING (30M/M) P','YD','M'],['ES#N FD 160D (PU 1TIME)','ES#N FD 160D (PU 1TIME)','YD','YD'],['POLY TASLAN PA COATED (WRCO) (CN)','POLY TASLAN PA COATED (WRCO) (CN)','YD','YD']];
+const style=(side:'reference'|'current',index:number):CbdStyle=>{const materials:CbdMaterialRow[]=names.map((p,i)=>({id:`${index}-${side}-${i}`,material:p[side==='reference'?0:1],unit:p[side==='reference'?2:3],group:i>=3&&side==='reference'?'OUTSHELL':'TRIMS',extended:i===3?.1511:i===4?.022:1,cost:2,usage:.5,size:'',width:'',remark:'',order:i}));return{id:`${side}${index}`,side,styleName:`FIXTURE ${index}`,sheetName:`FIXTURE ${index}`,fileName:'synthetic.xlsx',materials,summary:{totalMaterialCost:3.1731,finalFob:5,fobEvidence:'explicit'},groupOrder:['OUTSHELL','TRIMS'],groupTotals:side==='reference'?{OUTSHELL:.1731,TRIMS:3}:{OUTSHELL:0,TRIMS:3.1731}}};
+const styles=[style('reference',1),style('current',1),style('reference',2),style('current',2)];
+const state:ComparisonState={version:2,matcherVersion:4,referenceSeason:'27',currentSeason:'28',styles,files:[],styleMatches:[1,2].map(i=>({id:`pair${i}`,referenceId:`reference${i}`,currentId:`current${i}`,method:'Normalized',confidence:1,status:'Normalized'})),materialMatches:[1,2].map(i=>({styleMatchId:`pair${i}`,matcherVersion:4,clusters:assignMaterialMatches(styles.find(s=>s.id===`reference${i}`)!.materials,styles.find(s=>s.id===`current${i}`)!.materials)})),step:3,activeMatchId:'pair1'};
+await writeFile('reports/verification-state.json',JSON.stringify(state,null,2));
+for(const scope of ['current','all'])await buildComparisonWorkbook(state,scope==='current'?{stylePairIds:['pair1']}:undefined).xlsx.writeFile(`reports/fixture-${scope}.xlsx`);
+await writeFile('reports/fixture-audit.json',JSON.stringify(auditComparison(state),null,2));
+console.log('Generated synthetic current/all workbooks and audit; not original source workbook validation.');

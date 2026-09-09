@@ -1,0 +1,534 @@
+{
+  "scope": "Provided representative names; original workbooks unavailable",
+  "report": [
+    {
+      "reference": {
+        "id": "0-0",
+        "material": "HANG TAG FLY RACING 26 RAYCE PANT",
+        "unit": "PCS",
+        "group": "TRIMS",
+        "size": "",
+        "width": "",
+        "remark": "",
+        "order": 0
+      },
+      "current": {
+        "id": "0-1",
+        "material": "HANG TAG FLY RACING 25 RAYCE JERSEY",
+        "unit": "PCS",
+        "group": "TRIMS",
+        "size": "",
+        "width": "",
+        "remark": "",
+        "order": 0
+      },
+      "referenceAttributes": {
+        "normalized": "HANG TAG FLY RACING 26 RAYCE PANT",
+        "coreName": "FLY HANG PANT RACING RAYCE TAG",
+        "coreTokens": [
+          "FLY",
+          "HANG",
+          "PANT",
+          "RACING",
+          "RAYCE",
+          "TAG"
+        ],
+        "auxiliaryTokens": [
+          "26"
+        ],
+        "codes": [],
+        "specs": [],
+        "styles": [],
+        "composition": [],
+        "positions": [],
+        "demographics": [],
+        "productTypes": [
+          "HANG TAG"
+        ]
+      },
+      "comparisonAttributes": {
+        "normalized": "HANG TAG FLY RACING 25 RAYCE JERSEY",
+        "coreName": "FLY HANG JERSEY RACING RAYCE TAG",
+        "coreTokens": [
+          "FLY",
+          "HANG",
+          "JERSEY",
+          "RACING",
+          "RAYCE",
+          "TAG"
+        ],
+        "auxiliaryTokens": [
+          "25"
+        ],
+        "codes": [],
+        "specs": [],
+        "styles": [],
+        "composition": [],
+        "positions": [],
+        "demographics": [],
+        "productTypes": [
+          "HANG TAG"
+        ]
+      },
+      "candidates": [
+        {
+          "name": "HANG TAG FLY RACING 25 RAYCE JERSEY",
+          "score": 0,
+          "method": "Needs Review",
+          "evidence": {
+            "score": 0,
+            "method": "Needs Review",
+            "matchedCodes": [],
+            "matchedTokens": [
+              "FLY",
+              "HANG",
+              "RACING",
+              "RAYCE",
+              "TAG"
+            ],
+            "ignoredReference": [
+              "26"
+            ],
+            "ignoredComparison": [
+              "25"
+            ],
+            "groupAssessment": "Same group",
+            "unitAssessment": "Compatible",
+            "reason": "Insufficient distinctive material identity."
+          }
+        },
+        {
+          "name": "FLY RACING MAIN BUCKLE SET",
+          "score": 0,
+          "method": "Needs Review",
+          "blocked": "UNIT conflict: PCS vs SET",
+          "evidence": {
+            "score": 0,
+            "method": "Needs Review",
+            "matchedCodes": [],
+            "matchedTokens": [
+              "FLY",
+              "RACING"
+            ],
+            "ignoredReference": [
+              "26"
+            ],
+            "ignoredComparison": [
+              "SET"
+            ],
+            "groupAssessment": "Same group",
+            "unitAssessment": "Conflict",
+            "reason": "UNIT conflict: PCS vs SET"
+          }
+        },
+        {
+          "name": "NEW - NYLON WEBBING (30M/M) P",
+          "score": 0,
+          "method": "Needs Review",
+          "blocked": "UNIT conflict: PCS vs M",
+          "evidence": {
+            "score": 0,
+            "method": "Needs Review",
+            "matchedCodes": [],
+            "matchedTokens": [],
+            "ignoredReference": [
+              "26"
+            ],
+            "ignoredComparison": [
+              "NEW"
+            ],
+            "groupAssessment": "Same group",
+            "unitAssessment": "Conflict",
+            "reason": "UNIT conflict: PCS vs M"
+          }
+        }
+      ],
+      "margin": 0
+    },
+    {
+      "reference": {
+        "id": "1-0",
+        "material": "FLY RACING MAIN BUCKLE",
+        "unit": "PCS",
+        "group": "TRIMS",
+        "size": "",
+        "width": "",
+        "remark": "",
+        "order": 1
+      },
+      "current": {
+        "id": "1-1",
+        "material": "FLY RACING MAIN BUCKLE SET",
+        "unit": "SET",
+        "group": "TRIMS",
+        "size": "",
+        "width": "",
+        "remark": "",
+        "order": 1
+      },
+      "referenceAttributes": {
+        "normalized": "FLY RACING MAIN BUCKLE",
+        "coreName": "BUCKLE FLY MAIN RACING",
+        "coreTokens": [
+          "BUCKLE",
+          "FLY",
+          "MAIN",
+          "RACING"
+        ],
+        "auxiliaryTokens": [],
+        "codes": [],
+        "specs": [],
+        "styles": [],
+        "composition": [],
+        "positions": [],
+        "demographics": [],
+        "productTypes": [
+          "BUCKLE"
+        ]
+      },
+      "comparisonAttributes": {
+        "normalized": "FLY RACING MAIN BUCKLE SET",
+        "coreName": "BUCKLE FLY MAIN RACING",
+        "coreTokens": [
+          "BUCKLE",
+          "FLY",
+          "MAIN",
+          "RACING"
+        ],
+        "auxiliaryTokens": [
+          "SET"
+        ],
+        "codes": [],
+        "specs": [],
+        "styles": [],
+        "composition": [],
+        "positions": [],
+        "demographics": [],
+        "productTypes": [
+          "BUCKLE"
+        ]
+      },
+      "candidates": [
+        {
+          "name": "HANG TAG FLY RACING 25 RAYCE JERSEY",
+          "score": 0,
+          "method": "Needs Review",
+          "blocked": "Product type conflict: BUCKLE vs HANG TAG",
+          "evidence": {
+            "score": 0,
+            "method": "Needs Review",
+            "matchedCodes": [],
+            "matchedTokens": [
+              "FLY",
+              "RACING"
+            ],
+            "ignoredReference": [],
+            "ignoredComparison": [
+              "25"
+            ],
+            "groupAssessment": "Same group",
+            "unitAssessment": "Compatible",
+            "reason": "Product type conflict: BUCKLE vs HANG TAG"
+          }
+        },
+        {
+          "name": "FLY RACING MAIN BUCKLE SET",
+          "score": 0,
+          "method": "Needs Review",
+          "blocked": "UNIT conflict: PCS vs SET",
+          "evidence": {
+            "score": 0,
+            "method": "Needs Review",
+            "matchedCodes": [],
+            "matchedTokens": [
+              "BUCKLE",
+              "FLY",
+              "MAIN",
+              "RACING"
+            ],
+            "ignoredReference": [],
+            "ignoredComparison": [
+              "SET"
+            ],
+            "groupAssessment": "Same group",
+            "unitAssessment": "Conflict",
+            "reason": "UNIT conflict: PCS vs SET"
+          }
+        },
+        {
+          "name": "NEW - NYLON WEBBING (30M/M) P",
+          "score": 0,
+          "method": "Needs Review",
+          "blocked": "UNIT conflict: PCS vs M",
+          "evidence": {
+            "score": 0,
+            "method": "Needs Review",
+            "matchedCodes": [],
+            "matchedTokens": [],
+            "ignoredReference": [],
+            "ignoredComparison": [
+              "NEW"
+            ],
+            "groupAssessment": "Same group",
+            "unitAssessment": "Conflict",
+            "reason": "UNIT conflict: PCS vs M"
+          }
+        }
+      ],
+      "margin": 0
+    },
+    {
+      "reference": {
+        "id": "2-0",
+        "material": "NYLON WEBBING (30M/M)",
+        "unit": "YD",
+        "group": "TRIMS",
+        "size": "",
+        "width": "",
+        "remark": "",
+        "order": 2
+      },
+      "current": {
+        "id": "2-1",
+        "material": "NEW - NYLON WEBBING (30M/M) P",
+        "unit": "M",
+        "group": "TRIMS",
+        "size": "",
+        "width": "",
+        "remark": "",
+        "order": 2
+      },
+      "referenceAttributes": {
+        "normalized": "NYLON WEBBING ( 30MM )",
+        "coreName": "30MM NYLON WEBBING",
+        "coreTokens": [
+          "30MM",
+          "NYLON",
+          "WEBBING"
+        ],
+        "auxiliaryTokens": [],
+        "codes": [],
+        "specs": [
+          "30MM"
+        ],
+        "styles": [],
+        "composition": [],
+        "positions": [],
+        "demographics": [],
+        "productTypes": [
+          "WEBBING"
+        ]
+      },
+      "comparisonAttributes": {
+        "normalized": "NEW NYLON WEBBING ( 30MM ) P",
+        "coreName": "30MM NYLON P WEBBING",
+        "coreTokens": [
+          "30MM",
+          "NYLON",
+          "P",
+          "WEBBING"
+        ],
+        "auxiliaryTokens": [
+          "NEW"
+        ],
+        "codes": [],
+        "specs": [
+          "30MM"
+        ],
+        "styles": [],
+        "composition": [],
+        "positions": [],
+        "demographics": [],
+        "productTypes": [
+          "WEBBING"
+        ]
+      },
+      "candidates": [
+        {
+          "name": "HANG TAG FLY RACING 25 RAYCE JERSEY",
+          "score": 0,
+          "method": "Needs Review",
+          "blocked": "UNIT conflict: YD vs PCS",
+          "evidence": {
+            "score": 0,
+            "method": "Needs Review",
+            "matchedCodes": [],
+            "matchedTokens": [],
+            "ignoredReference": [],
+            "ignoredComparison": [
+              "25"
+            ],
+            "groupAssessment": "Same group",
+            "unitAssessment": "Conflict",
+            "reason": "UNIT conflict: YD vs PCS"
+          }
+        },
+        {
+          "name": "FLY RACING MAIN BUCKLE SET",
+          "score": 0,
+          "method": "Needs Review",
+          "blocked": "UNIT conflict: YD vs SET",
+          "evidence": {
+            "score": 0,
+            "method": "Needs Review",
+            "matchedCodes": [],
+            "matchedTokens": [],
+            "ignoredReference": [],
+            "ignoredComparison": [
+              "SET"
+            ],
+            "groupAssessment": "Same group",
+            "unitAssessment": "Conflict",
+            "reason": "UNIT conflict: YD vs SET"
+          }
+        },
+        {
+          "name": "NEW - NYLON WEBBING (30M/M) P",
+          "score": 0,
+          "method": "Needs Review",
+          "blocked": "UNIT conflict: YD vs M",
+          "evidence": {
+            "score": 0,
+            "method": "Needs Review",
+            "matchedCodes": [],
+            "matchedTokens": [
+              "30MM",
+              "NYLON",
+              "WEBBING"
+            ],
+            "ignoredReference": [],
+            "ignoredComparison": [
+              "NEW"
+            ],
+            "groupAssessment": "Same group",
+            "unitAssessment": "Conflict",
+            "reason": "UNIT conflict: YD vs M"
+          }
+        }
+      ],
+      "margin": 0
+    }
+  ],
+  "clusters": [
+    {
+      "id": "2b1f9774-3d09-4199-9ab7-55b2275ad8d3",
+      "referenceRowIds": [
+        "0-0"
+      ],
+      "currentRowId": null,
+      "relationType": "one-to-one",
+      "matchSource": "auto",
+      "finalGroup": "TRIMS",
+      "status": "REFERENCE ONLY",
+      "confidence": 0
+    },
+    {
+      "id": "c053c087-6578-4eef-9ace-03b179ed1c52",
+      "referenceRowIds": [
+        "1-0"
+      ],
+      "currentRowId": null,
+      "relationType": "one-to-one",
+      "matchSource": "auto",
+      "finalGroup": "TRIMS",
+      "status": "REFERENCE ONLY",
+      "confidence": 0
+    },
+    {
+      "id": "7488f9b8-26d0-4176-8d27-79ace3cdb75c",
+      "referenceRowIds": [
+        "2-0"
+      ],
+      "currentRowId": null,
+      "relationType": "one-to-one",
+      "matchSource": "auto",
+      "finalGroup": "TRIMS",
+      "status": "REFERENCE ONLY",
+      "confidence": 0
+    },
+    {
+      "id": "4177e35a-4aec-4c29-aea2-e5d07dd3a88c",
+      "referenceRowIds": [],
+      "currentRowId": "0-1",
+      "relationType": "one-to-one",
+      "matchSource": "auto",
+      "finalGroup": "TRIMS",
+      "status": "CURRENT ONLY",
+      "confidence": 0,
+      "evidence": {
+        "score": 0,
+        "method": "Needs Review",
+        "matchedCodes": [],
+        "matchedTokens": [
+          "FLY",
+          "HANG",
+          "RACING",
+          "RAYCE",
+          "TAG"
+        ],
+        "ignoredReference": [
+          "26"
+        ],
+        "ignoredComparison": [
+          "25"
+        ],
+        "groupAssessment": "Same group",
+        "unitAssessment": "Compatible",
+        "reason": "Insufficient distinctive material identity."
+      }
+    },
+    {
+      "id": "a62148cf-aca9-466c-8222-cd3334871e23",
+      "referenceRowIds": [],
+      "currentRowId": "1-1",
+      "relationType": "one-to-one",
+      "matchSource": "auto",
+      "finalGroup": "TRIMS",
+      "status": "CURRENT ONLY",
+      "confidence": 0,
+      "evidence": {
+        "score": 0,
+        "method": "Needs Review",
+        "matchedCodes": [],
+        "matchedTokens": [
+          "FLY",
+          "RACING"
+        ],
+        "ignoredReference": [
+          "26"
+        ],
+        "ignoredComparison": [
+          "SET"
+        ],
+        "groupAssessment": "Same group",
+        "unitAssessment": "Conflict",
+        "reason": "UNIT conflict: PCS vs SET"
+      }
+    },
+    {
+      "id": "22027728-3c81-439c-be36-4c694443b921",
+      "referenceRowIds": [],
+      "currentRowId": "2-1",
+      "relationType": "one-to-one",
+      "matchSource": "auto",
+      "finalGroup": "TRIMS",
+      "status": "CURRENT ONLY",
+      "confidence": 0,
+      "evidence": {
+        "score": 0,
+        "method": "Needs Review",
+        "matchedCodes": [],
+        "matchedTokens": [],
+        "ignoredReference": [
+          "26"
+        ],
+        "ignoredComparison": [
+          "NEW"
+        ],
+        "groupAssessment": "Same group",
+        "unitAssessment": "Conflict",
+        "reason": "UNIT conflict: PCS vs M"
+      }
+    }
+  ]
+}
