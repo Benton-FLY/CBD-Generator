@@ -2,7 +2,7 @@ export type ComparisonSide='reference'|'current';
 export type MatchStatus='Exact'|'Normalized'|'Alias'|'Manual'|'reference-only'|'current-only'|'duplicate'|'review';
 export interface CbdMaterialRow {id:string;group:string;material:string;size:string;unit:string;cost?:number;usage?:number;loss?:number;extended?:number;remark:string;width:string;order:number}
 export type FobEvidence='explicit'|'ratio-derived'|'review-required';
-export interface CbdSummary {totalMaterialCost?:number;laborCost?:number;overhead?:number;profit?:number;finalFob?:number;materialToFobRatio?:number;erpMaterial?:number;difference?:number;differenceRate?:number;fobEvidence?:FobEvidence;fobValidation?:'matched'|'mismatch'|'not-available';calculatedFob?:number}
+export interface CbdSummary {remarks?:Record<string,string>;totalMaterialCost?:number;laborCost?:number;overhead?:number;profit?:number;finalFob?:number;materialToFobRatio?:number;erpMaterial?:number;difference?:number;differenceRate?:number;fobEvidence?:FobEvidence;fobValidation?:'matched'|'mismatch'|'not-available';calculatedFob?:number}
 export interface CbdStyle {id:string;side:ComparisonSide;fileName:string;sheetName:string;styleName:string;sourceDate?:string;materials:CbdMaterialRow[];summary:CbdSummary;groupOrder:string[];groupTotals?:Record<string,number>}
 export interface UploadedCbd {id:string;name:string;size:number;lastModified:number;side:ComparisonSide;styleIds:string[]}
 export interface StyleMatch {id:string;referenceId?:string;currentId?:string;method:string;confidence:number;status:MatchStatus;excluded?:boolean}

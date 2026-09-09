@@ -13,9 +13,10 @@ describe('comparison CBD group subtotals',()=>{
   sheet.addRow(['','','','','','','',.3,'']);
   sheet.addRow(['LABEL & PACKAGING SUBTOTAL','','','','','','',.4,'']);
   sheet.addRow(['','Total material cost','','','','','',1.7,'']);
+  sheet.addRow(['Labor cost','','','','','','','','Includes heat transfer and packing cost']);
   const data=await workbook.xlsx.writeBuffer(),file=new File([data as BlobPart],'27.xlsx'),result=await parseCbdFiles([file],'reference'),style=result.styles[0];
   expect(style.groupTotals).toMatchObject({OUTSHELL:1,'SEWING THREAD':.3,'LABEL & PACKAGING':.4});
- expect(style.summary.totalMaterialCost).toBe(1.7);
+ expect(style.summary.totalMaterialCost).toBe(1.7);expect(style.summary.remarks?.laborCost).toBe('Includes heat transfer and packing cost');expect(style.summary.laborCost).toBeUndefined();
  });
  it('keeps an exact FINAL FOB separate from the material-to-FOB ratio and cross-validates it',async()=>{
   const workbook=new ExcelJS.Workbook(),sheet=workbook.addWorksheet('RAYCE PANT');

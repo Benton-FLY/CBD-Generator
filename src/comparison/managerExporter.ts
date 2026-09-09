@@ -135,6 +135,7 @@ export function buildManagerWorkbook(state:ComparisonState,options?:Pick<Compari
    for(const [item,offset,col,side] of [[comparison,0,'H','current'],[reference,16,'X','reference']] as const){
     sheet.mergeCells(row,offset+1,row,offset+7);sheet.getCell(row,offset+1).value=labels[i];
     if(item){
+     const key=['totalMaterialCost','laborCost','overhead','profit','finalFob'][i];sheet.getCell(row,offset+9).value=item.summary.remarks?.[key]??null;
      if(i===0)sheet.getCell(`${col}${row}`).value=formula(`SUM(${costSubtotals.map(s=>`${col}${s.row}`).join(',')})`,costSubtotals.reduce((v,s)=>v+s[side],0));
      else {const value=i===1?item.summary.laborCost:i===2?item.summary.overhead:i===3?item.summary.profit:item.summary.fobEvidence==='ratio-derived'?undefined:item.summary.finalFob;sheet.getCell(`${col}${row}`).value=value??null;}
     }

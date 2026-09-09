@@ -27,7 +27,7 @@ export async function parseCbdFiles(files:File[],side:ComparisonSide):Promise<{f
     for(let r=header.row+1;r<sheet.rows.length;r++){
      const row=sheet.rows[r]||[],material=String(row[header.map.material]??'').trim(),groupCell=String(row[header.map.group]??'').trim(),extended=num(row[header.map.extended]);
      const labeled=row.map((value,column)=>({key:summaryKey(value),raw:label(value),column})).find(item=>item.key&&(!EXCLUDED_FOB_LABELS.has(item.raw)||item.key==='materialToFobRatio'||item.key==='difference'||item.key==='differenceRate'));
-     if(labeled?.key){const value=summaryValue(row,header.map.extended);if(value!==undefined)summary[labeled.key]=value;continue}
+     if(labeled?.key){const value=summaryValue(row,header.map.extended);if(value!==undefined)summary[labeled.key]=value;const remark=String(row[header.map.remark]??'').trim();if(remark&&labeled.column!==header.map.remark)summary.remarks={...summary.remarks,[labeled.key]:remark};continue}
      if(/SUBTOTAL/i.test(material)||/SUBTOTAL/i.test(groupCell)){const subtotal=extended??num(row.find(v=>num(v)!==undefined));if(subtotal!==undefined)groupTotals[(groupCell||group).replace(/SUBTOTAL/i,'').trim()]=subtotal;continue}
      // Legacy 27-season sheets use an unlabeled numeric row immediately after each group.
      if(!material&&!groupCell&&group&&extended!==undefined){groupTotals[group]=extended;continue}

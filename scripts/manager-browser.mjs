@@ -24,7 +24,7 @@ for(const [button,name,count] of [['Export Current Style – Manager Format','cu
  const pending=page.waitForEvent('download');await page.getByRole('button',{name:button,exact:true}).click();const download=await pending;
  const path=`reports/${prefix}-${name}.xlsx`;await download.saveAs(path);const book=new ExcelJS.Workbook();await book.xlsx.readFile(path);assert.equal(book.worksheets.length,count);
  if(!name.startsWith('detail')){
-  for(const sheet of book.worksheets){assert.equal(sheet.getImages().length,2);assert.match(sheet.pageSetup.printArea,/^A1:Y\d+$/)}
+  for(const [i,sheet] of book.worksheets.entries()){assert.equal(sheet.getImages().length,2);assert.match(sheet.pageSetup.printArea,/^A1:Y\d+$/);const labor=sheet.getColumn(1).values.findIndex(v=>v==='Labor cost');for(const [id,col] of [[state.styleMatches[i].currentId,9],[state.styleMatches[i].referenceId,25]])assert.equal(sheet.getCell(labor,col).value,state.styles.find(s=>s.id===id)?.summary.remarks?.laborCost??null);}
   let found=false;book.worksheets[0].eachRow(row=>{if(String(row.getCell(25).value||'').includes('[GROUP MOVE: OUTSHELL → TRIMS]'))found=true});assert(found);
  }
  downloads.push({button,file:download.suggestedFilename(),path,sheets:count});

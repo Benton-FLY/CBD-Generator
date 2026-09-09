@@ -35,7 +35,7 @@ EVO 예: 신규 원본 인쇄 Total 5.2085 / 기존 상세와 Manager 비교 Tot
 - N:1 및 저장된 1:N 관계는 anchor와 바로 아래 구성 행으로 펼친다. 각 원본 Extended Cost는 한 번만 출력한다. K:N은 비우고 anchor O만 SUM(신규 구성 행) − SUM(기존 구성 행)이다. 신규 1:N 연결 UI나 별도 자동 분리 매칭은 추가하지 않았다.
 - 일반 행: K=E−U, L=K/U, M=F−V, N=M/V, O=H−X. IF로 공란·0 분모를 처리하고 IFERROR는 쓰지 않는다. 기존 전용 변화율은 −100%, 신규 전용 및 기존 0 분모의 비율은 공란이다. Unit이 다르면 K:N을 비운다. SPECIAL PROCESS는 비교 수식을 넣지 않는다.
 - 그룹 소계·Total·FOB의 O는 신규 − 기존. 그룹과 Total 수식은 생성된 실제 행을 참조한다. 원본 Extended Cost를 보존하여 PCS·고정값·특수 계산의 기존 정책을 유지한다.
-- 원본 FINAL FOB만 사용하며 ratio-derived FOB는 공란 처리한다. Labor/Overhead/Profit과 추가 요약은 파싱된 값만 표시한다. Material cost ratio는 비교 Total / FINAL FOB다.
+- 원본 FINAL FOB만 사용하며 ratio-derived FOB는 공란 처리한다. Labor/Overhead/Profit과 추가 요약은 파싱된 값만 표시하며, 하단 요약의 원본 I/Y Remark도 유지한다. Material cost ratio는 비교 Total / FINAL FOB다.
 
 ## GROUP 이동 검증
 
@@ -53,7 +53,7 @@ EVO 예: 신규 원본 인쇄 Total 5.2085 / 기존 상세와 Manager 비교 Tot
 
 ## 테스트·회귀·서비스 재추출
 
-- `npm run test`: 12개 테스트 파일, **138개 테스트 통과**.
+- `npm run test`: 12개 테스트 파일, **139개 테스트 통과**.
 - `npm run build`: 성공. 기존 대형 번들 경고만 존재.
 - 생성 Current: 1 STYLE, 135개 수식. All: 13 STYLE, 1,582개 수식.
 - 신규 원본 자재 323개, 기존 351개가 각 STYLE에서 정확히 한 번씩 출력됨을 검사했다.
@@ -75,9 +75,9 @@ EVO 예: 신규 원본 인쇄 Total 5.2085 / 기존 상세와 Manager 비교 Tot
 | src/comparison/types.ts | 이동 메타데이터, sourceDate, 선택적 1:N/manualOrder |
 | src/comparison/exporter.ts | 공통 모델 연결; 기존 형식·출력 유지; 저장된 분리 관계 합산 |
 | src/comparison/matcher.ts | 분리 관계 잠금·무결성 보존; 기존 점수/매칭 규칙 유지 |
-| src/comparison/parser.ts | 원본 Date 메타데이터 보존 |
+| src/comparison/parser.ts | 원본 Date 및 하단 요약 Remark 메타데이터 보존 |
 | src/comparison/ComparisonWorkspace.tsx | 신규 Current/All 버튼, 추출 오류 표시 |
-| src/comparison/managerExporter.test.ts | 공란·0·N:1·1:N·그룹·금액·서식 회귀 테스트 |
+| src/comparison/managerExporter.test.ts | 공란·0·N:1·1:N·그룹·금액·서식·요약 Remark 회귀 테스트 |
 | src/comparison/ComparisonWorkspace.test.tsx | 신규 메뉴의 독립 동작·필터 비의존 테스트 |
 | src/comparison/assets/fly-logo.png, fly-logo.ts | 원본 내부 실제 로고 |
 | scripts/*manager* | 템플릿 분석, 로고 추출, 실제 파일 생성, 브라우저·수식·인쇄·회귀 검증 |
