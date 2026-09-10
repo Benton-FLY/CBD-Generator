@@ -55,4 +55,12 @@ describe('Manager Format renderer',()=>{
   const broken=fixture();broken.materialMatches[0].clusters[0].referenceRowIds.push('ref-a');expect(()=>buildManagerWorkbook(broken)).toThrow(/repeated/);broken.materialMatches[0].clusters=[];expect(()=>buildManagerWorkbook(broken)).toThrow(/incomplete/);
   state.styles[1].summary={materialToFobRatio:.5,finalFob:12,fobEvidence:'ratio-derived'};const ratio=buildManagerWorkbook(state).worksheets[0];expect(ratio.getCell(find(ratio,1,'FOB PRICE'),8).value).toBeNull();
  });
+ it('uses the displayed final material total for PEE WEE and RAYCE internal-review ratios',()=>{
+  const state=fixture(),reference=state.styles[0],current=state.styles[1];
+  reference.materials=[material('ref',0)];current.materials=[material('pee',5.2438)];state.materialMatches[0].clusters=[{id:'pee',referenceRowIds:['ref'],currentRowId:'pee',relationType:'one-to-one',matchSource:'manual',finalGroup:'OUTSHELL',status:'MANUAL',confidence:1}];
+  current.styleName='PEE WEE PANT';current.summary={finalFob:16.98,preliminaryMaterialCost:4.8948,fobEvidence:'explicit'};const pee=buildManagerWorkbook(state).worksheets[0],total=find(pee,1,'Total material cost'),fob=find(pee,1,'FOB PRICE'),review=fob+1;
+  expect(pee.getCell(review,8).formula).toBe(`H${total}/H${fob}`);expect(pee.getCell(review,8).result).toBeCloseTo(5.2438/16.98,8);expect(pee.getCell(review+2,8).result).toBeCloseTo(.349,8);expect(pee.getCell(review+3,8).result).toBeCloseTo(.349/4.8948,8);
+  current.styleName='RAYCE PANT';current.materials=[material('rayce',17.053)];state.materialMatches[0].clusters[0]={...state.materialMatches[0].clusters[0],currentRowId:'rayce'};current.summary={finalFob:36.63,preliminaryMaterialCost:undefined,fobEvidence:'explicit'};const rayce=buildManagerWorkbook(state).worksheets[0],rayceFob=find(rayce,1,'FOB PRICE'),rayceReview=rayceFob+1;
+  expect(rayce.getCell(rayceReview,8).formula).toBe(`H${find(rayce,1,'Total material cost')}/H${rayceFob}`);expect(rayce.getCell(rayceReview,8).result).toBeCloseTo(17.053/36.63,8);expect(rayce.getCell(rayceReview+1,8).value).toBeNull();
+ });
 });
