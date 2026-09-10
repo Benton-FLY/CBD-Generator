@@ -53,7 +53,8 @@ export function buildManagerWorkbook(state:ComparisonState,options?:Pick<Compari
   const relations=managerRelations(reference,comparison,clusters);
   const sheet=workbook.addWorksheet(safeSheetName(comparison?.styleName||reference?.styleName||'STYLE',used));
   MANAGER_WIDTHS.forEach((width,i)=>sheet.getColumn(i+1).width=width);
-  sheet.views=[{state:'normal',showGridLines:false,zoomScale:105}];
+  // Keep the model/title block and row-5 column headers visible while reviewing materials.
+  sheet.views=[{state:'frozen',ySplit:5,showGridLines:false,zoomScale:105}];
   sheet.pageSetup={paperSize:9,orientation:'landscape',fitToPage:true,fitToWidth:1,fitToHeight:0,printTitlesRow:'1:5',margins:{left:.2,right:.2,top:.25,bottom:.25,header:0,footer:0}};
   for(const col of [0,16])sheet.addImage(logo,{tl:{col:col+.05,row:0},ext:{width:106,height:106*44/143},editAs:'oneCell'});
   sheet.getRow(1).height=18;sheet.getRow(2).height=22;
