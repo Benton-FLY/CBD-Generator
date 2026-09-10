@@ -15,6 +15,21 @@ for(const [i,sheet] of reopened.worksheets.entries()){
  assert.equal(sheet.getImages().length,2);assert.equal(sheet.pageSetup.printArea,`A1:Y${sheet.rowCount}`);
  const pair=state.styleMatches[i],ref=state.styles.find(s=>s.id===pair.referenceId)!,cur=state.styles.find(s=>s.id===pair.currentId)!;
  let totalRow=0,formulas=0;sheet.eachRow(row=>{if(row.getCell(1).value==='Total material cost')totalRow=row.number;row.eachCell(cell=>{if(cell.formula){formulas++;assert(!/#VALUE!|#REF!|#DIV\/0!|#NAME\?|#N\/A|IFERROR/.test(cell.formula));assert(!cell.formula.includes('!'));for(const match of cell.formula.matchAll(/\b([A-Z]+)(\d+)\b/g)){assert(Number(match[2])<=sheet.rowCount);assert.notEqual(match[0],cell.address)}}})});
+ const fobRow=totalRow+4,reviewRow=fobRow+1;
+ for(const [style,internalColumn,valueColumn,labelColumn] of [[cur,1,8,9],[ref,17,24,25]] as const){
+  assert.match(String(sheet.getCell(reviewRow,internalColumn).value),/^INTERNAL USE ONLY/);
+  assert.equal(sheet.getCell(reviewRow,labelColumn).value,'CBD 재료비 / FOB');
+  assert.equal(sheet.getCell(reviewRow+1,labelColumn).value,'사전원가 재료비');
+  assert.equal(sheet.getCell(reviewRow+2,labelColumn).value,'사전원가와 CBD 재료비 차이');
+  assert.equal(sheet.getCell(reviewRow+3,labelColumn).value,'차이율');
+  const fob=sheet.getCell(fobRow,valueColumn).value,total=sheet.getCell(totalRow,valueColumn).result,preliminary=style.summary.preliminaryMaterialCost;
+  if(typeof fob==='number'&&fob!==0)assert.equal(sheet.getCell(reviewRow,valueColumn).formula,`${valueColumn===8?'H':'X'}${totalRow}/${valueColumn===8?'H':'X'}${fobRow}`);
+  assert.equal(sheet.getCell(reviewRow+1,valueColumn).value,preliminary??null);
+  if(preliminary!==undefined){assert.equal(sheet.getCell(reviewRow+2,valueColumn).formula,`${valueColumn===8?'H':'X'}${totalRow}-${valueColumn===8?'H':'X'}${reviewRow+1}`);if(preliminary!==0)assert.equal(sheet.getCell(reviewRow+3,valueColumn).formula,`${valueColumn===8?'H':'X'}${reviewRow+2}/${valueColumn===8?'H':'X'}${reviewRow+1}`)}
+  assert.equal(sheet.getCell(reviewRow+6,labelColumn).value,'원본 CBD Total (참고, 합산 제외)');
+  assert.equal(sheet.getCell(reviewRow+7,labelColumn).value,'원본 Total − 최종 비교 Total');
+  assert.equal(sheet.getCell(reviewRow+8,labelColumn).value,'원본 소계 누락 또는 GROUP 차이 확인값');
+ }
  for(const [style,col,materialCol,detailCol] of [[cur,8,2,3],[ref,24,18,2]] as const){
   const rows=style.materials;
   const actual:string[]=[];sheet.eachRow(row=>{if(row.number>=6&&typeof row.getCell(materialCol).value==='string'&&!row.getCell(materialCol).isMerged)actual.push(String(row.getCell(materialCol).value))});

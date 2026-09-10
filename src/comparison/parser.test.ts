@@ -25,5 +25,12 @@ describe('comparison CBD group subtotals',()=>{
   const data=await workbook.xlsx.writeBuffer(),file=new File([data as BlobPart],'28.xlsx'),result=await parseCbdFiles([file],'current'),summary=result.styles[0].summary;
   expect(summary.finalFob).toBe(36.63);expect(summary.materialToFobRatio).toBe(0.483005733);expect(summary.fobEvidence).toBe('explicit');expect(summary.calculatedFob).toBeCloseTo(36.63,3);expect(summary.fobValidation).toBe('matched');
  });
+ it('reads 사전원가 재료비 independently and never substitutes a ratio or source total',async()=>{
+  const workbook=new ExcelJS.Workbook(),sheet=workbook.addWorksheet('PRELIMINARY');
+  sheet.addRow(['Model Name','PRELIMINARY']);sheet.addRow(['Group of','Material','Size','Unit','Cost per Unit','Usage','Loss','Extended Cost','Remark']);sheet.addRow(['OUTSHELL','FABRIC','','YD',5,1,0,5,'']);
+  sheet.addRow(['','Total material cost','','','','','',5,'']);sheet.addRow(['','FOB PRICE','','','','','',10,'']);sheet.addRow(['INTERNAL USE ONLY','','','','','','',.5,'CBD 재료비 / FOB']);sheet.addRow(['','','','','','','',4.8948,'사전원가 재료비']);
+  const data=await workbook.xlsx.writeBuffer(),summary=(await parseCbdFiles([new File([data as BlobPart],'preliminary.xlsx')],'current')).styles[0].summary;
+  expect(summary.preliminaryMaterialCost).toBe(4.8948);expect(summary.materialToFobRatio).toBe(.5);expect(summary.totalMaterialCost).toBe(5);
+ });
  it('does not promote excluded FOB labels or a ratio to FINAL FOB',async()=>{const workbook=new ExcelJS.Workbook(),sheet=workbook.addWorksheet('MISSING FOB');sheet.addRow(['Model Name','MISSING FOB']);sheet.addRow(['Group of','Material','Size','Unit','Cost per Unit','Usage','Loss','Extended Cost','Remark']);sheet.addRow(['OUTSHELL','FABRIC','','YD',1,1,0,17.6925,'']);sheet.addRow(['','Total material cost','','','','','',17.6925,'']);sheet.addRow(['','','','','','','',0.483005733,'FOB RATIO']);sheet.addRow(['','','','','','','',99,'NOT FINAL FOB']);const data=await workbook.xlsx.writeBuffer(),file=new File([data as BlobPart],'missing.xlsx'),summary=(await parseCbdFiles([file],'current')).styles[0].summary;expect(summary.finalFob).toBeUndefined();expect(summary.materialToFobRatio).toBe(0.483005733);expect(summary.fobEvidence).toBe('review-required')});
 });

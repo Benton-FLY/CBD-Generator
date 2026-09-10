@@ -10,6 +10,9 @@ export async function saveComparison(state:ComparisonState){const db=await open(
 export async function clearComparison(){const db=await open();try{await done(db.transaction(STORE,'readwrite').objectStore(STORE).delete(KEY))}finally{db.close()}}
 
 export function upgradeComparison(state:ComparisonState):ComparisonState {
+ // Versions saved before the explicit source field was introduced used erpMaterial.
+ // Preserve that parsed source value once, but never manufacture a replacement.
+ for(const style of state.styles){const legacy=style.summary as typeof style.summary&{erpMaterial?:number};if(style.summary.preliminaryMaterialCost===undefined&&typeof legacy.erpMaterial==='number')style.summary.preliminaryMaterialCost=legacy.erpMaterial;}
  const materialMatches=state.materialMatches.map(set=>{const pair=state.styleMatches.find(p=>p.id===set.styleMatchId);if(!pair)return set;const reference=state.styles.find(s=>s.id===pair.referenceId),comparison=state.styles.find(s=>s.id===pair.currentId);const restored={...set,clusters:set.clusters.map(c=>resolveGroup(c,reference?.materials||[],comparison?.materials||[]))};return set.matcherVersion===MATERIAL_MATCHER_VERSION?restored:matchMaterials(pair,state.styles,restored)});
  return {...state,matcherVersion:MATERIAL_MATCHER_VERSION,materialMatches,history:state.history?{past:state.history.past.map(upgradeComparison),future:state.history.future.map(upgradeComparison)}:undefined};
 }
