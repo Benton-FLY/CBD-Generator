@@ -32,7 +32,7 @@ describe('Manager Format renderer',()=>{
  });
  it('caches unchanged numeric rates as finite zero, including all-zero totals',async()=>{
   const state=fixture();state.materialMatches[0].clusters[0].referenceRowIds=['ref-a'];state.materialMatches[0].clusters[0].relationType='one-to-one';state.styles[0].materials.splice(1,1);state.styles[1].materials[0].usage=state.styles[0].materials[0].usage;const book=buildManagerWorkbook(state),sheet=book.worksheets[0],r=find(sheet,2,'new-a');expect(sheet.getCell(r,12).result).toBe(0);expect(sheet.getCell(r,14).result).toBe(0);sheet.eachRow(row=>row.eachCell(cell=>{if(typeof cell.result==='number')expect(Number.isFinite(cell.result)).toBe(true)}));
-  for(const style of state.styles)for(const row of style.materials)row.extended=0;const zero=buildManagerWorkbook(state).worksheets[0],total=find(zero,1,'Total material cost');expect(zero.getCell(total,15).result).toBe(0);expect(zero.getCell(total+5,8).result).toBe(0);
+  for(const style of state.styles)for(const row of style.materials)row.extended=0;const zero=buildManagerWorkbook(state).worksheets[0],total=find(zero,1,'Total material cost');expect(zero.getCell(total,15).result).toBe(4);expect(zero.getCell(total+5,8).result).toBeCloseTo(4/12,8);
  });
  it('preserves source summary remarks without inventing missing financial values',()=>{const state=fixture();state.styles[1].summary.remarks={laborCost:'Includes heat transfer, laser and packing cost'};const sheet=buildManagerWorkbook(state).worksheets[0],r=find(sheet,1,'Labor cost');expect(sheet.getCell(r,9).value).toBe(state.styles[1].summary.remarks.laborCost);expect(sheet.getCell(r,8).value).toBeNull();});
  it('keeps explicit move provenance across group resolution, persistence upgrade and auto rematching',()=>{

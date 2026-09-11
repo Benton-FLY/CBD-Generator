@@ -11,5 +11,10 @@ export interface MaterialMatchEvidence {score:number;method:'Context Match'|'Exa
 export interface MaterialMatch {id:string;referenceId?:string;currentId?:string;finalGroup:string;referenceGroup?:string;currentGroup?:string;method:string;confidence:number;status:MaterialStatus}
 export type MaterialMatchCluster={id:string;referenceRowIds:string[];currentRowId:string|null;currentRowIds?:string[];relationType:'one-to-one'|'many-to-one'|'one-to-many';matchSource:'auto'|'manual';manualLocked?:boolean;manualOrder?:number;finalGroup:string;referenceOriginalGroup?:string;comparisonOriginalGroup?:string;effectiveGroup?:string;groupChangedFrom?:string;groupChangedTo?:string;groupChangeSource?:'manual'|'automatic';groupAssignmentSource?:'comparison'|'manual'|'referenceFallback';manualGroupOverride?:boolean;status:MaterialStatus;confidence:number;evidence?:MaterialMatchEvidence};
 export interface MaterialMatchSet {styleMatchId:string;clusters:MaterialMatchCluster[];matches?:MaterialMatch[];matcherVersion?:number}
+export interface ManagerAppliedMaterial {
+ sourceOldUnitCost?:number;sourceOldUsage?:number;sourceNewUnitCost?:number;sourceNewUsage?:number;
+ appliedNewUnitCost?:number;appliedNewUsage?:number;unitCostFloorApplied:boolean;usageFloorApplied:boolean;
+ status:'matched'|'current-only'|'reference-only'|'needs-review';reason?:string;
+}
 export interface ComparisonState {version:number;matcherVersion?:number;referenceSeason:string;currentSeason:string;files:UploadedCbd[];styles:CbdStyle[];styleMatches:StyleMatch[];materialMatches:MaterialMatchSet[];step:1|2|3|4|5;activeMatchId?:string;savedAt?:string;history?:{past:ComparisonState[];future:ComparisonState[]}}
 export interface ComparisonFinancials {referenceFob?:number;comparisonFob?:number;referenceMaterialTotal?:number;comparisonMaterialTotal?:number;referenceMaterialToFobRatio?:number;comparisonMaterialToFobRatio?:number;referenceFobEvidence:FobEvidence;comparisonFobEvidence:FobEvidence}

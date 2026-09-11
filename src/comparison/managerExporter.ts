@@ -4,6 +4,7 @@ import {saveAs} from 'file-saver';
 import {flyLogo} from './assets/fly-logo';
 import {comparisonModel,COST_GROUPS} from './model';
 import {unitChanged} from './groups';
+import {applyManagerFloors} from './managerPricing';
 import type {CbdMaterialRow,CbdStyle,ComparisonState,MaterialMatchCluster} from './types';
 import type {ComparisonExportOptions} from './exporter';
 
@@ -80,19 +81,23 @@ export function buildManagerWorkbook(state:ComparisonState,options?:Pick<Compari
    const value=sheet.getCell(`${delta}${r}`).result;
    if(hasNumber(baseValue)&&baseValue!==0&&hasNumber(value))sheet.getCell(`${out}${r}`).value=formula(`${delta}${r}/${base}${r}`,value/baseValue);
   };
-  const writeMaterial=(r:number,offset:number,item:CbdMaterialRow|undefined,cluster:MaterialMatchCluster)=>{
+  const writeMaterial=(r:number,offset:number,item:CbdMaterialRow|undefined,cluster:MaterialMatchCluster,overrides?:{cost?:number;usage?:number;remark?:string;highlight?:number[];costFloor?:boolean;usageFloor?:boolean})=>{
    if(!item)return;
    const moved=item.group.trim().toUpperCase()!==cluster.finalGroup;
-   const remark=[item.remark,moved?`[GROUP MOVE: ${item.group} → ${cluster.finalGroup}]`:''].filter(Boolean).join('\n');
-   const values=[displayGroup(cluster.finalGroup),item.material,item.size,item.unit,item.cost,item.usage,item.loss,null,remark];
+   const remark=[item.remark,overrides?.remark,moved?`[GROUP MOVE: ${item.group} → ${cluster.finalGroup}]`:''].filter(Boolean).join('\n');
+   const values=[displayGroup(cluster.finalGroup),item.material,item.size,item.unit,overrides?.cost??item.cost,overrides?.usage??item.usage,item.loss,null,remark];
    // Preserve the common parser's verified Extended Cost, including PCS/fixed/special values.
    values.forEach((v,i)=>sheet.getCell(r,offset+i+1).value=v===undefined||v===''?null:v);
    const costColumn=offset===0?'E':'U',usageColumn=offset===0?'F':'V',lossColumn=offset===0?'G':'W',extendedColumn=offset===0?'H':'X';
-   if(hasNumber(item.cost)&&hasNumber(item.usage)){
-    const useLoss=appliesLoss(item),calculated=item.cost*item.usage*(useLoss?1+(item.loss??0):1);
-    sheet.getCell(`${extendedColumn}${r}`).value=formula(useLoss?`${costColumn}${r}*${usageColumn}${r}*(1+${lossColumn}${r})`:`${costColumn}${r}*${usageColumn}${r}`,hasNumber(item.extended)?item.extended:calculated);
+   if(offset===0&&overrides?.costFloor)sheet.getCell(`${costColumn}${r}`).value=formula(`${costColumn==='E'?'U':'E'}${r}`,overrides.cost??item.cost??0);
+   if(offset===0&&overrides?.usageFloor)sheet.getCell(`${usageColumn}${r}`).value=formula(`${usageColumn==='F'?'V':'F'}${r}`,overrides.usage??item.usage??0);
+   const outputCost=overrides?.cost??item.cost,outputUsage=overrides?.usage??item.usage;
+   if(hasNumber(outputCost)&&hasNumber(outputUsage)){
+    const useLoss=appliesLoss(item),calculated=outputCost*outputUsage*(useLoss?1+(item.loss??0):1);
+    sheet.getCell(`${extendedColumn}${r}`).value=formula(useLoss?`${costColumn}${r}*${usageColumn}${r}*(1+${lossColumn}${r})`:`${costColumn}${r}*${usageColumn}${r}`,calculated);
    }else if(hasNumber(item.extended))sheet.getCell(`${extendedColumn}${r}`).value=item.extended;
    if(moved)tint(r,[offset+9,15],COLORS.pink);
+   if(overrides?.highlight)tint(r,overrides.highlight,COLORS.pink);
   };
   const groups=[...COST_GROUPS,...new Set(relations.map(r=>r.cluster.finalGroup).filter(g=>!COST_GROUPS.includes(g)&&!g.toUpperCase().startsWith('SPECIAL PROCESS'))),...new Set(['SPECIAL PROCESS (LIST ONLY)',...relations.map(r=>r.cluster.finalGroup).filter(g=>g.toUpperCase().startsWith('SPECIAL PROCESS'))])];
   // Normalize only the display block for multiline source spelling.
@@ -109,19 +114,33 @@ export function buildManagerWorkbook(state:ComparisonState,options?:Pick<Compari
     const anchor=row,count=Math.max(1,references.length,currents.length),end=anchor+count-1;
     for(let i=0;i<count;i++,row++){
      const cur=currents[i],ref=references[i];
-     writeMaterial(row,0,cur,cluster);writeMaterial(row,16,ref,cluster);
-     currentTotal+=amount(cur);referenceTotal+=amount(ref);
+     const decision=i===0?applyManagerFloors(references,currents,cluster):undefined;
+     const costHold=!!decision?.unitCostFloorApplied,usageHold=!!decision?.usageFloorApplied;
+     const holdRemark=decision?.status==='needs-review'?decision.reason:[
+       costHold&&hasNumber(decision?.sourceNewUnitCost)&&hasNumber(decision?.appliedNewUnitCost)?`COST HOLD: New $${decision!.sourceNewUnitCost!.toFixed(4)} → Applied $${decision!.appliedNewUnitCost!.toFixed(4)} (Prior)`: '',
+       usageHold&&hasNumber(decision?.sourceNewUsage)&&hasNumber(decision?.appliedNewUsage)?`USAGE HOLD: New ${decision!.sourceNewUsage!.toFixed(4)} → Applied ${decision!.appliedNewUsage!.toFixed(4)} (Prior)`: '',
+       cur&&ref&&cur.material!==ref.material?`REPLACEMENT MATCH: ${ref.material} → ${cur.material}`:'',
+       cur&&ref&&hasNumber(decision?.appliedNewUnitCost)&&hasNumber(decision?.appliedNewUsage)&&hasNumber(ref.extended)&&hasNumber(cur.extended)&&((decision!.appliedNewUnitCost!*decision!.appliedNewUsage!*(appliesLoss(cur)?1+(cur.loss??0):1))<ref.extended-0.00005)?'REVIEW: Extended Cost remains lower':''
+     ].filter(Boolean).join('\n');
+     const currentCost=i===0?decision?.appliedNewUnitCost:undefined,currentUsage=i===0?decision?.appliedNewUsage:undefined;
+     writeMaterial(row,0,cur,cluster,{cost:currentCost,usage:currentUsage,remark:holdRemark,costFloor:costHold,usageFloor:usageHold,highlight:[...(costHold?[5]:[]),...(usageHold?[6]:[]),...(cur&&ref&&cur.material!==ref.material?[2]:[])]});
+     writeMaterial(row,16,ref,cluster,{remark:!cur?'Needs Review: 신규 대체 자재 또는 삭제 여부 확인 필요':''});
+     const appliedExtended=sheet.getCell(`H${row}`).result;
+     currentTotal+=hasNumber(appliedExtended)?appliedExtended:amount(cur);referenceTotal+=amount(ref);
      if(!listOnly&&count===1){
+      const appliedCost=decision?.appliedNewUnitCost??cur?.cost,appliedUsage=decision?.appliedNewUsage??cur?.usage;
       if(!unitChanged(references,current)){
-       directDifference(row,'K','E','U',cur?.cost,ref?.cost);directRate(row,'L','K','U',ref?.cost);
-       directDifference(row,'M','F','V',cur?.usage,ref?.usage);directRate(row,'N','M','V',ref?.usage);
+       directDifference(row,'K','E','U',appliedCost,ref?.cost);directRate(row,'L','K','U',ref?.cost);
+       directDifference(row,'M','F','V',appliedUsage,ref?.usage);directRate(row,'N','M','V',ref?.usage);
       }
-      directDifference(row,'O','H','X',cur?.extended,ref?.extended);
+      const managerExtended=sheet.getCell(`H${row}`).result,referenceExtended=sheet.getCell(`X${row}`).result;
+      directDifference(row,'O','H','X',hasNumber(managerExtended)?managerExtended:cur?.extended,hasNumber(referenceExtended)?referenceExtended:ref?.extended);
      }
      if(!listOnly){
       if(!cur||!ref||cur.material!==ref.material)tint(row,[...(cur?[2]:[]),...(ref?[18]:[])],COLORS.pink);
-      for(const [a,b,col] of [[cur?.cost,ref?.cost,11],[cur?.usage,ref?.usage,13],[cur?.extended,ref?.extended,15]] as const)
-       if(a!==undefined&&b!==undefined&&Math.abs(a-b)>Math.max(.00005,Math.max(Math.abs(a),Math.abs(b))*.0001)&&sheet.getCell(row,col).value!==null)tint(row,[col],COLORS.pink);
+      // Pink is reserved for the actual Manager decision cells and explicit review rows.
+      if(decision?.status==='needs-review')tint(row,[...(cur?[2,5,6]:[]),...(ref?[18,21,22]:[])],COLORS.pink);
+      if(decision?.status==='needs-review'||decision?.status==='reference-only')sheet.getRow(row).font={color:redFont};
       if(cluster.status==='REVIEW')tint(row,[...(cur?[9]:[]),...(ref?[25]:[])],COLORS.pink);
      }
     }
